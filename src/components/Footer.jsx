@@ -11,7 +11,7 @@ const Footer = () => {
                     <div className="footer-section">
                         <h3 className="footer-title">What is Rotaract?</h3>
                         <p className="footer-text">
-                            Rotaract is a global network of 
+                            Rotaract is a global network of check 123
                         </p>
                     </div>
 
