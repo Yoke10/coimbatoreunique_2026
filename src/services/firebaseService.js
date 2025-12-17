@@ -1,7 +1,7 @@
 
 import { db, auth, storage } from '../firebase/config';
 import {
-    collection, getDocs, addDoc, deleteDoc, doc, updateDoc,
+    collection, getDocs, addDoc, deleteDoc, doc, updateDoc, getDoc,
     query, where, orderBy
 } from 'firebase/firestore';
 import {
@@ -32,6 +32,16 @@ const mapDoc = (doc) => ({ id: doc.id, ...doc.data() });
 
 export const firebaseService = {
     // --- AUTHENTICATION ---
+    isAdmin: async (uid) => {
+        try {
+            const ref = doc(db, "admins", uid);
+            const snap = await getDoc(ref);
+            return snap.exists() && snap.data().active === true;
+        } catch (error) {
+            console.error("Error checking admin status:", error);
+            return false;
+        }
+    },
     login: async (username, password, role) => {
         // NOTE: Firebase Auth requires EMAIL. 
         // If app passes username, we assume it's actually an email OR we need to lookup email by username.
@@ -48,19 +58,15 @@ export const firebaseService = {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Get extra profile details from Firestore 'members' collection
-            // We assume the auth.uid matches the document ID or we query by email
-            // Let's try to find the user profile in Firestore
+            const isAdmin = await firebaseService.isAdmin(user.uid);
 
-            // Note: In a real app, you'd store custom claims or look up the profile.
-            // Returning a mock-like object to satisfy the frontend expectation.
             return {
                 id: user.uid,
-                username: email.split('@')[0], // Fallback
+                username: email.split("@")[0],
                 email: user.email,
-                role: role || 'member', // Firebase Auth doesn't store role by default, simplistic approach
+                role: isAdmin ? "admin" : "member",
                 profile: {
-                    fullName: user.displayName || 'Member',
+                    fullName: user.displayName || "Member",
                     email: user.email
                 }
             };
