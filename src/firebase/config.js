@@ -7,12 +7,12 @@ import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyC71HTePW6ir1Nk-AlMsUW-pyuDkfFTWXo",
+    authDomain: "coimbatoreuniquebackend.firebaseapp.com",
+    projectId: "coimbatoreuniquebackend",
+    storageBucket: "coimbatoreuniquebackend.firebasestorage.app",
+    messagingSenderId: "185302419552",
+    appId: "1:185302419552:web:4aca100cd3c8784b7e5b05"
 }
 
 // Initialize Firebase

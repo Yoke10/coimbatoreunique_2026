@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './JoinUsSection.css'
+import groupPic from '../images/grouppic.webp'
 
 const JoinUsSection = () => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const JoinUsSection = () => {
                     {/* Left Side - Image */}
                     <div className="join-us-image-wrapper">
                         <img
-                            src="src/components/images/grouppic.webp"
+                            src={groupPic}
                             alt="Join Rotaract Team"
                             className="join-us-image"
                             loading="lazy"
