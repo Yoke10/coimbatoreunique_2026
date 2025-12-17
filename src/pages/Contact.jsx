@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { mockDataService } from '../services/mockDataService'
+import { firebaseService } from '../services/firebaseService'
 import './Contact.css'
 import { useToast } from '../components/ui/Toast/ToastContext'
 import { InputGroup, SelectGroup, TextAreaGroup } from '../components/common/FormElements'
@@ -62,35 +62,46 @@ const Contact = () => {
         return Object.keys(newErrors).length === 0
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         if (validateForm()) {
-            mockDataService.addSupportMessage(formData)
+            try {
+                await firebaseService.addSupportMessage(formData)
 
-            toast({
-                title: "Message Sent!",
-                description: "Thank you for reaching out. We will get back to you shortly.",
-                variant: "success",
-                duration: 4000
-            })
+                toast({
+                    title: "Message Sent!",
+                    description: "Thank you for reaching out. We will get back to you shortly.",
+                    variant: "success",
+                    duration: 4000
+                })
 
-            setFormData({
-                fullName: '',
-                email: '',
-                phone: '',
-                profession: '',
-                location: '',
-                purpose: '',
-                message: '',
-                agreed: false
-            })
+                setFormData({
+                    fullName: '',
+                    email: '',
+                    phone: '',
+                    profession: '',
+                    location: '',
+                    purpose: '',
+                    message: '',
+                    agreed: false
+                })
 
-            // Navigate after delay
-            setTimeout(() => {
-                navigate('/')
-            }, 3000)
+                // Navigate after delay
+                setTimeout(() => {
+                    navigate('/')
+                }, 3000)
+            } catch (error) {
+                console.error("Failed to send message", error)
+                toast({
+                    title: "Error",
+                    description: "Failed to send message. Please try again.",
+                    variant: "destructive"
+                })
+            }
         }
     }
+
+
 
     return (
         <div className="contact-page">

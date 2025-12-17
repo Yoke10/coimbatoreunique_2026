@@ -3,7 +3,7 @@ import FirstTimeSetup from './FirstTimeSetup'
 import MemberProfile from './MemberProfile'
 import Resources from './Resources'
 import ReportGenerator from '../reports/ReportGenerator'
-import { mockDataService } from '../../services/mockDataService'
+import { firebaseService } from '../../services/firebaseService'
 import './MemberDashboard.css'
 import {
     AlertDialog,
@@ -16,12 +16,17 @@ import {
     AlertDialogAction,
 } from "../ui/AlertDialog/AlertDialog"
 
+import { useAuth } from "../../context/AuthContext"
+
 const MemberDashboard = ({ user, onLogout }) => {
     // Default to Directory as Profile is now in modal
     const [activeTab, setActiveTab] = useState('directory')
     const [reports, setReports] = useState([])
     const [viewingReport, setViewingReport] = useState(null)
-    const [currentUser, setCurrentUser] = useState(user)
+
+    // 🔥 USE CONTEXT INSTEAD OF PROPS/LOCAL STATE
+    const { currentUser } = useAuth()
+
     const [alertConfig, setAlertConfig] = useState({ open: false, title: '', description: '', action: null })
 
     const showAlert = (title, description, action) => {
@@ -40,6 +45,8 @@ const MemberDashboard = ({ user, onLogout }) => {
     const [showProfileModal, setShowProfileModal] = useState(false)
     const [selectedMember, setSelectedMember] = useState(null)
 
+    // No need for re-fetch useEffect, AuthContext handles it.
+
     useEffect(() => {
         loadReports()
     }, [])
@@ -51,13 +58,21 @@ const MemberDashboard = ({ user, onLogout }) => {
     }, [activeTab])
 
     const loadReports = async () => {
-        setReports(await mockDataService.getReports())
+        try {
+            setReports(await firebaseService.getReports())
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     const loadMembers = async () => {
-        const allUsers = await mockDataService.getUsers()
-        // Filter only members
-        setMembers(allUsers.filter(u => u.role === 'member'))
+        try {
+            const allUsers = await firebaseService.getUsers()
+            // Filter only members
+            setMembers(allUsers.filter(u => u.role === 'member'))
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     const handleSaveReport = async (reportData) => {
@@ -67,18 +82,23 @@ const MemberDashboard = ({ user, onLogout }) => {
             return
         }
 
-        if (reportData.id) {
-            await mockDataService.updateReport(reportData.id, reportData)
-        } else {
-            await mockDataService.addReport({ ...reportData, createdBy: userId })
+        try {
+            if (reportData.id) {
+                await firebaseService.updateReport(reportData.id, reportData)
+            } else {
+                await firebaseService.addReport({ ...reportData, createdBy: userId })
+            }
+            await loadReports()
+            setViewingReport(null)
+            alert("Report Saved Successfully!")
+        } catch (e) {
+            alert("Failed to save report: " + e.message)
         }
-        await loadReports()
-        setViewingReport(null)
-        alert("Report Saved Successfully!")
     }
 
-    const handleUpdateUser = (updatedUser) => {
-        setCurrentUser(updatedUser)
+    const handleUpdateUser = () => {
+        // Since we use AuthContext, we reload to fetch fresh data
+        window.location.reload();
     }
 
     return (
@@ -111,11 +131,11 @@ const MemberDashboard = ({ user, onLogout }) => {
                     onClick={() => setShowProfileModal(true)}
                     title="View My Details"
                 >
-                    {currentUser.profile?.fullName ? currentUser.profile.fullName.charAt(0).toUpperCase() : 'U'}
+                    {currentUser?.profile?.fullName ? currentUser.profile.fullName.charAt(0).toUpperCase() : 'U'}
                 </div>
             </div>
 
-            {currentUser.isFirstLogin ? (
+            {currentUser?.isFirstLogin ? (
                 <FirstTimeSetup user={currentUser} onComplete={handleUpdateUser} />
             ) : (
                 <>

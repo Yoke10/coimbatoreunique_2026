@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { mockDataService } from '../../services/mockDataService'
+import { firebaseService } from '../../services/firebaseService'
 
 const Resources = () => {
     const [resources, setResources] = useState([])
@@ -8,7 +8,7 @@ const Resources = () => {
     useEffect(() => {
         const load = async () => {
             try {
-                const data = await mockDataService.getResources()
+                const data = await firebaseService.getResources()
                 setResources(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
             } catch (e) {
                 console.error(e)

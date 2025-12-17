@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import '../MemberDashboard.css';
 
 const MemberDirectory = () => {
@@ -12,11 +12,16 @@ const MemberDirectory = () => {
 
     const loadMembers = async () => {
         try {
-            const data = await mockDataService.getUsers();
-            // Filter only active members? Or all? Usually verified members.
-            setMembers(data.filter(u => u.status === 'active'));
+            console.log("Fetching members directory...");
+            const data = await firebaseService.getUsers();
+            console.log("Fetched members:", data);
+
+            // Filter only active members
+            // If data contains old mock structure, it might crash, so be safe
+            const activeMembers = data.filter(u => u.status === 'active' || !u.status);
+            setMembers(activeMembers);
         } catch (e) {
-            console.error(e);
+            console.error("Failed to load members:", e);
         } finally {
             setLoading(false);
         }

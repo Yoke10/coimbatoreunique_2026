@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { mockDataService } from '../services/mockDataService'
+import { firebaseService } from '../services/firebaseService'
 import ConfettiButton from '../components/ui/ConfettiButton'
 import './JoinUs.css'
 import { useToast } from '../components/ui/Toast/ToastContext'
@@ -32,7 +32,7 @@ const JoinUs = () => {
         }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         if (!formData.terms) {
             toast({
@@ -44,7 +44,7 @@ const JoinUs = () => {
         }
 
         try {
-            mockDataService.addJoinRequest(formData)
+            await firebaseService.addJoinRequest(formData)
 
             toast({
                 title: "Welcome Aboard!",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { mockDataService } from '../services/mockDataService'
+import { firebaseService } from '../services/firebaseService'
 import './Gallery.css'
 
 const Gallery = () => {
@@ -7,7 +7,8 @@ const Gallery = () => {
 
     useEffect(() => {
         const loadGallery = async () => {
-            setGalleryItems(await mockDataService.getGallery())
+            const data = await firebaseService.getGallery()
+            setGalleryItems(data)
         }
         loadGallery()
     }, [])

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockDataService } from '../../services/mockDataService';
+import { firebaseService } from '../../services/firebaseService';
 import { useToast } from '../ui/Toast/ToastContext';
 import * as XLSX from 'xlsx';
 import ReactQuill from 'react-quill';
@@ -37,10 +37,10 @@ const EmailManager = () => {
 
     const loadData = async () => {
         try {
-            setContacts((await mockDataService.getBirthdayContacts()) || {});
-            setMembers(((await mockDataService.getUsers()) || []).filter(u => u.type !== 'admin')); // Filter logic might vary
-            setConfig((await mockDataService.getClubConfig()) || {});
-            setSentLogs((await mockDataService.getSentLogs()) || []);
+            setContacts((await firebaseService.getBirthdayContacts()) || {});
+            setMembers(((await firebaseService.getUsers()) || []).filter(u => u.type !== 'admin')); // Filter logic might vary
+            setConfig((await firebaseService.getClubConfig()) || {});
+            setSentLogs((await firebaseService.getSentLogs()) || []);
         } catch (e) { console.error(e); }
     };
 
@@ -65,7 +65,7 @@ const EmailManager = () => {
 
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const templates = (await mockDataService.getEmailTemplates()) || [];
+        const templates = (await firebaseService.getEmailTemplates()) || [];
         const logs = sentLogs; // use state
 
         // Simplification: We will just filter contacts roughly for now to ensure UI renders
@@ -123,7 +123,7 @@ const EmailManager = () => {
             } else {
                 const newContacts = { ...contacts, [category]: clean };
                 setContacts(newContacts);
-                mockDataService.saveBirthdayContacts(newContacts);
+                firebaseService.saveBirthdayContacts(newContacts);
                 toast({ title: `Imported ${clean.length} to ${category}` });
             }
         };
@@ -255,7 +255,7 @@ const EmailManager = () => {
                         <AdminInput label="Sender Name" value={config.name || ''} onChange={(e) => setConfig({ ...config, name: e.target.value })} />
                         <AdminInput label="Sender Email" value={config.email || ''} onChange={(e) => setConfig({ ...config, email: e.target.value })} />
                         <AdminInput label="App Script URL" value={config.apps_script_url || ''} onChange={(e) => setConfig({ ...config, apps_script_url: e.target.value })} />
-                        <button onClick={async () => { await mockDataService.saveClubConfig(config); toast({ title: "Saved" }) }} className="admin-btn-primary">Save Config</button>
+                        <button onClick={async () => { await firebaseService.saveClubConfig(config); toast({ title: "Saved" }) }} className="admin-btn-primary">Save Config</button>
                     </div>
                 )}
 

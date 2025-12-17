@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Eye, Image } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../ui/Toast/ToastContext';
 import AdminModal from '../common/AdminModal';
 import { AdminInput, AdminFile, AdminSelect } from '../common/FormComponents';
@@ -18,7 +18,7 @@ const GalleryView = () => {
     const [formData, setFormData] = useState({ eventName: '', image: '', orientation: 'landscape' });
 
     useEffect(() => { load(); }, []);
-    const load = async () => setItems(await mockDataService.getGallery());
+    const load = async () => setItems(await firebaseService.getGallery());
 
     const handleInputChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     const handleFileChange = async (e) => {
@@ -36,8 +36,8 @@ const GalleryView = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (isEditing) await mockDataService.updateGalleryItem(selectedItem.id, formData);
-            else await mockDataService.addGalleryItem(formData);
+            if (isEditing) await firebaseService.updateGalleryItem(selectedItem.id, formData);
+            else await firebaseService.addGalleryItem(formData);
             toast({ title: "Success", variant: "success" });
             setIsFormModalOpen(false);
             load();
@@ -45,7 +45,7 @@ const GalleryView = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Delete?")) { await mockDataService.deleteGalleryItem(id); load(); }
+        if (window.confirm("Delete?")) { await firebaseService.deleteGalleryItem(id); load(); }
     };
 
     return (

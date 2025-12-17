@@ -15,8 +15,12 @@ import '@fontsource/playfair-display/800.css'
 import '@fontsource/overpass/800.css'
 import '@fontsource/overpass/900.css'
 
+import { AuthProvider } from "./context/AuthContext"
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <App />
+        <AuthProvider>
+            <App />
+        </AuthProvider>
     </React.StrictMode>,
 )

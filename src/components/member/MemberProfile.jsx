@@ -1,28 +1,107 @@
-import React, { useState } from 'react'
-import { mockDataService } from '../../services/mockDataService'
+import React, { useState, useEffect } from 'react'
+import { firebaseService } from '../../services/firebaseService'
 import { useToast } from '../ui/Toast/ToastContext'
+import { Edit2, Check, X, Shield, Lock } from 'lucide-react'
 
-// Component defined OUTSIDE to prevent re-mounting on every render
-const InfoRow = ({ label, value, field, isEditing, formData, onChange }) => (
-    <div style={{ marginBottom: '1rem', borderBottom: '1px solid #f0f0f0', paddingBottom: '0.5rem' }}>
-        <div style={{ fontSize: '0.85rem', color: '#888', marginBottom: '0.2rem' }}>{label}</div>
-        {isEditing ? (
-            <input
-                name={field}
-                value={formData[field] || ''}
-                onChange={onChange}
-                style={inputStyle}
-            />
-        ) : (
-            <div style={{ fontWeight: '500', color: '#333' }}>{value || '-'}</div>
-        )}
-    </div>
-)
+// Constants
+const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
+const GENDERS = ['Male', 'Female', 'Other']
+const PROFESSIONS = ['Student', 'Working', 'Business', 'Other']
+
+const InfoRow = ({ label, value, field, isEditing, formData, onChange, type = 'text', options = [], required = false, rows = 1 }) => {
+    return (
+        <div style={{ marginBottom: '1.2rem', position: 'relative' }}>
+            <label style={{
+                display: 'block',
+                fontSize: '0.85rem',
+                color: '#666',
+                marginBottom: '0.3rem',
+                fontWeight: '500'
+            }}>
+                {label} {required && <span style={{ color: 'red' }}>*</span>}
+            </label>
+
+            {isEditing ? (
+                type === 'select' ? (
+                    <select
+                        name={field}
+                        value={formData[field] || ''}
+                        onChange={onChange}
+                        style={inputStyle}
+                        required={required}
+                    >
+                        <option value="">Select {label}</option>
+                        {options.map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                    </select>
+                ) : type === 'textarea' ? (
+                    <textarea
+                        name={field}
+                        value={formData[field] || ''}
+                        onChange={onChange}
+                        style={{ ...inputStyle, minHeight: '60px', resize: 'vertical' }}
+                        rows={rows}
+                    />
+                ) : (
+                    <input
+                        type={type}
+                        name={field}
+                        value={formData[field] || ''}
+                        onChange={onChange}
+                        style={inputStyle}
+                        required={required}
+                        placeholder={type === 'date' ? '' : `Enter ${label}`}
+                    />
+                )
+            ) : (
+                <div style={{
+                    fontWeight: '500',
+                    color: value ? '#333' : '#aaa',
+                    fontSize: '1rem',
+                    minHeight: '1.5rem',
+                    borderBottom: '1px solid transparent'
+                }}>
+                    {value || '-'}
+                </div>
+            )}
+        </div>
+    )
+}
 
 const MemberProfile = ({ user, onUpdate }) => {
     const { toast } = useToast()
     const [isEditing, setIsEditing] = useState(false)
-    const [formData, setFormData] = useState(user.profile)
+    const [authStatus, setAuthStatus] = useState('Checking...')
+
+    // Auth Listener
+    React.useEffect(() => {
+        import('../../firebase/config').then(({ auth }) => {
+            auth.onAuthStateChanged(u => {
+                setAuthStatus(u ? 'Connected' : 'Disconnected')
+            })
+        })
+    }, [])
+
+    // Ensure nested profile object exists
+    const getInitialData = (u) => ({
+        ...u.profile,
+        // Ensure defaults if missing
+        addressLine1: u.profile?.addressLine1 || '',
+        addressLine2: u.profile?.addressLine2 || '',
+        personalEmail: u.profile?.personalEmail || u.email || '', // Default to login email if missing
+        gender: u.profile?.gender || '',
+        bloodGroup: u.profile?.bloodGroup || '',
+        profession: u.profile?.profession || 'Student',
+    })
+
+    const [formData, setFormData] = useState(getInitialData(user))
+
+    // SYNC FORM DATA WHEN USER PROP UPDATES (e.g. after async fetch)
+    useEffect(() => {
+        setFormData(getInitialData(user))
+    }, [user])
+
     const [loading, setLoading] = useState(false)
 
     const handleChange = (e) => {
@@ -33,119 +112,215 @@ const MemberProfile = ({ user, onUpdate }) => {
     const handleSave = async () => {
         setLoading(true)
         try {
-            const updatedUser = mockDataService.updateUser(user.id, { profile: formData })
-            onUpdate(updatedUser)
-            toast({ title: "Profile Updated", description: "Your details have been saved.", variant: "success" })
+            // Update Firestore DIRECTLY using firebaseService
+            // We only update the 'profile' field in the user document
+            const updatedUser = await firebaseService.updateUser(user.id, {
+                profile: {
+                    ...formData,
+                    // If name is edited, we might want to update top-level username too? 
+                    // Usually safer to keep top-level sync with profile.fullName
+                }
+            })
+
+            // Update parent state
+            onUpdate({ ...user, profile: formData }) // Optimistic or use returned
+
+            toast({ title: "Profile Updated", description: "Your details have been saved successfully.", variant: "success" })
             setIsEditing(false)
         } catch (err) {
             console.error(err)
-            toast({ title: "Update Failed", description: "Failed to update profile.", variant: "destructive" })
+            if (err.message.includes("Session not found") || err.message.includes("Permission Denied")) {
+                toast({
+                    title: "Session Expired",
+                    description: "Your secure session has expired. Please Log Out and Log In again to save changes.",
+                    variant: "destructive",
+                    duration: 5000
+                })
+            } else {
+                toast({ title: "Update Failed", description: "Failed to update profile.", variant: "destructive" })
+            }
         } finally {
             setLoading(false)
         }
     }
 
+    const initials = formData.fullName
+        ? formData.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+        : 'U';
+
     return (
-        <div style={{ maxWidth: '1000px', margin: '2rem auto', display: 'grid', gridTemplateColumns: '300px 1fr', gap: '2rem' }}>
-            {/* Sidebar Card */}
-            <div style={{ background: 'white', padding: '2rem', borderRadius: '15px', height: 'fit-content', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-                <div style={{ width: '100px', height: '100px', background: 'var(--primary-magenta)', borderRadius: '50%', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '2.5rem', fontWeight: 'bold' }}>
-                    {user.profile.fullName ? user.profile.fullName.charAt(0) : 'U'}
-                </div>
-                <h2 style={{ margin: '0.5rem 0', color: '#333' }}>{user.profile.fullName}</h2>
-                <div style={{ color: 'var(--primary-pink)', fontWeight: '600', marginBottom: '1.5rem' }}>{user.memberId}</div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+            <div className="profile-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 2fr', gap: '2rem' }}>
 
-                <div style={{ textAlign: 'left', background: '#f9f9f9', padding: '1rem', borderRadius: '10px' }}>
-                    <div style={{ marginBottom: '0.5rem' }}><strong>Status:</strong> <span style={{ color: 'green' }}>Active</span></div>
-                    <div style={{ marginBottom: '0.5rem' }}><strong>Joined:</strong> 2023</div>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div style={{ background: 'white', padding: '2rem', borderRadius: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
-                    <h2 style={{ color: 'var(--primary-magenta)', margin: 0 }}>My Profile</h2>
-                    {!user.isLocked && (
-                        <button
-                            onClick={isEditing ? handleSave : () => setIsEditing(true)}
-                            style={isEditing ? saveBtnStyle : editBtnStyle}
-                            disabled={loading}
-                        >
-                            {loading ? "Saving..." : (isEditing ? "Save Changes" : "Edit Profile")}
-                        </button>
-                    )}
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                    <div>
-                        <h4 style={{ color: '#555', marginBottom: '1rem', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '1px' }}>Personal Details</h4>
-                        <InfoRow label="Full Name" value={user.profile.fullName} field="fullName" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="Date of Birth" value={user.profile.dob} field="dob" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="Gender" value={user.profile.gender} field="gender" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="Blood Group" value={user.profile.bloodGroup} field="bloodGroup" isEditing={isEditing} formData={formData} onChange={handleChange} />
+                {/* LEFT COLUMN: Identity Card */}
+                <div style={{ background: 'white', padding: '2rem', borderRadius: '20px', height: 'fit-content', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', textAlign: 'center' }}>
+                    <div style={{
+                        width: '120px', height: '120px',
+                        background: 'linear-gradient(135deg, var(--primary-magenta), var(--primary-purple))',
+                        borderRadius: '50%', margin: '0 auto 1.5rem',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: 'white', fontSize: '3rem', fontWeight: 'bold',
+                        boxShadow: '0 8px 16px rgba(237, 7, 117, 0.3)'
+                    }}>
+                        {initials}
                     </div>
-                    <div>
-                        <h4 style={{ color: '#555', marginBottom: '1rem', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '1px' }}>Contact Details</h4>
-                        <InfoRow label="Email" value={user.profile.email} field="email" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="Phone" value={user.profile.contact} field="contact" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="Address" value={`${user.profile.addressLine1}, ${user.profile.addressLine2}`} field="addressLine1" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="Emergency Contact" value={user.profile.emergencyContact} field="emergencyContact" isEditing={isEditing} formData={formData} onChange={handleChange} />
+
+                    <h2 style={{ margin: '0.5rem 0', color: '#2d3748', fontSize: '1.5rem' }}>
+                        {formData.fullName || 'Member Name'}
+                    </h2>
+
+                    <div className="badge" style={{
+                        background: 'rgba(237, 7, 117, 0.1)', color: 'var(--primary-magenta)',
+                        padding: '0.4rem 1rem', borderRadius: '50px',
+                        display: 'inline-block', fontWeight: '600', fontSize: '0.9rem',
+                        marginBottom: '1.5rem'
+                    }}>
+                        {user.memberId}
+                    </div>
+
+                    <div style={{ textAlign: 'left', background: '#f7fafc', padding: '1.5rem', borderRadius: '15px' }}>
+                        <div style={{ marginBottom: '0.8rem', display: 'flex', justifyContent: 'space-between' }}>
+                            <span style={{ color: '#718096', fontSize: '0.9rem' }}>Membership Status</span>
+                            <span style={{ color: 'var(--success-green)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <Shield size={14} /> Active
+                            </span>
+                        </div>
+                        <div style={{ marginBottom: '0.8rem', display: 'flex', justifyContent: 'space-between' }}>
+                            <span style={{ color: '#718096', fontSize: '0.9rem' }}>Member Since</span>
+                            <span style={{ color: '#4a5568', fontWeight: '600' }}>2024</span>
+                        </div>
+                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                            <div style={{ fontSize: '0.75rem', color: '#a0aec0', marginBottom: '0.2rem' }}>LOGIN ID</div>
+                            <div style={{ fontSize: '0.9rem', color: '#4a5568', wordBreak: 'break-all' }}>{user.email} <Lock size={12} style={{ display: 'inline', marginLeft: '4px' }} /></div>
+                        </div>
                     </div>
                 </div>
 
-                <div style={{ marginTop: '1rem' }}>
-                    <h4 style={{ color: '#555', marginBottom: '1rem', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '1px' }}>Additional Info</h4>
+                {/* RIGHT COLUMN: Details Form */}
+                <div style={{ background: 'white', padding: '2.5rem', borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid #f7fafc', paddingBottom: '1.5rem' }}>
+                        <div>
+                            <h2 style={{ color: 'var(--primary-magenta)', margin: 0, fontSize: '1.8rem' }}>Profile Details</h2>
+                            <p style={{ color: '#718096', margin: '0.5rem 0 0', fontSize: '0.95rem' }}>Manage your personal information</p>
+                        </div>
+
+                        {!isEditing ? (
+                            <button onClick={() => setIsEditing(true)} style={actionBtnStyle}>
+                                <Edit2 size={18} /> Edit Profile
+                            </button>
+                        ) : (
+                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                <button onClick={() => setIsEditing(false)} style={cancelBtnStyle}>
+                                    <X size={18} /> Cancel
+                                </button>
+                                <button onClick={handleSave} style={saveBtnStyle} disabled={loading}>
+                                    {loading ? 'Saving...' : <><Check size={18} /> Save Changes</>}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                        <InfoRow label="Profession" value={user.profile.profession} field="profession" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="RI ID" value={user.profile.riId} field="riId" isEditing={isEditing} formData={formData} onChange={handleChange} />
-                        <InfoRow label="Hobbies" value={user.profile.hobbies} field="hobbies" isEditing={isEditing} formData={formData} onChange={handleChange} />
+
+                        {/* Personal Info Group */}
+                        <div style={{ gridColumn: '1 / -1' }}>
+                            <h4 style={sectionHeaderStyle}>Personal Information</h4>
+                        </div>
+
+                        <InfoRow label="Full Name" field="fullName" value={formData.fullName} isEditing={isEditing} formData={formData} onChange={handleChange} required />
+                        <InfoRow label="Date of Birth" field="dob" value={formData.dob} isEditing={isEditing} formData={formData} onChange={handleChange} type="date" />
+
+                        <InfoRow label="Gender" field="gender" value={formData.gender} isEditing={isEditing} formData={formData} onChange={handleChange} type="select" options={GENDERS} />
+                        <InfoRow label="Blood Group" field="bloodGroup" value={formData.bloodGroup} isEditing={isEditing} formData={formData} onChange={handleChange} type="select" options={BLOOD_GROUPS} />
+
+                        {/* Contact Info Group */}
+                        <div style={{ gridColumn: '1 / -1', marginTop: '1rem' }}>
+                            <h4 style={sectionHeaderStyle}>Contact Information</h4>
+                        </div>
+
+                        <InfoRow label="Personal Email" field="personalEmail" value={formData.personalEmail} isEditing={isEditing} formData={formData} onChange={handleChange} type="email" />
+                        <InfoRow label="Phone Number" field="contact" value={formData.contact} isEditing={isEditing} formData={formData} onChange={handleChange} type="tel" />
+
+                        {/* Address: Full Width */}
+                        <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                            <InfoRow label="Address Line 1" field="addressLine1" value={formData.addressLine1} isEditing={isEditing} formData={formData} onChange={handleChange} type="text" />
+                            <InfoRow label="Address Line 2" field="addressLine2" value={formData.addressLine2} isEditing={isEditing} formData={formData} onChange={handleChange} type="text" />
+                        </div>
+
+                        <InfoRow label="Emergency Contact" field="emergencyContact" value={formData.emergencyContact} isEditing={isEditing} formData={formData} onChange={handleChange} />
+
+                        {/* Professional & Extra */}
+                        <div style={{ gridColumn: '1 / -1', marginTop: '1rem' }}>
+                            <h4 style={sectionHeaderStyle}>Additional Details</h4>
+                        </div>
+
+                        <InfoRow label="Profession" field="profession" value={formData.profession} isEditing={isEditing} formData={formData} onChange={handleChange} type="select" options={PROFESSIONS} />
+                        <InfoRow label="RI ID" field="riId" value={formData.riId} isEditing={isEditing} formData={formData} onChange={handleChange} />
+                        <div style={{ gridColumn: '1 / -1' }}>
+                            <InfoRow label="Hobbies / Interests" field="hobbies" value={formData.hobbies} isEditing={isEditing} formData={formData} onChange={handleChange} type="textarea" rows={2} />
+                        </div>
+
                     </div>
                 </div>
-
-                {isEditing && (
-                    <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
-                        <button onClick={() => setIsEditing(false)} style={cancelBtnStyle}>Cancel</button>
-                    </div>
-                )}
             </div>
         </div>
     )
 }
 
-const inputStyle = {
-    width: '100%',
-    padding: '0.5rem',
-    borderRadius: '5px',
-    border: '1px solid #ddd',
-    fontSize: '0.9rem'
+// Styles
+const sectionHeaderStyle = {
+    color: '#a0aec0',
+    fontSize: '0.85rem',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    borderBottom: '1px solid #e2e8f0',
+    paddingBottom: '0.5rem',
+    marginBottom: '1rem'
 }
 
-const editBtnStyle = {
-    padding: '0.5rem 1.5rem',
+const inputStyle = {
+    width: '100%',
+    padding: '0.75rem',
+    borderRadius: '8px',
+    border: '1px solid #e2e8f0',
+    fontSize: '0.95rem',
+    backgroundColor: '#fff',
+    transition: 'all 0.2s',
+    outline: 'none'
+}
+
+const actionBtnStyle = {
+    display: 'flex', alignItems: 'center', gap: '0.5rem',
+    padding: '0.6rem 1.2rem',
     background: 'white',
     color: 'var(--primary-magenta)',
-    border: '1px solid var(--primary-magenta)',
-    borderRadius: '8px',
+    border: '2px solid var(--primary-magenta)',
+    borderRadius: '10px',
     fontWeight: '600',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    transition: 'all 0.2s'
 }
 
 const saveBtnStyle = {
-    padding: '0.5rem 1.5rem',
+    display: 'flex', alignItems: 'center', gap: '0.5rem',
+    padding: '0.6rem 1.5rem',
     background: 'var(--primary-magenta)',
     color: 'white',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '10px',
     fontWeight: '600',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    boxShadow: '0 4px 12px rgba(237, 7, 117, 0.3)'
 }
 
 const cancelBtnStyle = {
-    padding: '0.5rem 1.5rem',
-    background: '#eee',
-    color: '#555',
+    display: 'flex', alignItems: 'center', gap: '0.5rem',
+    padding: '0.6rem 1.2rem',
+    background: '#edf2f7',
+    color: '#4a5568',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '10px',
     fontWeight: '600',
     cursor: 'pointer'
 }

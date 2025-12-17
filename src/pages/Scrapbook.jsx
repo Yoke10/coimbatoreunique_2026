@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import BulletinCard from '../components/bulletin/BulletinCard'
 import FlipbookViewer from '../components/bulletin/FlipbookViewer'
-import { mockDataService } from '../services/mockDataService'
+import { firebaseService } from '../services/firebaseService'
 
 const Scrapbook = () => {
     const [scrapbooks, setScrapbooks] = useState([])
@@ -10,13 +10,10 @@ const Scrapbook = () => {
     useEffect(() => {
         window.scrollTo(0, 0)
         const loadScrapbooks = async () => {
-            const data = await mockDataService.getScrapbooks()
+            const data = await firebaseService.getScrapbooks()
             setScrapbooks(data)
         }
         loadScrapbooks()
-
-        window.addEventListener('storage', loadScrapbooks)
-        return () => window.removeEventListener('storage', loadScrapbooks)
     }, [])
 
     return (

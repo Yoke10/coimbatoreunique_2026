@@ -2,7 +2,7 @@ import React from 'react'
 import TeamMemberCard from './TeamMemberCard'
 import './TeamGridSection.css'
 
-import { mockDataService } from '../../services/mockDataService'
+import { firebaseService } from '../../services/firebaseService'
 
 const TeamGridSection = () => {
     const [members, setMembers] = React.useState([])
@@ -11,7 +11,7 @@ const TeamGridSection = () => {
     React.useEffect(() => {
         const fetchMembers = async () => {
             try {
-                const data = await mockDataService.getBoardMembers()
+                const data = await firebaseService.getBoardMembers()
                 setMembers(data)
             } catch (error) {
                 console.error("Failed to fetch team members", error)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import EventCard from '../components/events/EventCard'
-import { mockDataService } from '../services/mockDataService'
+import { firebaseService } from '../services/firebaseService'
 
 const Events = () => {
     const [events, setEvents] = useState([])
@@ -8,13 +8,10 @@ const Events = () => {
     useEffect(() => {
         window.scrollTo(0, 0)
         const loadEvents = async () => {
-            const data = await mockDataService.getEvents()
+            const data = await firebaseService.getEvents()
             setEvents(data)
         }
         loadEvents()
-
-        window.addEventListener('storage', loadEvents)
-        return () => window.removeEventListener('storage', loadEvents)
     }, [])
 
     return (

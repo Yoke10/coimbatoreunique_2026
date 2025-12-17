@@ -2,43 +2,47 @@ import React, { useState, useEffect } from 'react'
 import Login from '../components/admin/Login'
 import AdminDashboard from '../components/admin/AdminDashboard'
 import MemberDashboard from '../components/member/MemberDashboard'
-import { mockDataService } from '../services/mockDataService'
+import { firebaseService } from '../services/firebaseService'
+import { useAuth } from '../context/AuthContext'
+import ErrorBoundary from '../components/common/ErrorBoundary'
 
 const MemberSpace = () => {
-    const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        const currentUser = mockDataService.getCurrentUser()
-        if (currentUser) {
-            setUser(currentUser)
-        }
-        setLoading(false)
-    }, [])
+    // 🔥 CONNECT TO AUTH CONTEXT
+    const { currentUser, loading } = useAuth()
 
     const handleLogin = (loggedInUser) => {
-        setUser(loggedInUser)
+        // Login component might still pass user up, but Context will update automatically
+        // No local state needed here really, but Login might need refactor next.
+        // For now, if Login succeeds, it calls firebaseService.login -> auth changes -> Context updates.
     }
 
-    const handleLogout = () => {
-        mockDataService.logout()
-        setUser(null)
+    const handleLogout = async () => {
+        await firebaseService.logout()
+        // Context will auto-update to null
     }
 
-    if (loading) return null
+    if (loading) {
+        return (
+            <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#B30F54' }}>
+                Loading Member Space...
+            </div>
+        )
+    }
 
     return (
-        <div className="memberspace-page">
-            {!user ? (
-                <Login onLogin={handleLogin} />
-            ) : (
-                user.role === 'admin' ? (
-                    <AdminDashboard user={user} onLogout={handleLogout} />
+        <ErrorBoundary>
+            <div className="memberspace-page">
+                {!currentUser ? (
+                    <Login onLogin={handleLogin} />
                 ) : (
-                    <MemberDashboard user={user} onLogout={handleLogout} />
-                )
-            )}
-        </div>
+                    currentUser.role === 'admin' ? (
+                        <AdminDashboard user={currentUser} onLogout={handleLogout} />
+                    ) : (
+                        <MemberDashboard user={currentUser} onLogout={handleLogout} />
+                    )
+                )}
+            </div>
+        </ErrorBoundary>
     )
 }
 

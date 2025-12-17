@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import BulletinCard from '../components/bulletin/BulletinCard'
 import FlipbookViewer from '../components/bulletin/FlipbookViewer'
-import { mockDataService } from '../services/mockDataService'
+import { firebaseService } from '../services/firebaseService'
 
 const Bulletin = () => {
     const [bulletins, setBulletins] = useState([])
@@ -10,13 +10,14 @@ const Bulletin = () => {
     useEffect(() => {
         window.scrollTo(0, 0)
         const loadBulletins = async () => {
-            const data = await mockDataService.getBulletins()
-            setBulletins(data)
+            try {
+                const data = await firebaseService.getBulletins()
+                setBulletins(data)
+            } catch (error) {
+                console.error("Failed to load bulletins", error)
+            }
         }
         loadBulletins()
-
-        window.addEventListener('storage', loadBulletins)
-        return () => window.removeEventListener('storage', loadBulletins)
     }, [])
 
     return (

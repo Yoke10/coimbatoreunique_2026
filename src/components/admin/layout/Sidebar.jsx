@@ -74,10 +74,12 @@ const Sidebar = ({
             <div className="sidebar-footer">
                 <div className="user-profile">
                     <div className="user-avatar">
-                        {user.username.charAt(0).toUpperCase()}
+                        {(user?.profile?.fullName || user?.email || 'A').charAt(0).toUpperCase()}
                     </div>
                     <div className="user-info">
-                        <span className="user-name">{user.username}</span>
+                        <span className="user-name">
+                            {user?.profile?.fullName || user?.email || 'System Admin'}
+                        </span>
                         <span className="user-role">Administrator</span>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Eye, Link as LinkIcon, FileText, Image } from 'lucide-react';
-import { mockDataService } from '../../services/mockDataService';
+import { firebaseService } from '../../services/firebaseService';
 import { useToast } from '../ui/Toast/ToastContext';
 import AdminModal from './common/AdminModal';
 import { AdminInput, AdminSelect, AdminFile } from './common/FormComponents';
@@ -19,7 +19,7 @@ const ResourceManager = () => {
     const [uploadError, setUploadError] = useState('');
 
     useEffect(() => { load(); }, []);
-    const load = async () => setResources((await mockDataService.getResources()).sort((a, b) => new Date(b.date) - new Date(a.date)));
+    const load = async () => setResources((await firebaseService.getResources()).sort((a, b) => new Date(b.date) - new Date(a.date)));
 
     const handleInputChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     const handleTypeChange = (e) => setFormData(prev => ({ ...prev, type: e.target.value, content: '' }));
@@ -44,8 +44,8 @@ const ResourceManager = () => {
         if (!formData.content) { toast({ title: "Error", description: "Content required", variant: "destructive" }); return; }
 
         try {
-            if (isEditing) await mockDataService.updateResource(selectedItem.id, formData);
-            else await mockDataService.addResource(formData);
+            if (isEditing) await firebaseService.updateResource(selectedItem.id, formData);
+            else await firebaseService.addResource(formData);
             toast({ title: "Success", variant: "success" });
             setIsFormModalOpen(false);
             load();
@@ -53,7 +53,7 @@ const ResourceManager = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Delete Resource?")) { await mockDataService.deleteResource(id); load(); }
+        if (window.confirm("Delete Resource?")) { await firebaseService.deleteResource(id); load(); }
     };
 
     const previewResource = (res) => {

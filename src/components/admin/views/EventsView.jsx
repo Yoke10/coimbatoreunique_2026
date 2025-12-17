@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Eye, Calendar, Tag } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../ui/Toast/ToastContext';
 import AdminModal from '../common/AdminModal';
 import { AdminInput, AdminTextarea, AdminFile, AdminSelect } from '../common/FormComponents';
@@ -33,7 +33,7 @@ const EventsView = () => {
 
     const loadEvents = async () => {
         try {
-            const data = await mockDataService.getEvents();
+            const data = await firebaseService.getEvents();
             // Sort by date descending
             setEvents(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
         } catch (error) { toast({ title: "Error", description: "Failed to load events", variant: "destructive" }); }
@@ -102,10 +102,10 @@ const EventsView = () => {
         e.preventDefault();
         try {
             if (isEditing && selectedEvent) {
-                await mockDataService.updateEvent(selectedEvent.id, formData);
+                await firebaseService.updateEvent(selectedEvent.id, formData);
                 toast({ title: "Updated", description: "Event updated successfully", variant: "success" });
             } else {
-                await mockDataService.addEvent(formData);
+                await firebaseService.addEvent(formData);
                 toast({ title: "Created", description: "Event created successfully", variant: "success" });
             }
             setIsFormModalOpen(false);
@@ -116,7 +116,7 @@ const EventsView = () => {
     // DELETE
     const handleDelete = async (id) => {
         if (window.confirm("Delete this event?")) {
-            await mockDataService.deleteEvent(id);
+            await firebaseService.deleteEvent(id);
             loadEvents();
             toast({ title: "Deleted", variant: "default" });
         }

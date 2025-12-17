@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Eye, FileText } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../ui/Toast/ToastContext';
 import AdminModal from '../common/AdminModal';
 import { AdminInput, AdminFile } from '../common/FormComponents';
@@ -20,7 +20,7 @@ const BulletinView = () => {
     useEffect(() => { loadBulletins(); }, []);
 
     const loadBulletins = async () => {
-        setBulletins(await mockDataService.getBulletins());
+        setBulletins(await firebaseService.getBulletins());
     };
 
     const handleInputChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -47,8 +47,8 @@ const BulletinView = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (isEditing) await mockDataService.updateBulletin(selectedItem.id, formData);
-            else await mockDataService.addBulletin(formData);
+            if (isEditing) await firebaseService.updateBulletin(selectedItem.id, formData);
+            else await firebaseService.addBulletin(formData);
             toast({ title: "Success", description: "Saved successfully", variant: "success" });
             setIsFormModalOpen(false);
             loadBulletins();
@@ -57,7 +57,7 @@ const BulletinView = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm("Delete this bulletin?")) {
-            await mockDataService.deleteBulletin(id);
+            await firebaseService.deleteBulletin(id);
             loadBulletins();
         }
     };

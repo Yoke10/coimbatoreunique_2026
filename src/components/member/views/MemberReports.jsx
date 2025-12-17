@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../../components/ui/Toast/ToastContext';
 import '../MemberDashboard.css';
 import { AdminInput, AdminTextarea, AdminFile } from '../../admin/common/FormComponents';
@@ -24,13 +24,13 @@ const MemberReports = ({ currentUser }) => {
         try {
             // Assuming getReports fetches all, we might filter by user if specific logic exists
             // But usually members can see their own reports? 
-            // MockDataService.getReports() returns all. Let's filter by author if needed?
+            // firebaseService.getReports() returns all. Let's filter by author if needed?
             // For now, let's just show all or implement a getUserReports if it existed.
             // Let's assume we show reports created by this user.
-            const allReports = await mockDataService.getReports();
+            const allReports = await firebaseService.getReports();
             // Filter logic: report.userId === currentUser.id ?? 
             // If report structure doesn't have userId, we might just list all.
-            // Let's check mock data service structure... 
+            // Let's check firebase service structure... 
             // For now, listing all.
             setReports(allReports);
         } catch (e) {
@@ -47,7 +47,7 @@ const MemberReports = ({ currentUser }) => {
             let attachments = [];
             // Basic file handling logic here if we had fileToBase64 helper imported
             // For now, just submitting text data to mock
-            await mockDataService.addReport({
+            await firebaseService.addReport({
                 title: formData.title,
                 content: formData.description,
                 author: currentUser.username,

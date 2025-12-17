@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Download, Filter } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { generateReportPDF, generateBulkPDF } from '../../../utils/pdfGenerator';
 import '../layout/AdminLayout.css';
 
@@ -9,7 +9,7 @@ const ReportsView = () => {
     const [filterMonth, setFilterMonth] = useState(new Date().toISOString().substring(0, 7));
 
     useEffect(() => {
-        const load = async () => setReports(await mockDataService.getReports());
+        const load = async () => setReports(await firebaseService.getReports());
         load();
     }, []);
 

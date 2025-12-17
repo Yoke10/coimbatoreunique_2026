@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { mockDataService } from '../../services/mockDataService'
+import { firebaseService } from '../../services/firebaseService'
 import { useToast } from '../ui/Toast/ToastContext'
 import { Eye, EyeOff } from 'lucide-react'
 import './Login.css'
@@ -46,13 +46,17 @@ const Login = ({ onLogin }) => {
 
         setLoading(true)
         try {
-            const user = await mockDataService.login(username, password, type)
+            // Login now only returns Auth User
+            const userAuth = await firebaseService.login(username, password)
+
             toast({
                 title: 'Login Successful',
-                description: `Welcome back, ${user.profile?.fullName || user.username}`,
+                description: `Welcome back! Redirecting...`,
                 variant: 'success'
             })
-            onLogin(user)
+
+            // Notify parent (though AuthContext will trigger re-render)
+            onLogin(userAuth)
         } catch (err) {
             toast({
                 title: 'Login Failed',

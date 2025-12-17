@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { mockDataService } from '../../services/mockDataService'
+import { firebaseService } from '../../services/firebaseService'
 import { useToast } from '../ui/Toast/ToastContext'
 
 const FirstTimeSetup = ({ user, onComplete }) => {
@@ -65,10 +65,10 @@ const FirstTimeSetup = ({ user, onComplete }) => {
             // Submit Profile
             try {
                 // 1. Change Password
-                await mockDataService.changePassword(user.id, formData.newPassword)
+                await firebaseService.changePassword(user.id, formData.newPassword)
 
                 // 2. Generate Member ID
-                const memberId = await mockDataService.generateMemberId()
+                const memberId = await firebaseService.generateMemberId()
 
                 // 3. Update Profile
                 const profileData = {
@@ -88,7 +88,7 @@ const FirstTimeSetup = ({ user, onComplete }) => {
                     hobbies: formData.hobbies
                 }
 
-                await mockDataService.updateUser(user.id, {
+                await firebaseService.updateUser(user.id, {
                     profile: profileData,
                     memberId: memberId,
                     isFirstLogin: false

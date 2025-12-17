@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { generateReportPDF } from '../../utils/pdfGenerator'
-import { mockDataService } from '../../services/mockDataService'
+
 import { compressImage } from '../../utils/imageUtils'
 
 const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }) => {

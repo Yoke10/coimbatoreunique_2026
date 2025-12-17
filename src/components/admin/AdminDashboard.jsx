@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { mockDataService } from '../../services/mockDataService'
 
 // Layout
 import AdminLayout from './layout/AdminLayout'
@@ -20,7 +19,7 @@ import EmailManager from './EmailManager'
 import ResourceManager from './ResourceManager'
 
 // Styles
-import './AdminDashboard.css' // Import legacy styles just in case for sub-components, though we should prefer AdminLayout.css
+import './AdminDashboard.css'
 
 const AdminDashboard = ({ user, onLogout }) => {
     const [activeSection, setActiveSection] = useState('events')
@@ -33,16 +32,18 @@ const AdminDashboard = ({ user, onLogout }) => {
 
     const loadStorageInfo = async () => {
         try {
-            const usage = await mockDataService.getStorageInfo()
-            setStorageUsage(usage)
+            if (navigator.storage && navigator.storage.estimate) {
+                const estimate = await navigator.storage.estimate()
+                setStorageUsage((estimate.usage / 1024 / 1024).toFixed(2))
+            }
         } catch (error) {
             console.error("Failed to load storage info")
         }
     }
 
     const handleClearData = async () => {
-        if (window.confirm("CRITICAL WARNING: This will WIPE ALL DATA. Are you sure?")) {
-            await mockDataService.clearAllData()
+        if (window.confirm("Are you sure? This will clear local session data.")) {
+            sessionStorage.clear();
             window.location.reload()
         }
     }

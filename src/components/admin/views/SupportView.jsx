@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Eye, MessageSquare } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../ui/Toast/ToastContext';
 import AdminModal from '../common/AdminModal';
 import '../layout/AdminLayout.css';
@@ -12,13 +12,13 @@ const SupportView = () => {
 
     useEffect(() => { loadMessages(); }, []);
     const loadMessages = async () => {
-        try { setMessages(await mockDataService.getSupportMessages()); }
+        try { setMessages(await firebaseService.getSupportMessages()); }
         catch { toast({ title: "Error", description: "Failed to load messages", variant: "destructive" }); }
     };
 
     const handleDelete = async (id) => {
         if (window.confirm("Delete this message?")) {
-            await mockDataService.deleteSupportMessage(id);
+            await firebaseService.deleteSupportMessage(id);
             loadMessages();
             if (selectedMessage?.id === id) setSelectedMessage(null);
             toast({ title: "Deleted", variant: "default" });

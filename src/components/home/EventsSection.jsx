@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { mockDataService } from '../../services/mockDataService'
+import { firebaseService } from '../../services/firebaseService'
 import { useNavigate } from 'react-router-dom'
 import './EventsSection.css'
 
@@ -11,13 +11,10 @@ const EventsSection = () => {
 
     useEffect(() => {
         const loadEvents = async () => {
-            const data = await mockDataService.getEvents()
+            const data = await firebaseService.getEvents()
             setEvents(data)
         }
         loadEvents()
-
-        window.addEventListener('storage', loadEvents)
-        return () => window.removeEventListener('storage', loadEvents)
     }, [])
 
     const scroll = (direction) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Eye, BookOpen } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../ui/Toast/ToastContext';
 import AdminModal from '../common/AdminModal';
 import { AdminInput, AdminFile } from '../common/FormComponents';
@@ -18,7 +18,7 @@ const ScrapbookView = () => {
     const [formData, setFormData] = useState({ title: '', date: '', poster: '', pdfUrl: '' });
 
     useEffect(() => { load(); }, []);
-    const load = async () => setItems(await mockDataService.getScrapbooks());
+    const load = async () => setItems(await firebaseService.getScrapbooks());
 
     const handleInputChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     const handleFileChange = async (e, field, type) => {
@@ -36,8 +36,8 @@ const ScrapbookView = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (isEditing) await mockDataService.updateScrapbook(selectedItem.id, formData);
-            else await mockDataService.addScrapbook(formData);
+            if (isEditing) await firebaseService.updateScrapbook(selectedItem.id, formData);
+            else await firebaseService.addScrapbook(formData);
             toast({ title: "Success", variant: "success" });
             setIsFormModalOpen(false);
             load();
@@ -45,7 +45,7 @@ const ScrapbookView = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Delete?")) { await mockDataService.deleteScrapbook(id); load(); }
+        if (window.confirm("Delete?")) { await firebaseService.deleteScrapbook(id); load(); }
     };
 
     return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Eye, User } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../ui/Toast/ToastContext';
 import AdminModal from '../common/AdminModal';
 import { AdminInput, AdminFile, AdminTextarea } from '../common/FormComponents';
@@ -18,7 +18,7 @@ const BoardMembersView = () => {
     const [formData, setFormData] = useState({ name: '', role: '', message: '', image: '' });
 
     useEffect(() => { load(); }, []);
-    const load = async () => setItems(await mockDataService.getBoardMembers());
+    const load = async () => setItems(await firebaseService.getBoardMembers());
 
     const handleInputChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     const handleFileChange = async (e) => {
@@ -36,8 +36,8 @@ const BoardMembersView = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (isEditing) await mockDataService.updateBoardMember(selectedItem.id, formData);
-            else await mockDataService.addBoardMember(formData);
+            if (isEditing) await firebaseService.updateBoardMember(selectedItem.id, formData);
+            else await firebaseService.addBoardMember(formData);
             toast({ title: "Success", variant: "success" });
             setIsFormModalOpen(false);
             load();
@@ -45,7 +45,7 @@ const BoardMembersView = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Delete?")) { await mockDataService.deleteBoardMember(id); load(); }
+        if (window.confirm("Delete?")) { await firebaseService.deleteBoardMember(id); load(); }
     };
 
     return (

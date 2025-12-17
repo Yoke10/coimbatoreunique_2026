@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Eye, UserPlus } from 'lucide-react';
-import { mockDataService } from '../../../services/mockDataService';
+import { firebaseService } from '../../../services/firebaseService';
 import { useToast } from '../../ui/Toast/ToastContext';
 import AdminModal from '../common/AdminModal';
 import '../layout/AdminLayout.css';
@@ -12,13 +12,13 @@ const JoiningEnquiryView = () => {
 
     useEffect(() => { loadItems(); }, []);
     const loadItems = async () => {
-        try { setEnquiries(await mockDataService.getJoinRequests()); }
+        try { setEnquiries(await firebaseService.getJoinRequests()); }
         catch { toast({ title: "Error", description: "Failed to load", variant: "destructive" }); }
     };
 
     const handleDelete = async (id) => {
         if (window.confirm("Delete this request?")) {
-            await mockDataService.deleteJoinRequest(id);
+            await firebaseService.deleteJoinRequest(id);
             loadItems();
             if (selectedEnquiry?.id === id) setSelectedEnquiry(null);
             toast({ title: "Deleted", variant: "default" });
