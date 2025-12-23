@@ -3,20 +3,19 @@ import React, { useState, useEffect } from 'react'
 // Layout
 import AdminLayout from './layout/AdminLayout'
 
-// Views
-import EventsView from './views/EventsView'
-import BulletinView from './views/BulletinView'
-import ScrapbookView from './views/ScrapbookView'
-import GalleryView from './views/GalleryView'
-import BoardMembersView from './views/BoardMembersView'
-import SupportView from './views/SupportView'
-import JoiningEnquiryView from './views/JoiningEnquiryView'
-import MembersView from './views/MembersView'
-import ReportsView from './views/ReportsView'
+const EventsView = React.lazy(() => import('./views/EventsView'))
+const BulletinView = React.lazy(() => import('./views/BulletinView'))
+const ScrapbookView = React.lazy(() => import('./views/ScrapbookView'))
+const GalleryView = React.lazy(() => import('./views/GalleryView'))
+const BoardMembersView = React.lazy(() => import('./views/BoardMembersView'))
+const SupportView = React.lazy(() => import('./views/SupportView'))
+const JoiningEnquiryView = React.lazy(() => import('./views/JoiningEnquiryView'))
+const MembersView = React.lazy(() => import('./views/MembersView'))
+const ReportsView = React.lazy(() => import('./views/ReportsView'))
 
-// Legacy/External components (assuming they work within the new layout or just ported as is)
-import EmailManager from './EmailManager'
-import ResourceManager from './ResourceManager'
+// Legacy/External components
+const EmailManager = React.lazy(() => import('./EmailManager'))
+const ResourceManager = React.lazy(() => import('./ResourceManager'))
 
 // Styles
 import './AdminDashboard.css'
@@ -50,20 +49,26 @@ const AdminDashboard = ({ user, onLogout }) => {
 
     // Router Logic
     const renderContent = () => {
-        switch (activeSection) {
-            case 'events': return <EventsView />
-            case 'bulletin': return <BulletinView />
-            case 'scrapbook': return <ScrapbookView />
-            case 'gallery': return <GalleryView />
-            case 'board': return <BoardMembersView />
-            case 'support': return <SupportView />
-            case 'joining': return <JoiningEnquiryView />
-            case 'members': return <MembersView />
-            case 'reports': return <ReportsView />
-            case 'email': return <EmailManager />
-            case 'resources': return <ResourceManager />
-            default: return <EventsView />
-        }
+        return (
+            <React.Suspense fallback={<div className="p-8 text-center">Loading section...</div>}>
+                {(() => {
+                    switch (activeSection) {
+                        case 'events': return <EventsView />
+                        case 'bulletin': return <BulletinView />
+                        case 'scrapbook': return <ScrapbookView />
+                        case 'gallery': return <GalleryView />
+                        case 'board': return <BoardMembersView />
+                        case 'support': return <SupportView />
+                        case 'joining': return <JoiningEnquiryView />
+                        case 'members': return <MembersView />
+                        case 'reports': return <ReportsView />
+                        case 'email': return <EmailManager />
+                        case 'resources': return <ResourceManager />
+                        default: return <EventsView />
+                    }
+                })()}
+            </React.Suspense>
+        )
     }
 
     return (

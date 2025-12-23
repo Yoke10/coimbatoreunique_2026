@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { generateReportPDF } from '../../utils/pdfGenerator'
+// import { generateReportPDF } from '../../utils/pdfGenerator'
 
 import { compressImage } from '../../utils/imageUtils'
 
@@ -9,14 +9,21 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
     // ... handlers ...
 
     // --- PDF GENERATION ---
-    const generatePDF = (action = 'download') => {
+    const generatePDF = async (action = 'download') => {
         const fullData = {
             ...formData,
             poster: poster?.base64,
             images: gallery.map(g => g.base64),
             logos: logos.map(l => l?.base64)
         }
-        generateReportPDF(fullData, action)
+
+        try {
+            const { generateReportPDF } = await import('../../utils/pdfGenerator')
+            generateReportPDF(fullData, action)
+        } catch (error) {
+            console.error("Failed to load PDF generator", error)
+            alert("Failed to load PDF generator")
+        }
     }
     const [formData, setFormData] = useState({
         eventName: '',

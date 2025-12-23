@@ -19,9 +19,6 @@
     left: 0;
     width: 100%;
     height: calc(100% + 80px);
-    background: url('/images/grouppic.jpg') center/cover no-repeat;
-    opacity: 0.9;
-    z-index: 0;
 }
 
 

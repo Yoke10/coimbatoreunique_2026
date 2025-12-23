@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import FirstTimeSetup from './FirstTimeSetup'
-import MemberProfile from './MemberProfile'
-import Resources from './Resources'
-import ReportGenerator from '../reports/ReportGenerator'
+// Lazy load sub-components
+const FirstTimeSetup = React.lazy(() => import('./FirstTimeSetup'))
+const MemberProfile = React.lazy(() => import('./MemberProfile'))
+const Resources = React.lazy(() => import('./Resources'))
+const ReportGenerator = React.lazy(() => import('../reports/ReportGenerator'))
 import { firebaseService } from '../../services/firebaseService'
 import './MemberDashboard.css'
 import {
@@ -136,72 +137,76 @@ const MemberDashboard = ({ user, onLogout }) => {
             </div>
 
             {currentUser?.isFirstLogin ? (
-                <FirstTimeSetup user={currentUser} onComplete={handleUpdateUser} />
+                <React.Suspense fallback={<div>Loading Setup...</div>}>
+                    <FirstTimeSetup user={currentUser} onComplete={handleUpdateUser} />
+                </React.Suspense>
             ) : (
                 <>
-                    {activeTab === 'resources' && <Resources />}
+                    <React.Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                        {activeTab === 'resources' && <Resources />}
 
-                    {activeTab === 'directory' && (
-                        <div className="directory-container">
-                            <h2 style={{ color: 'var(--primary-magenta)', marginBottom: '1.5rem' }}>Member Directory</h2>
-                            <div className="directory-grid">
-                                {members.map(member => (
-                                    <div key={member.id} className="directory-card">
-                                        <div className="dir-avatar">
-                                            {member.profile?.fullName ? member.profile.fullName.charAt(0) : 'M'}
-                                        </div>
-                                        <div className="dir-info">
-                                            <h3>{member.profile?.fullName || member.username}</h3>
-                                            <div className="dir-details">
-                                                <p><strong>Email:</strong> {member.profile?.email || '-'}</p>
-                                                <p><strong>Contact:</strong> {member.profile?.contact || '-'}</p>
+                        {activeTab === 'directory' && (
+                            <div className="directory-container">
+                                <h2 style={{ color: 'var(--primary-magenta)', marginBottom: '1.5rem' }}>Member Directory</h2>
+                                <div className="directory-grid">
+                                    {members.map(member => (
+                                        <div key={member.id} className="directory-card">
+                                            <div className="dir-avatar">
+                                                {member.profile?.fullName ? member.profile.fullName.charAt(0) : 'M'}
                                             </div>
-                                            <button
-                                                className="view-details-btn"
-                                                onClick={() => setSelectedMember(member)}
-                                            >
-                                                View Details
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'reports' && (
-                        <div>
-                            {!viewingReport ? (
-                                <div>
-                                    <div className="report-action-bar">
-                                        <button onClick={() => setViewingReport('new')} className="create-report-btn">+ Create New Report</button>
-                                    </div>
-
-                                    <div className="report-grid">
-                                        {reports.filter(r => r.createdBy === currentUser.id).length === 0 && <p className="no-reports-msg">No reports found.</p>}
-                                        {reports.filter(r => r.createdBy === currentUser.id).map(report => (
-                                            <div key={report.id} className="report-item">
-                                                <div>
-                                                    <h4 className="report-title">{report.eventName}</h4>
-                                                    <span className="report-date">{report.eventDate} | {report.avenue}</span>
+                                            <div className="dir-info">
+                                                <h3>{member.profile?.fullName || member.username}</h3>
+                                                <div className="dir-details">
+                                                    <p><strong>Email:</strong> {member.profile?.email || '-'}</p>
+                                                    <p><strong>Contact:</strong> {member.profile?.contact || '-'}</p>
                                                 </div>
-                                                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                                    <button onClick={() => setViewingReport(report)} className="edit-btn">Edit</button>
-                                                </div>
+                                                <button
+                                                    className="view-details-btn"
+                                                    onClick={() => setSelectedMember(member)}
+                                                >
+                                                    View Details
+                                                </button>
                                             </div>
-                                        ))}
-                                    </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ) : (
-                                <ReportGenerator
-                                    user={currentUser}
-                                    reportData={viewingReport === 'new' ? null : viewingReport}
-                                    onSave={handleSaveReport}
-                                    onCancel={() => setViewingReport(null)}
-                                />
-                            )}
-                        </div>
-                    )}
+                            </div>
+                        )}
+
+                        {activeTab === 'reports' && (
+                            <div>
+                                {!viewingReport ? (
+                                    <div>
+                                        <div className="report-action-bar">
+                                            <button onClick={() => setViewingReport('new')} className="create-report-btn">+ Create New Report</button>
+                                        </div>
+
+                                        <div className="report-grid">
+                                            {reports.filter(r => r.createdBy === currentUser.id).length === 0 && <p className="no-reports-msg">No reports found.</p>}
+                                            {reports.filter(r => r.createdBy === currentUser.id).map(report => (
+                                                <div key={report.id} className="report-item">
+                                                    <div>
+                                                        <h4 className="report-title">{report.eventName}</h4>
+                                                        <span className="report-date">{report.eventDate} | {report.avenue}</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                        <button onClick={() => setViewingReport(report)} className="edit-btn">Edit</button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <ReportGenerator
+                                        user={currentUser}
+                                        reportData={viewingReport === 'new' ? null : viewingReport}
+                                        onSave={handleSaveReport}
+                                        onCancel={() => setViewingReport(null)}
+                                    />
+                                )}
+                            </div>
+                        )}
+                    </React.Suspense>
                 </>
             )}
 
@@ -213,7 +218,9 @@ const MemberDashboard = ({ user, onLogout }) => {
                         <button onClick={() => showAlert("Logout?", "Are you sure you want to log out?", onLogout)} className="modal-header-logout-btn">
                             Logout
                         </button>
-                        <MemberProfile user={currentUser} onUpdate={handleUpdateUser} />
+                        <React.Suspense fallback={<div>Loading Profile...</div>}>
+                            <MemberProfile user={currentUser} onUpdate={handleUpdateUser} />
+                        </React.Suspense>
                     </div>
                 </div>
             )}

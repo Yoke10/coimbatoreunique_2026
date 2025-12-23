@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import TeamMemberCard from '../team/TeamMemberCard'
 import './OurTeamSection.css'
-import groupPic from '../images/grouppic.webp'
+const groupPic = '/images/grouppic.webp'
 
 const OurTeamSection = () => {
     const teamMembers = [

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import groupPic from '../images/grouppic.webp'
+const groupPic = '/images/grouppic.webp'
 import './AboutUsSection.css'
 
 const AboutUsSection = () => {

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import './ClubDescriptionSection.css';
-import groupPic from '../images/grouppic.webp';
+const groupPic = '/images/grouppic.webp';
 
 const ClubDescriptionSection = () => {
     const cardRef = useRef(null);

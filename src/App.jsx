@@ -7,7 +7,8 @@ import { ToastProvider, Toaster } from './components/ui/Toast/ToastContext'
 import ScrollToTop from './components/common/ScrollToTop'
 
 // Lazy Load Pages
-const Home = React.lazy(() => import('./pages/Home'))
+import Home from './pages/Home'
+// const Home = React.lazy(() => import('./pages/Home'))
 const About = React.lazy(() => import('./pages/About'))
 const Team = React.lazy(() => import('./pages/Team'))
 const Events = React.lazy(() => import('./pages/Events'))
@@ -129,16 +130,24 @@ const MainLayout = () => {
 const SmokeyCursorWrapper = () => {
     const location = useLocation()
     const [isEnabled, setIsEnabled] = React.useState(true)
+    const [isReady, setIsReady] = React.useState(false) // Defer loading
     const isExcluded = location.pathname.startsWith('/memberspace')
 
-    if (isExcluded) return null
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsReady(true)
+        }, 2500) // 2.5s delay to allow LCP to finish
+        return () => clearTimeout(timer)
+    }, [])
+
+    if (isExcluded || !isReady) return null
 
     return (
         <>
             {isEnabled && (
                 <React.Suspense fallback={null}>
                     <SmokeyCursor
-                        simulationResolution={256}
+                        simulationResolution={128}
                         dyeResolution={1024}
                         densityDissipation={2}
                         curl={5}

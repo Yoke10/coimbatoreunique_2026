@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './JoinUsSection.css'
-import groupPic from '../images/grouppic.webp'
+const groupPic = '/images/grouppic.webp'
 
 const JoinUsSection = () => {
     const navigate = useNavigate();
