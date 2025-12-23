@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, setPersistence, browserSessionPersistence } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { firebaseService } from "../services/firebaseService";
 
@@ -10,6 +10,9 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Enforce Session Persistence (Logout on Tab Close)
+        setPersistence(auth, browserSessionPersistence).catch(console.error);
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
