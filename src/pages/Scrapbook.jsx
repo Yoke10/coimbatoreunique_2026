@@ -41,10 +41,11 @@ const Scrapbook = () => {
                 {loading ? (
                     <Loading fullScreen={false} style={{ gridColumn: '1/-1' }} />
                 ) : scrapbooks.length > 0 ? (
-                    scrapbooks.map(item => (
+                    scrapbooks.map((item, index) => (
                         <BulletinCard
                             key={item.id}
                             bulletin={{ ...item, month: item.date }} // Map date to month for card compatibility
+                            priority={index < 4}
                         />
                     ))
                 ) : (

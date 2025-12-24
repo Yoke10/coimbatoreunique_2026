@@ -84,7 +84,8 @@
 .input-label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--dark-gray);
+    color: #333333;
+    /* Darker for better contrast */
 }
 
 .input-wrapper {
@@ -184,7 +185,8 @@
 
 .checkbox-group label {
     font-size: 0.9rem;
-    color: var(--gray);
+    color: #444444;
+    /* Darker for better contrast */
     cursor: pointer;
     line-height: 1.4;
     display: flex;
@@ -193,7 +195,8 @@
 }
 
 .link-text {
-    color: var(--primary-pink);
+    color: #bf065e;
+    /* WCAG Compliant Dark Pink */
     text-decoration: none;
     font-weight: 500;
 }

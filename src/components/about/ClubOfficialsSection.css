@@ -132,7 +132,7 @@
 
 .officials-section .official-role {
     font-size: 0.85rem;
-    color: var(--primary-pink);
+    color: #bf065e; /* Darker pink for better contrast */
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;

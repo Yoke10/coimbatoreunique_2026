@@ -8,6 +8,9 @@
 /* -----------------------------
    MASONRY GRID SYSTEM
 --------------------------------*/
+/* -----------------------------
+   MASONRY GRID SYSTEM
+--------------------------------*/
 .gallery-page .carousel__container {
     column-count: 5;
     /* number of columns */
@@ -25,7 +28,6 @@
     background: #f7f7f7;
     border-radius: 14px;
     overflow: hidden;
-    /* required for image zoom */
     position: relative;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     transition: box-shadow 0.25s ease;

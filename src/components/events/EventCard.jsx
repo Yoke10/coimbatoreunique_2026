@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './EventCard.css'
 
-const EventCard = ({ event, index }) => {
+const EventCard = ({ event, index, priority = false }) => {
     const [showGallery, setShowGallery] = useState(false)
 
     // Parse date
@@ -17,7 +17,14 @@ const EventCard = ({ event, index }) => {
             {/* Left Panel (Poster) */}
             <div className="event-left-panel">
                 {event.poster ? (
-                    <img src={event.poster} alt={event.title} className="event-poster" />
+                    <img
+                        src={event.poster}
+                        alt={event.title}
+                        className="event-poster"
+                        width="300"
+                        height="400"
+                        loading={priority ? "eager" : "lazy"}
+                    />
                 ) : (
                     <div style={{ width: '100%', height: '100%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc' }}>
                         No Poster
@@ -28,7 +35,7 @@ const EventCard = ({ event, index }) => {
             {/* Center Panel (Content) */}
             <div className="event-center-panel">
                 <span className="event-category-tag">{event.category}</span>
-                <h3 className="event-title-text">{event.title}</h3>
+                <h2 className="event-title-text">{event.title}</h2>
                 <p className="event-short-desc">{event.description}</p>
             </div>
 
@@ -43,6 +50,7 @@ const EventCard = ({ event, index }) => {
                         className="view-gallery-btn"
                         onClick={() => setShowGallery(true)}
                         title="View Gallery"
+                        aria-label={`View gallery for ${event.title}`}
                     >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>

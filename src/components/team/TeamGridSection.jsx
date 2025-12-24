@@ -22,13 +22,14 @@ const TeamGridSection = () => {
                 <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>No team members added yet.</div>
             ) : (
                 <div className="team-grid-container">
-                    {members.map(member => (
+                    {members.map((member, index) => (
                         <TeamMemberCard
                             key={member.id}
                             name={member.name}
                             role={member.role}
                             image={member.image}
                             message={member.message}
+                            priority={index < 4}
                         />
                     ))}
                 </div>

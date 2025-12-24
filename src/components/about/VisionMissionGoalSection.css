@@ -138,9 +138,13 @@
     color: #680b56;
 }
 
-.vmg-section .vmg-card.theme-pink .vmg-title,
-.vmg-section .vmg-card.theme-pink .vmg-text {
+.vmg-section .vmg-card.theme-pink .vmg-title {
     color: #ed0775;
+}
+
+.vmg-section .vmg-card.theme-pink .vmg-text {
+    color: #bf065e;
+    /* Darker pink for better contrast */
 }
 
 @media (max-width: 1024px) {

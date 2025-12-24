@@ -37,7 +37,12 @@ const Events = () => {
                     <Loading fullScreen={false} />
                 ) : events.length > 0 ? (
                     events.map((event, index) => (
-                        <EventCard key={event.id} event={event} index={index} />
+                        <EventCard
+                            key={event.id}
+                            event={event}
+                            index={index}
+                            priority={index < 3}
+                        />
                     ))
                 ) : (
                     <p style={{ textAlign: 'center', fontSize: '1.2rem', color: 'var(--dark-gray)' }}>

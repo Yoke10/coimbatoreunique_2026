@@ -58,7 +58,7 @@ const ClubOfficialsSection = () => {
             <h2 className="officials-title">Club Officials</h2>
 
             <div className="carousel-container">
-                <button className="nav-btn prev" onClick={prevSlide}>
+                <button className="nav-btn prev" onClick={prevSlide} aria-label="Previous Official">
                     <ChevronLeft size={32} />
                 </button>
 
@@ -77,13 +77,19 @@ const ClubOfficialsSection = () => {
                                 </div>
                             </div>
                             <div className="official-image-container">
-                                <img src={official.image} alt={official.name} className="official-image" />
+                                <img
+                                    src={official.image}
+                                    alt={official.name}
+                                    className="official-image"
+                                    width="120"
+                                    height="160"
+                                />
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <button className="nav-btn next" onClick={nextSlide}>
+                <button className="nav-btn next" onClick={nextSlide} aria-label="Next Official">
                     <ChevronRight size={32} />
                 </button>
             </div>

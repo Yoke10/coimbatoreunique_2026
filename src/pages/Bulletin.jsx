@@ -41,10 +41,11 @@ const Bulletin = () => {
                 {loading ? (
                     <Loading fullScreen={false} style={{ gridColumn: '1/-1' }} />
                 ) : bulletins.length > 0 ? (
-                    bulletins.map(bulletin => (
+                    bulletins.map((bulletin, index) => (
                         <BulletinCard
                             key={bulletin.id}
                             bulletin={bulletin}
+                            priority={index < 4}
                         />
                     ))
                 ) : (

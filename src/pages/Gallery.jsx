@@ -12,22 +12,7 @@ const Gallery = () => {
     })
 
     // No explicit fetch useEffect needed anymore
-
-    // Function to calculate row span for each image
-    const handleImageLoad = (e) => {
-        const img = e.target
-        const item = img.closest(".carousel-item")
-
-        if (!item) return
-
-        const rowHeight = 10   // same as CSS grid-auto-rows
-        const gap = 20         // same as CSS gap
-
-        const imgHeight = img.getBoundingClientRect().height
-        const rowSpan = Math.ceil((imgHeight + gap) / (rowHeight + gap))
-
-        item.style.setProperty("--row-span", rowSpan)
-    }
+    // Removed unused masonry calculation logic to improve performance and CLS
 
     return (
         <div className="gallery-page" style={{ marginTop: '80px', padding: '2rem 0', minHeight: '80vh', background: '#fff' }}>
@@ -50,16 +35,16 @@ const Gallery = () => {
                     <Loading fullScreen={false} />
                 ) : (
                     <div className="carousel__container">
-                        {galleryItems.map((item) => (
+                        {galleryItems.map((item, index) => (
                             <div key={item.id} className="carousel-item">
                                 <img
                                     className="carousel-item__img"
                                     src={item.image}
                                     alt={item.eventName}
-                                    onLoad={handleImageLoad}
+                                    loading={index < 4 ? "eager" : "lazy"}
                                 />
                                 <div className="carousel-item__details">
-                                    <h5 className="carousel-item__details--title">{item.eventName}</h5>
+                                    <h2 className="carousel-item__details--title">{item.eventName}</h2>
                                 </div>
                             </div>
                         ))}

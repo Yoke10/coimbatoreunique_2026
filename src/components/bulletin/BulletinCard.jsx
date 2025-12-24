@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BulletinCard = ({ bulletin }) => {
+const BulletinCard = ({ bulletin, priority = false }) => {
 
     const handleCardClick = () => {
         if (bulletin.driveFileId) {
@@ -33,6 +33,9 @@ const BulletinCard = ({ bulletin }) => {
                         transition: 'transform 0.6s ease'
                     }}
                     className="bulletin-poster"
+                    width="300"
+                    height="400"
+                    loading={priority ? "eager" : "lazy"}
                 />
             </div>
             <div style={{ padding: '1.2rem 1rem' }}>
@@ -49,7 +52,7 @@ const BulletinCard = ({ bulletin }) => {
                 }}>
                     {bulletin.month}
                 </span>
-                <h3 style={{
+                <h2 style={{
                     margin: '0',
                     color: 'var(--primary-magenta)',
                     fontFamily: 'var(--font-display)',
@@ -57,7 +60,7 @@ const BulletinCard = ({ bulletin }) => {
                     lineHeight: '1.3'
                 }}>
                     {bulletin.title}
-                </h3>
+                </h2>
             </div>
 
             <style>{`
