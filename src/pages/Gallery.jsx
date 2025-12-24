@@ -2,22 +2,16 @@ import React, { useState, useEffect, useRef } from 'react'
 import { firebaseService } from '../services/firebaseService'
 import Loading from '../components/common/Loading'
 import './Gallery.css'
+import { useQuery } from '@tanstack/react-query'
 
 const Gallery = () => {
-    const [galleryItems, setGalleryItems] = useState([])
-    const [loading, setLoading] = useState(true)
+    const { data: galleryItems = [], isLoading: loading } = useQuery({
+        queryKey: ['gallery'],
+        queryFn: firebaseService.getGallery,
+        staleTime: 5 * 60 * 1000,
+    })
 
-    useEffect(() => {
-        const loadGallery = async () => {
-            try {
-                const data = await firebaseService.getGallery()
-                setGalleryItems(data)
-            } finally {
-                setLoading(false)
-            }
-        }
-        loadGallery()
-    }, [])
+    // No explicit fetch useEffect needed anymore
 
     // Function to calculate row span for each image
     const handleImageLoad = (e) => {

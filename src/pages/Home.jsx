@@ -1,9 +1,8 @@
 import React, { Suspense } from 'react'
 import HeroSection from '../components/home/HeroSection'
-import AnnouncementTicker from '../components/home/AnnouncementTicker'
-import AboutUsSection from '../components/home/AboutUsSection'
-import PrayerAndTestSection from '../components/home/PrayerAndTestSection'
-
+const AnnouncementTicker = React.lazy(() => import('../components/home/AnnouncementTicker'))
+const AboutUsSection = React.lazy(() => import('../components/home/AboutUsSection'))
+const PrayerAndTestSection = React.lazy(() => import('../components/home/PrayerAndTestSection'))
 const OurTeamSection = React.lazy(() => import('../components/home/OurTeamSection'))
 const ClubStatsSection = React.lazy(() => import('../components/home/ClubStatsSection'))
 const EventsSection = React.lazy(() => import('../components/home/EventsSection'))
@@ -15,9 +14,18 @@ const Home = () => {
     return (
         <div className="home-page">
             <HeroSection />
-            <AnnouncementTicker />
-            <AboutUsSection />
-            <PrayerAndTestSection />
+
+            <Suspense fallback={<div style={{ height: '50px' }}></div>}>
+                <AnnouncementTicker />
+            </Suspense>
+
+            <Suspense fallback={<div style={{ height: '400px' }}></div>}>
+                <AboutUsSection />
+            </Suspense>
+
+            <Suspense fallback={<div style={{ height: '300px' }}></div>}>
+                <PrayerAndTestSection />
+            </Suspense>
 
             <Suspense fallback={<div style={{ height: '200px' }}></div>}>
                 <OurTeamSection />

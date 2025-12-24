@@ -2,7 +2,7 @@
 import { db, auth, storage } from '../firebase/config';
 import {
     collection, getDocs, addDoc, deleteDoc, doc, updateDoc, getDoc,
-    query, where, orderBy, setDoc, runTransaction, writeBatch, serverTimestamp
+    query, where, orderBy, setDoc, runTransaction, writeBatch, serverTimestamp, limit
 } from 'firebase/firestore';
 import {
     signInWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence,
@@ -149,9 +149,10 @@ export const firebaseService = {
     },
 
     // --- GENERIC CRUD HELPERS ---
-    getAll: async (collectionName) => {
+    getAll: async (collectionName, constraints = []) => {
         await firebaseService.waitForAuth();
-        const querySnapshot = await getDocs(collection(db, collectionName));
+        const q = query(collection(db, collectionName), ...constraints);
+        const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map(mapDoc);
     },
 
@@ -187,20 +188,20 @@ export const firebaseService = {
 
     // --- SPECIFIC METHODS (Mapping mockDataService) ---
 
-    // EVENTS
-    getEvents: () => firebaseService.getAll(COLLECTIONS.EVENTS),
+    // EVENTS (Optimized: sort by date, limit 12)
+    getEvents: () => firebaseService.getAll(COLLECTIONS.EVENTS, [orderBy('date', 'asc'), limit(12)]), // Assuming 'date' field exists and ascending order is desired for upcoming
     addEvent: (event) => firebaseService.add(COLLECTIONS.EVENTS, event),
     deleteEvent: (id) => firebaseService.delete(COLLECTIONS.EVENTS, id),
     updateEvent: (id, updates) => firebaseService.update(COLLECTIONS.EVENTS, id, updates),
 
-    // BULLETINS
-    getBulletins: () => firebaseService.getAll(COLLECTIONS.BULLETINS),
+    // BULLETINS (Optimized: limit 12)
+    getBulletins: () => firebaseService.getAll(COLLECTIONS.BULLETINS, [limit(12)]),
     addBulletin: (item) => firebaseService.add(COLLECTIONS.BULLETINS, item),
     deleteBulletin: (id) => firebaseService.delete(COLLECTIONS.BULLETINS, id),
     updateBulletin: (id, updates) => firebaseService.update(COLLECTIONS.BULLETINS, id, updates),
 
-    // SCRAPBOOKS
-    getScrapbooks: () => firebaseService.getAll(COLLECTIONS.SCRAPBOOKS),
+    // SCRAPBOOKS (Optimized: limit 12)
+    getScrapbooks: () => firebaseService.getAll(COLLECTIONS.SCRAPBOOKS, [limit(12)]),
     addScrapbook: (item) => firebaseService.add(COLLECTIONS.SCRAPBOOKS, item),
     deleteScrapbook: (id) => firebaseService.delete(COLLECTIONS.SCRAPBOOKS, id),
     updateScrapbook: (id, updates) => firebaseService.update(COLLECTIONS.SCRAPBOOKS, id, updates),

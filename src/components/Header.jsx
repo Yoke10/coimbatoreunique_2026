@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ConfettiButton from './ui/ConfettiButton'
 import './Header.css'
+import { useQueryClient } from '@tanstack/react-query'
+import { firebaseService } from '../services/firebaseService'
 
 const Header = () => {
     const [isOnHero, setIsOnHero] = useState(true)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const navigate = useNavigate()
-
+    const queryClient = useQueryClient()
     const location = useLocation()
 
     useEffect(() => {
@@ -65,6 +67,21 @@ const Header = () => {
         return () => document.removeEventListener("click", closeOnClickOutside)
     }, [])
 
+    // Prefetch Logic
+    const handlePrefetch = (route) => {
+        if (route === '/team') {
+            queryClient.prefetchQuery({ queryKey: ['boardMembers'], queryFn: firebaseService.getBoardMembers })
+        } else if (route === '/events') {
+            queryClient.prefetchQuery({ queryKey: ['events'], queryFn: firebaseService.getEvents })
+        } else if (route === '/bulletin') {
+            queryClient.prefetchQuery({ queryKey: ['bulletins'], queryFn: firebaseService.getBulletins })
+        } else if (route === '/scrapbook') {
+            queryClient.prefetchQuery({ queryKey: ['scrapbooks'], queryFn: firebaseService.getScrapbooks })
+        } else if (route === '/gallery') {
+            queryClient.prefetchQuery({ queryKey: ['gallery'], queryFn: firebaseService.getGallery })
+        }
+    }
+
     const handleNavClick = (e, path) => {
         // Close menus
         setIsMobileMenuOpen(false)
@@ -94,7 +111,12 @@ const Header = () => {
                 <nav className={`nav ${isMobileMenuOpen ? "mobile-open" : ""}`}>
                     <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>Home</Link>
                     <Link to="/about" className="nav-link" onClick={(e) => handleNavClick(e, '/about')}>About Us</Link>
-                    <Link to="/team" className="nav-link" onClick={(e) => handleNavClick(e, '/team')}>Our Team</Link>
+                    <Link
+                        to="/team"
+                        className="nav-link"
+                        onClick={(e) => handleNavClick(e, '/team')}
+                        onMouseEnter={() => handlePrefetch('/team')}
+                    >Our Team</Link>
 
                     {/* Dropdown */}
                     <div className="nav-dropdown">
@@ -110,14 +132,34 @@ const Header = () => {
 
                         {isDropdownOpen && (
                             <div className="dropdown-menu show">
-                                <Link to="/events" className="dropdown-item" onClick={(e) => handleNavClick(e, '/events')}>Events</Link>
-                                <Link to="/bulletin" className="dropdown-item" onClick={(e) => handleNavClick(e, '/bulletin')}>Bulletin</Link>
-                                <Link to="/scrapbook" className="dropdown-item" onClick={(e) => handleNavClick(e, '/scrapbook')}>Scrapbook</Link>
+                                <Link
+                                    to="/events"
+                                    className="dropdown-item"
+                                    onClick={(e) => handleNavClick(e, '/events')}
+                                    onMouseEnter={() => handlePrefetch('/events')}
+                                >Events</Link>
+                                <Link
+                                    to="/bulletin"
+                                    className="dropdown-item"
+                                    onClick={(e) => handleNavClick(e, '/bulletin')}
+                                    onMouseEnter={() => handlePrefetch('/bulletin')}
+                                >Bulletin</Link>
+                                <Link
+                                    to="/scrapbook"
+                                    className="dropdown-item"
+                                    onClick={(e) => handleNavClick(e, '/scrapbook')}
+                                    onMouseEnter={() => handlePrefetch('/scrapbook')}
+                                >Scrapbook</Link>
                             </div>
                         )}
                     </div>
 
-                    <Link to="/gallery" className="nav-link" onClick={(e) => handleNavClick(e, '/gallery')}>Gallery</Link>
+                    <Link
+                        to="/gallery"
+                        className="nav-link"
+                        onClick={(e) => handleNavClick(e, '/gallery')}
+                        onMouseEnter={() => handlePrefetch('/gallery')}
+                    >Gallery</Link>
                     <Link to="/contact" className="nav-link" onClick={(e) => handleNavClick(e, '/contact')}>Contact Us</Link>
 
                     <ConfettiButton

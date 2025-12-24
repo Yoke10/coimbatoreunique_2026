@@ -2,22 +2,17 @@ import React, { useState, useEffect } from 'react'
 import BulletinCard from '../components/bulletin/BulletinCard'
 import Loading from '../components/common/Loading'
 import { firebaseService } from '../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const Scrapbook = () => {
-    const [scrapbooks, setScrapbooks] = useState([])
-    const [loading, setLoading] = useState(true)
+    const { data: scrapbooks = [], isLoading: loading } = useQuery({
+        queryKey: ['scrapbooks'],
+        queryFn: firebaseService.getScrapbooks,
+        staleTime: 5 * 60 * 1000,
+    })
 
     useEffect(() => {
         window.scrollTo(0, 0)
-        const loadScrapbooks = async () => {
-            try {
-                const data = await firebaseService.getScrapbooks()
-                setScrapbooks(data)
-            } finally {
-                setLoading(false)
-            }
-        }
-        loadScrapbooks()
     }, [])
 
     return (

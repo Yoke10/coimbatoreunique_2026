@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react' // Removed useState as it is handled by useQuery
 import EventCard from '../components/events/EventCard'
 import Loading from '../components/common/Loading'
 import { firebaseService } from '../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const Events = () => {
-    const [events, setEvents] = useState([])
-    const [loading, setLoading] = useState(true)
+    // TanStack Query Hook
+    const { data: events = [], isLoading: loading } = useQuery({
+        queryKey: ['events'],
+        queryFn: firebaseService.getEvents,
+        staleTime: 5 * 60 * 1000, // 5 minutes default
+    })
 
     useEffect(() => {
         window.scrollTo(0, 0)
-        const loadEvents = async () => {
-            try {
-                const data = await firebaseService.getEvents()
-                setEvents(data)
-            } finally {
-                setLoading(false)
-            }
-        }
-        loadEvents()
     }, [])
 
     return (

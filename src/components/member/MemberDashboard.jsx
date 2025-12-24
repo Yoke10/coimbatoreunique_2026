@@ -18,15 +18,16 @@ import {
 } from "../ui/AlertDialog/AlertDialog"
 
 import { useAuth } from "../../context/AuthContext"
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 const MemberDashboard = ({ user, onLogout }) => {
     // Default to Directory as Profile is now in modal
     const [activeTab, setActiveTab] = useState('directory')
-    const [reports, setReports] = useState([])
     const [viewingReport, setViewingReport] = useState(null)
 
     // 🔥 USE CONTEXT INSTEAD OF PROPS/LOCAL STATE
     const { currentUser } = useAuth()
+    const queryClient = useQueryClient()
 
     const [alertConfig, setAlertConfig] = useState({ open: false, title: '', description: '', action: null })
 
@@ -42,39 +43,29 @@ const MemberDashboard = ({ user, onLogout }) => {
     }
 
     // Directory & Profile Modal State
-    const [members, setMembers] = useState([])
     const [showProfileModal, setShowProfileModal] = useState(false)
     const [selectedMember, setSelectedMember] = useState(null)
 
-    // No need for re-fetch useEffect, AuthContext handles it.
+    // --- TANSTACK QUERIES ---
 
-    useEffect(() => {
-        loadReports()
-    }, [])
+    // 1. Fetch Reports
+    const { data: reports = [] } = useQuery({
+        queryKey: ['reports'],
+        queryFn: firebaseService.getReports,
+        staleTime: 5 * 60 * 1000
+    })
 
-    useEffect(() => {
-        if (activeTab === 'directory') {
-            loadMembers()
-        }
-    }, [activeTab])
-
-    const loadReports = async () => {
-        try {
-            setReports(await firebaseService.getReports())
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    const loadMembers = async () => {
-        try {
+    // 2. Fetch Members (only when tab is directory)
+    const { data: members = [] } = useQuery({
+        queryKey: ['members'],
+        queryFn: async () => {
             const allUsers = await firebaseService.getUsers()
-            // Filter only members
-            setMembers(allUsers.filter(u => u.role === 'member'))
-        } catch (e) {
-            console.error(e)
-        }
-    }
+            return allUsers.filter(u => u.role === 'member')
+        },
+        enabled: activeTab === 'directory', // Lazy fetch
+        staleTime: 5 * 60 * 1000
+    })
+
 
     const handleSaveReport = async (reportData) => {
         const userId = currentUser?.id
@@ -89,7 +80,8 @@ const MemberDashboard = ({ user, onLogout }) => {
             } else {
                 await firebaseService.addReport({ ...reportData, createdBy: userId })
             }
-            await loadReports()
+            // Refetch reports
+            queryClient.invalidateQueries({ queryKey: ['reports'] })
             setViewingReport(null)
             alert("Report Saved Successfully!")
         } catch (e) {

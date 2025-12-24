@@ -11,11 +11,16 @@
   <title>Rotaract Club of Coimbatore Unique</title>
 
   <!-- Preload Critical LCP Image -->
-  <link rel="preload" as="image" href="/images/grouppic.webp">
+  <!-- Preload Critical LCP Image -->
+  <!-- <link rel="preload" as="image" href="/images/grouppic.webp"> -->
 
 
   <!-- Google Fonts loaded via @fontsource in main.jsx -->
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' media="print"
+    onload="this.media='all'">
+  <noscript>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  </noscript>
 </head>
 
 <body>

@@ -1,23 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { firebaseService } from '../../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const Resources = () => {
-    const [resources, setResources] = useState([])
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        const load = async () => {
-            try {
-                const data = await firebaseService.getResources()
-                setResources(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
-            } catch (e) {
-                console.error(e)
-            } finally {
-                setLoading(false)
-            }
-        }
-        load()
-    }, [])
+    const { data: resources = [], isLoading: loading } = useQuery({
+        queryKey: ['resources'],
+        queryFn: async () => {
+            const data = await firebaseService.getResources();
+            return data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        },
+        staleTime: 5 * 60 * 1000
+    })
 
     const openResource = (res) => {
         if (res.type === 'link') {

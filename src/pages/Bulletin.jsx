@@ -2,24 +2,17 @@ import React, { useState, useEffect } from 'react'
 import BulletinCard from '../components/bulletin/BulletinCard'
 import Loading from '../components/common/Loading'
 import { firebaseService } from '../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const Bulletin = () => {
-    const [bulletins, setBulletins] = useState([])
-    const [loading, setLoading] = useState(true)
+    const { data: bulletins = [], isLoading: loading } = useQuery({
+        queryKey: ['bulletins'],
+        queryFn: firebaseService.getBulletins,
+        staleTime: 5 * 60 * 1000,
+    })
 
     useEffect(() => {
         window.scrollTo(0, 0)
-        const loadBulletins = async () => {
-            try {
-                const data = await firebaseService.getBulletins()
-                setBulletins(data)
-            } catch (error) {
-                console.error("Failed to load bulletins", error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        loadBulletins()
     }, [])
 
     return (

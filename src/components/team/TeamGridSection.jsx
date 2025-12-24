@@ -2,26 +2,15 @@ import React from 'react'
 import TeamMemberCard from './TeamMemberCard'
 import Loading from '../common/Loading'
 import './TeamGridSection.css'
-
 import { firebaseService } from '../../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const TeamGridSection = () => {
-    const [members, setMembers] = React.useState([])
-    const [loading, setLoading] = React.useState(true)
-
-    React.useEffect(() => {
-        const fetchMembers = async () => {
-            try {
-                const data = await firebaseService.getBoardMembers()
-                setMembers(data)
-            } catch (error) {
-                console.error("Failed to fetch team members", error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchMembers()
-    }, [])
+    const { data: members = [], isLoading: loading } = useQuery({
+        queryKey: ['boardMembers'],
+        queryFn: firebaseService.getBoardMembers,
+        staleTime: 5 * 60 * 1000,
+    })
 
 
     return (

@@ -17,10 +17,34 @@ import '@fontsource/overpass/900.css'
 
 import { AuthProvider } from "./context/AuthContext"
 
+import { QueryClient } from '@tanstack/react-query'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 60 * 24, // 24 hours (Aggressive caching since we persist)
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours (formerly cacheTime)
+            refetchOnWindowFocus: false,
+            retry: 1,
+        },
+    },
+})
+
+const persister = createSyncStoragePersister({
+    storage: window.localStorage,
+})
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <AuthProvider>
-            <App />
-        </AuthProvider>
+        <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{ persister }}
+        >
+            <AuthProvider>
+                <App />
+            </AuthProvider>
+        </PersistQueryClientProvider>
     </React.StrictMode>,
 )

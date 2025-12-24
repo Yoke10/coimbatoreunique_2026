@@ -1,21 +1,17 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { firebaseService } from '../../services/firebaseService'
 import { useNavigate } from 'react-router-dom'
 import './EventsSection.css'
-
 const EventsSection = () => {
     const scrollRef = useRef(null)
     const navigate = useNavigate()
 
-    const [events, setEvents] = useState([])
-
-    useEffect(() => {
-        const loadEvents = async () => {
-            const data = await firebaseService.getEvents()
-            setEvents(data)
-        }
-        loadEvents()
-    }, [])
+    const { data: events = [] } = useQuery({
+        queryKey: ['events'],
+        queryFn: firebaseService.getEvents,
+        staleTime: 5 * 60 * 1000,
+    })
 
     const scroll = (direction) => {
         if (scrollRef.current) {
