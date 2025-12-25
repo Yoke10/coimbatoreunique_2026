@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf'
 
 export const generateReportPDF = (data, action = 'download') => {
-    const doc = new jsPDF({ unit: "mm", format: "a4" })
+    const doc = new jsPDF({ unit: "mm", format: "a4", compress: true })
     drawReportOnDoc(doc, data)
 
     if (action === 'preview') window.open(doc.output('bloburl'))
@@ -11,7 +11,7 @@ export const generateReportPDF = (data, action = 'download') => {
 export const generateBulkPDF = (reports, filename = 'Bulk_Reports.pdf') => {
     if (!reports || reports.length === 0) return alert("No reports to generate")
 
-    const doc = new jsPDF({ unit: "mm", format: "a4" })
+    const doc = new jsPDF({ unit: "mm", format: "a4", compress: true })
 
     reports.forEach((report, index) => {
         if (index > 0) doc.addPage()
@@ -120,6 +120,13 @@ const drawReportOnDoc = (doc, data) => {
         y += 8
     }
 
+    const getImageType = (data) => {
+        if (!data) return 'JPEG'
+        if (data.startsWith('data:image/webp')) return 'WEBP'
+        if (data.startsWith('data:image/png')) return 'PNG'
+        return 'JPEG'
+    }
+
     // LOGOS (Header) - Centered
     const logoSize = 25
     const logos = data.logos || []
@@ -130,7 +137,7 @@ const drawReportOnDoc = (doc, data) => {
     let logoX = (pageWidth - totalLogoWidth) / 2
 
     validLogos.forEach(logo => {
-        try { doc.addImage(logo, 'JPEG', logoX, y, logoSize, logoSize) } catch (e) { }
+        try { doc.addImage(logo, getImageType(logo), logoX, y, logoSize, logoSize, undefined, 'FAST') } catch (e) { }
         logoX += logoSize + 5
     })
 
@@ -148,7 +155,7 @@ const drawReportOnDoc = (doc, data) => {
     doc.text(data.parentClub || "PARENTED BY ROTARY CLUB OF THONDAMUTHUR", pageWidth / 2, y, { align: "center" })
     y += 7
 
-    // META INFO (3 Things)
+    // META INFO
     doc.setFontSize(10)
     doc.setTextColor(...colors.black)
     const metaString = `${data.clubId || 'CLUB ID : 50295'} | ${data.group || 'GROUP 1'} | ${data.rid || 'RI DISTRICT : 3206'}`
@@ -249,25 +256,54 @@ const drawReportOnDoc = (doc, data) => {
         ensureSpace(80)
         drawSectionLabel("PROJECT POSTER")
         try {
-            doc.addImage(data.poster, 'JPEG', margin, y, contentWidth * 0.6, 80)
-        } catch (e) { }
-        y += 90
+            const imgProps = doc.getImageProperties(data.poster)
+            // Reduced size: 35% width, max 80mm height
+            const maxW = contentWidth * 0.35
+            const maxH = 80
+
+            const ratio = Math.min(maxW / imgProps.width, maxH / imgProps.height)
+            const newW = imgProps.width * ratio
+            const newH = imgProps.height * ratio
+
+            // Left align
+            const posterX = margin
+
+            doc.addImage(data.poster, getImageType(data.poster), posterX, y, newW, newH, undefined, 'FAST')
+            y += newH + 10 // Adjust Y dynamically based on height
+        } catch (e) {
+            console.error("Poster Error:", e)
+        }
+        y += 10
     }
 
     // GALLERY
     if (data.images && data.images.length > 0) {
-        ensureSpace(70)
+        ensureSpace(60)
         drawSectionLabel("COMPLETION IMAGES")
-        const gH = 60; const gW = (contentWidth - 10) / 3
+
+        const gap = 5
+        const imgBoxW = (contentWidth - (gap * (data.images.length - 1))) / data.images.length
+        const imgBoxH = 50 // Reduced height
         let gx = margin
+
         data.images.forEach((g) => {
             if (g) {
                 try {
-                    doc.addImage(g, 'JPEG', gx, y, gW, gH)
-                    gx += gW + 5
-                } catch (e) { }
+                    const imgProps = doc.getImageProperties(g)
+                    const ratio = Math.min(imgBoxW / imgProps.width, imgBoxH / imgProps.height)
+                    const newW = imgProps.width * ratio
+                    const newH = imgProps.height * ratio
+
+                    const offsetX = (imgBoxW - newW) / 2
+                    const offsetY = (imgBoxH - newH) / 2
+
+                    doc.addImage(g, getImageType(g), gx + offsetX, y + offsetY, newW, newH, undefined, 'FAST')
+                    gx += imgBoxW + gap
+                } catch (e) {
+                    console.error("Gallery Error:", e)
+                }
             }
         })
-        y += gH + 10
+        y += imgBoxH + 10
     }
 }

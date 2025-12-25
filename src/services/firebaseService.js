@@ -353,7 +353,7 @@ export const firebaseService = {
 
             // Create a timeout promise
             const timeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error("Upload timed out. Check CORS/Firewall.")), 15000)
+                setTimeout(() => reject(new Error("Upload timed out. Check CORS/Firewall.")), 60000)
             );
 
             // Race the upload against the timeout

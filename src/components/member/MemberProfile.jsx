@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { firebaseService } from '../../services/firebaseService'
 import { useToast } from '../ui/Toast/ToastContext'
-import { Edit2, Check, X, Shield, Lock } from 'lucide-react'
+import { Edit2, Check, X, Shield, Lock, LogOut } from 'lucide-react'
 
 // Constants
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
@@ -69,7 +69,7 @@ const InfoRow = ({ label, value, field, isEditing, formData, onChange, type = 't
     )
 }
 
-const MemberProfile = ({ user, onUpdate }) => {
+const MemberProfile = ({ user, onUpdate, onLogout }) => {
     const { toast } = useToast()
     const [isEditing, setIsEditing] = useState(false)
     const [authStatus, setAuthStatus] = useState('Checking...')
@@ -248,9 +248,14 @@ const MemberProfile = ({ user, onUpdate }) => {
                         </div>
 
                         {!isEditing ? (
-                            <button onClick={() => setIsEditing(true)} style={actionBtnStyle}>
-                                <Edit2 size={18} /> Edit Profile
-                            </button>
+                            <div style={{ display: 'flex', gap: '0.8rem' }}>
+                                <button onClick={onLogout} style={{ ...actionBtnStyle, color: '#e53e3e', borderColor: '#e53e3e' }}>
+                                    <LogOut size={18} /> Logout
+                                </button>
+                                <button onClick={() => setIsEditing(true)} style={actionBtnStyle}>
+                                    <Edit2 size={18} /> Edit Profile
+                                </button>
+                            </div>
                         ) : (
                             <div style={{ display: 'flex', gap: '1rem' }}>
                                 <button onClick={() => setIsEditing(false)} style={cancelBtnStyle}>

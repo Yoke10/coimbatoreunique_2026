@@ -21,8 +21,8 @@ export const compressImage = (file, maxWidth = 800, quality = 0.6) => {
                 const ctx = canvas.getContext('2d')
                 ctx.drawImage(img, 0, 0, width, height)
 
-                // Convert to base64 with reduced quality
-                const dataUrl = canvas.toDataURL('image/jpeg', quality)
+                // Convert to base64 with reduced quality (WebP for better compression)
+                const dataUrl = canvas.toDataURL('image/webp', quality)
                 resolve(dataUrl)
             }
             img.onerror = (err) => reject(err)

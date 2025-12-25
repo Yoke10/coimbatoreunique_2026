@@ -60,7 +60,12 @@ const MemberDashboard = ({ user, onLogout }) => {
         queryKey: ['members'],
         queryFn: async () => {
             const allUsers = await firebaseService.getUsers()
-            return allUsers.filter(u => u.role === 'member')
+            // Filter: Must be 'member' AND not have 'admin' in email/username
+            return allUsers.filter(u =>
+                u.role === 'member' &&
+                !u.email.toLowerCase().includes('admin') &&
+                !u.username?.toLowerCase().includes('admin')
+            )
         },
         enabled: activeTab === 'directory', // Lazy fetch
         staleTime: 5 * 60 * 1000
@@ -75,16 +80,64 @@ const MemberDashboard = ({ user, onLogout }) => {
         }
 
         try {
-            if (reportData.id) {
-                await firebaseService.updateReport(reportData.id, reportData)
-            } else {
-                await firebaseService.addReport({ ...reportData, createdBy: userId })
+            // Helper to convert data URL to Blob
+            const dataURLtoBlob = async (dataUrl) => {
+                const res = await fetch(dataUrl);
+                return await res.blob();
             }
+
+            // Upload helper
+            const uploadImage = async (data, pathPrefix) => {
+                if (!data || typeof data !== 'string' || !data.startsWith('data:')) return data; // Return as is if URL or null
+
+                const blob = await dataURLtoBlob(data);
+                // Random filename
+                const filename = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.webp`;
+                // Path: reports/{userId}/{filename}
+                const path = `reports/${userId}/${pathPrefix}_${filename}`;
+                return await firebaseService.uploadFile(blob, path);
+            }
+
+            // 1. Upload Poster
+            let posterUrl = reportData.poster;
+            if (posterUrl && posterUrl.startsWith('data:')) {
+                posterUrl = await uploadImage(posterUrl, 'poster');
+            }
+
+            // 2. Upload Gallery
+            const galleryUrls = await Promise.all((reportData.images || []).map((img, idx) =>
+                uploadImage(img, `gallery_${idx}`)
+            ));
+
+            // 3. Upload Logos
+            const logoUrls = await Promise.all((reportData.logos || []).map((logo, idx) =>
+                uploadImage(logo, `logo_${idx}`)
+            ));
+
+            // 4. Construct Clean Data
+            const cleanData = {
+                ...reportData,
+                poster: posterUrl || null,
+                images: galleryUrls,
+                logos: logoUrls,
+                createdBy: userId, // Ensure ownership
+                updatedAt: new Date().toISOString()
+            };
+
+            if (reportData.id) {
+                await firebaseService.updateReport(reportData.id, cleanData)
+            } else {
+                // Ensure createdAt is present for new reports
+                cleanData.createdAt = new Date().toISOString();
+                await firebaseService.addReport(cleanData)
+            }
+
             // Refetch reports
             queryClient.invalidateQueries({ queryKey: ['reports'] })
             setViewingReport(null)
             alert("Report Saved Successfully!")
         } catch (e) {
+            console.error("Save Report Error:", e)
             alert("Failed to save report: " + e.message)
         }
     }
@@ -207,11 +260,12 @@ const MemberDashboard = ({ user, onLogout }) => {
                 <div className="modal-overlay">
                     <div className="modal-box large" style={{ maxWidth: '1100px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
                         <button onClick={() => setShowProfileModal(false)} className="modal-close-btn">✕</button>
-                        <button onClick={() => showAlert("Logout?", "Are you sure you want to log out?", onLogout)} className="modal-header-logout-btn">
-                            Logout
-                        </button>
                         <React.Suspense fallback={<div>Loading Profile...</div>}>
-                            <MemberProfile user={currentUser} onUpdate={handleUpdateUser} />
+                            <MemberProfile
+                                user={currentUser}
+                                onUpdate={handleUpdateUser}
+                                onLogout={() => showAlert("Logout?", "Are you sure you want to log out?", onLogout)}
+                            />
                         </React.Suspense>
                     </div>
                 </div>

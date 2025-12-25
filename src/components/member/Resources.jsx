@@ -49,9 +49,7 @@ const Resources = () => {
                             onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
                             onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
                         >
-                            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                                {res.type === 'link' ? '🔗' : (res.type === 'pdf' ? '📄' : '🖼️')}
-                            </div>
+
                             <h3 style={{ margin: '0 0 0.5rem 0', color: '#333', fontSize: '1.2rem' }}>{res.name}</h3>
                             <p style={{ fontSize: '0.8rem', color: '#888' }}>{new Date(res.date).toLocaleDateString()}</p>
                             <span style={{
