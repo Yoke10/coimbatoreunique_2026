@@ -5,7 +5,9 @@ import Footer from './components/Footer'
 
 import { ToastProvider, Toaster } from './components/ui/Toast/ToastContext'
 import Loading from './components/common/Loading'
+import Loading from './components/common/Loading'
 import ScrollToTop from './components/common/ScrollToTop'
+import './components/admin/AuthStyles.css' // Globally import auth styles
 
 // Lazy Load Pages
 import Home from './pages/Home'
