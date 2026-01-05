@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Calendar, FileText, BookOpen, Image, Users, MessagesSquare,
-    UserPlus, BarChart, HardDrive, Mail, Trash2, LogOut, LayoutDashboard, X
+    UserPlus, BarChart, HardDrive, Mail, Trash2, LogOut, LayoutDashboard, X, Star
 } from 'lucide-react';
 import {
     AlertDialog,
@@ -29,6 +29,7 @@ const Sidebar = ({
 
     const menuItems = [
         { id: 'events', label: 'Events', icon: Calendar },
+        { id: 'calendar', label: 'Important Days', icon: Star },
         { id: 'bulletin', label: 'Bulletin', icon: FileText },
         { id: 'scrapbook', label: 'Scrapbook', icon: BookOpen },
         { id: 'gallery', label: 'Gallery', icon: Image },

@@ -1,0 +1,686 @@
+/* Scoped styles for Calendar Section */
+.calendar-section-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 80px 0;
+    font-family: var(--font-primary);
+    background-color: var(--white);
+    overflow: hidden;
+}
+
+.calendar-section-wrapper .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 150px;
+    /* Increased gap as requested */
+}
+
+/* --- UI 1: WIDGET (Scaled Up & Themed) --- */
+
+.cs-widget-container {
+    position: relative;
+    width: 350px;
+    /* Increased container size */
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+.anim04c {
+    transition: all .4s cubic-bezier(.5, .35, .15, 1.4);
+}
+
+.cs-widget-container .outer {
+    position: relative;
+    top: 0;
+    z-index: 1;
+    transform: translateY(0);
+    cursor: pointer;
+    width: 130px;
+    /* Increased size from 100px */
+    height: 130px;
+}
+
+.cs-widget-container .signboard {
+    width: 130px;
+    /* Match outer size */
+    height: 130px;
+    margin: auto;
+    color: #fff;
+    border-radius: 15px;
+    /* Slightly more rounded */
+}
+
+/* Themed Colors */
+.cs-widget-container .front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    background: var(--primary-pink);
+    /* Replaced #ff726b */
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.cs-widget-container .right {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    transform: rotate(-10deg) translate(7px, 8px);
+    background: var(--primary-magenta);
+    /* Gold Accent */
+}
+
+.cs-widget-container .left {
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    transform: rotate(5deg) translate(-4px, 4px);
+    background: var(--primary-purple);
+    /* Replaced #3498DB */
+}
+
+/* Hover Effects */
+.cs-widget-container .outer:hover .inner {
+    transform: rotate(0) translate(0);
+}
+
+.cs-widget-container .outer:hover .front .date {
+    transform: scale(2);
+}
+
+.cs-widget-container .outer:hover .front .day,
+.cs-widget-container .outer:hover .front .month {
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0);
+}
+
+.cs-widget-container .outer:hover .right {
+    transform: rotate(-5deg) translateX(100px) scale(0.9);
+    /* Adjusted translation for bigger size */
+}
+
+.cs-widget-container .outer:hover .left {
+    transform: rotate(5deg) translateX(-100px) scale(0.9);
+    /* Adjusted translation for bigger size */
+}
+
+/* Active State */
+.cs-widget-container .outer:active .inner {
+    transform: rotate(0) translate(0) scale(0.9);
+}
+
+.cs-widget-container .outer:hover .calendarMain {
+    transform: scale(1.8);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.cs-widget-container .outer:hover .clock {
+    transform: scale(1.4);
+    opacity: 1;
+    visibility: visible;
+}
+
+.cs-widget-container .outer:hover .calendarNormal {
+    bottom: -35px;
+    /* Adjusted */
+    opacity: 1;
+    visibility: visible;
+}
+
+.cs-widget-container .outer:hover .year {
+    top: -35px;
+    /* Adjusted */
+    opacity: 1;
+    visibility: visible;
+    letter-spacing: 3px;
+}
+
+/* Inner Element Styles - Scaled Fonts */
+.cs-widget-container .calendarMain {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 1;
+    top: 0;
+    left: 0;
+    padding: 0;
+}
+
+.cs-widget-container .month,
+.cs-widget-container .day {
+    display: block;
+    font-size: 13px;
+    /* Increased from 10px */
+    line-height: 40px;
+    /* Adjusted spacing */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.cs-widget-container .date {
+    display: block;
+    font-size: 50px;
+    /* Increased from 40px */
+    line-height: 50px;
+    /* Adjusted */
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.cs-widget-container .clock {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 50px;
+    /* Increased */
+    line-height: 130px;
+    /* Center in 130px */
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.cs-widget-container .year {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    font-size: 16px;
+    /* Increased */
+    line-height: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    color: var(--primary-pink);
+}
+
+.cs-widget-container .calendarNormal {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 16px;
+    /* Increased */
+    line-height: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Text Colors based on Palette */
+.cs-widget-container .date2 span {
+    color: var(--primary-pink);
+}
+
+.cs-widget-container .day2 span {
+    color: var(--primary-purple);
+}
+
+.cs-widget-container .month2 span {
+    color: var(--primary-magenta);
+}
+
+
+/* --- Rotary Area of Focus (Right Side) --- */
+.cs-focus-container {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+    text-align: left;
+}
+
+.cs-focus-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dark-gray);
+    margin-bottom: 20px;
+    display: block;
+    border-left: 3px solid var(--primary-pink);
+    padding-left: 15px;
+    background: transparent;
+}
+
+.cs-focus-title-large {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    /* Slightly adjusted for focus titles which can be long */
+    line-height: 1.1;
+    color: var(--primary-purple);
+    margin-bottom: 20px;
+    font-weight: 700;
+    padding: 0;
+    background: transparent;
+}
+
+.cs-focus-desc {
+    color: var(--dark-gray);
+    line-height: 1.8;
+    font-size: 1.125rem;
+    max-width: 90%;
+    font-weight: 400;
+    background: transparent;
+    padding: 0;
+}
+
+
+/* --- UI 2: Full Calendar Modal/Overlay --- */
+.cs-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    overflow: hidden;
+    /* Lock overlay */
+}
+
+.cs-modal-content {
+    position: relative;
+    width: 1000px;
+    height: 650px;
+    /* FIXED HEIGHT */
+    max-width: 95vw;
+    max-height: none;
+    /* Disable max-height relative behavior */
+    display: flex;
+    flex-direction: row;
+    box-shadow: var(--shadow-xl);
+    border-radius: 20px;
+    background: transparent;
+    overflow: hidden;
+    /* KILL ALL INTERNAL SCROLL */
+}
+
+/* Hide scrollbar for clean look (just in case) */
+.cs-modal-content::-webkit-scrollbar {
+    width: 0;
+}
+
+/* Ensure container allows grid to fill space */
+.ui2-calendar-base {
+    width: 700px;
+    height: 650px;
+    /* Fixed height as requested */
+    min-height: unset;
+    border-radius: 0 20px 20px 0;
+    background-color: var(--white);
+    position: relative;
+    z-index: 1;
+    color: var(--dark-gray);
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Stop overflow */
+}
+
+.ui2-calendar-left {
+    width: 300px;
+    min-height: 650px;
+    /* Match base */
+    height: auto;
+    border-radius: 20px 0px 0px 20px;
+    background-color: var(--primary-purple);
+    position: relative;
+    z-index: 2;
+    color: var(--white);
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Stop overflow */
+}
+
+.cs-modal-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: var(--primary-pink);
+    color: var(--white);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    z-index: 100;
+    border: 2px solid var(--white);
+    transition: transform 0.3s ease;
+}
+
+.cs-modal-close:hover {
+    transform: rotate(90deg);
+}
+
+.ui2-year {
+    color: var(--light-gray);
+    font-size: 30px;
+    float: right;
+    position: relative;
+    font-weight: bold;
+}
+
+.ui2-months {
+    color: var(--gray);
+    position: relative;
+    margin-top: 40px;
+    word-spacing: 5px;
+    text-align: center;
+    font-size: 14px;
+    user-select: none;
+}
+
+.ui2-months span {
+    cursor: pointer;
+    padding: 0 5px;
+    transition: color 0.3s;
+}
+
+.ui2-months span:hover,
+.ui2-month-active {
+    color: var(--primary-pink) !important;
+    font-weight: bold;
+}
+
+.ui2-days {
+    color: var(--gray);
+    position: relative;
+    font-size: 14px;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Google Calendar Style Grid */
+.ui2-num-dates {
+    flex: 1;
+    height: auto;
+    max-height: 100%;
+    /* Ensure it doesn't overflow container */
+    margin-top: 10px;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+    /* Distribute rows evenly */
+    gap: 1px;
+    background: transparent;
+    border: none;
+    overflow: hidden;
+    /* Prevent internal scroll if sizing is correct */
+}
+
+.ui2-date-cell {
+    position: relative;
+    width: 100%;
+    min-height: unset;
+    /* Let Grid control height */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0;
+    transition: all 0.2s;
+    background: var(--white);
+    padding: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    /* Move borders to cells */
+}
+
+/* Gray out prev/next month days */
+.ui2-date-cell.prev,
+.ui2-date-cell.next {
+    background-color: #fafafa;
+    color: #ccc;
+    pointer-events: none;
+    /* Optional: disable clicking if desired */
+}
+
+.ui2-date-cell:hover {
+    background: #f8f9fa;
+    z-index: 10;
+    /* Higher than tooltip neighbor issue */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.ui2-date-cell.today {
+    background: #fff5f5;
+}
+
+.ui2-date-cell.today .ui2-cell-date-num {
+    background: var(--primary-pink);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ui2-date-cell.active-day {
+    box-shadow: inset 0 0 0 2px var(--primary-pink);
+    background-color: #fff0f5;
+}
+
+.ui2-cell-date-num {
+    font-size: 12px;
+    margin-bottom: 2px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Event Labels inside Square Cell */
+.ui2-cell-event-label {
+    font-size: 10px;
+    width: 100%;
+    padding: 2px 4px;
+    margin-top: 2px;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.ui2-cell-event-label.type-rotary {
+    background-color: #fde2e2;
+    color: #c0392b;
+    border-left: 2px solid #c0392b;
+}
+
+.ui2-cell-event-label.type-event {
+    background-color: #e2e2fd;
+    color: #3498db;
+    border-left: 2px solid #3498db;
+}
+
+/* Custom Tooltip */
+.ui2-tooltip-content {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    width: max-content;
+    max-width: 200px;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ui2-date-cell:hover .ui2-tooltip-content {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ui2-tooltip-item {
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.ui2-tooltip-item:last-child {
+    margin-bottom: 0;
+}
+
+.tooltip-desc {
+    display: block;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.ui2-num-date {
+    font-size: 100px;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 40px;
+    font-family: var(--font-display);
+    color: var(--white);
+}
+
+.ui2-day {
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    color: var(--white);
+    letter-spacing: 2px;
+}
+
+.ui2-current-events {
+    font-size: 15px;
+    margin-top: 30px;
+    padding: 0 20px;
+    color: var(--white);
+    overflow-y: auto;
+    /* Scrollable sidebar events */
+    max-height: 250px;
+    /* Restrict height to force scroll if needed */
+    padding-right: 10px;
+    /* Space for scrollbar */
+}
+
+/* Custom scrollbar for sidebar */
+.ui2-current-events::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ui2-current-events::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.ui2-current-events::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.ui2-current-events::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.ui2-current-events strong {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+}
+
+.ui2-current-events ul {
+    list-style: none;
+    padding: 0;
+}
+
+.ui2-current-events li {
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+}
+
+.ui2-current-events li:before {
+    content: '•';
+    margin-right: 10px;
+    color: #EFC94C;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 950px) {
+    .calendar-section-wrapper .container {
+        flex-direction: column-reverse;
+        text-align: center;
+        gap: 60px;
+    }
+
+    .cs-focus-container {
+        text-align: center;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: none;
+    }
+
+    .cs-focus-subtitle {
+        border-left: none;
+    }
+}

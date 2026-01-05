@@ -12,6 +12,7 @@ const SupportView = React.lazy(() => import('./views/SupportView'))
 const JoiningEnquiryView = React.lazy(() => import('./views/JoiningEnquiryView'))
 const MembersView = React.lazy(() => import('./views/MembersView'))
 const ReportsView = React.lazy(() => import('./views/ReportsView'))
+const CalendarManagerView = React.lazy(() => import('./views/CalendarManagerView'))
 
 // Legacy/External components
 const EmailManager = React.lazy(() => import('./EmailManager'))
@@ -54,6 +55,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                 {(() => {
                     switch (activeSection) {
                         case 'events': return <EventsView />
+                        case 'calendar': return <CalendarManagerView />
                         case 'bulletin': return <BulletinView />
                         case 'scrapbook': return <ScrapbookView />
                         case 'gallery': return <GalleryView />

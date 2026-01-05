@@ -28,7 +28,8 @@ const COLLECTIONS = {
     SENT_LOGS: 'sent_logs',
     RESOURCES: 'resources',
     BOARD: 'board_members',
-    TEMPLATES: 'email_templates'
+    TEMPLATES: 'email_templates',
+    CALENDAR_DAYS: 'calendar_days'
 };
 
 // Helper to map doc snapshot to object
@@ -156,6 +157,13 @@ export const firebaseService = {
         return querySnapshot.docs.map(mapDoc);
     },
 
+    // Fast Public Read (No Auth Wait)
+    getAllPublic: async (collectionName, constraints = []) => {
+        const q = query(collection(db, collectionName), ...constraints);
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(mapDoc);
+    },
+
     add: async (collectionName, data) => {
         await firebaseService.waitForAuth();
         const docRef = await addDoc(collection(db, collectionName), data);
@@ -189,25 +197,26 @@ export const firebaseService = {
     // --- SPECIFIC METHODS (Mapping mockDataService) ---
 
     // EVENTS (Optimized: sort by date, limit 12)
-    getEvents: () => firebaseService.getAll(COLLECTIONS.EVENTS, [orderBy('date', 'asc'), limit(12)]), // Assuming 'date' field exists and ascending order is desired for upcoming
+    // Use Public Read for Homepage speed
+    getEvents: () => firebaseService.getAllPublic(COLLECTIONS.EVENTS, [orderBy('date', 'asc'), limit(12)]),
     addEvent: (event) => firebaseService.add(COLLECTIONS.EVENTS, event),
     deleteEvent: (id) => firebaseService.delete(COLLECTIONS.EVENTS, id),
     updateEvent: (id, updates) => firebaseService.update(COLLECTIONS.EVENTS, id, updates),
 
     // BULLETINS (Optimized: limit 12)
-    getBulletins: () => firebaseService.getAll(COLLECTIONS.BULLETINS, [limit(12)]),
+    getBulletins: () => firebaseService.getAllPublic(COLLECTIONS.BULLETINS, [limit(12)]),
     addBulletin: (item) => firebaseService.add(COLLECTIONS.BULLETINS, item),
     deleteBulletin: (id) => firebaseService.delete(COLLECTIONS.BULLETINS, id),
     updateBulletin: (id, updates) => firebaseService.update(COLLECTIONS.BULLETINS, id, updates),
 
     // SCRAPBOOKS (Optimized: limit 12)
-    getScrapbooks: () => firebaseService.getAll(COLLECTIONS.SCRAPBOOKS, [limit(12)]),
+    getScrapbooks: () => firebaseService.getAllPublic(COLLECTIONS.SCRAPBOOKS, [limit(12)]),
     addScrapbook: (item) => firebaseService.add(COLLECTIONS.SCRAPBOOKS, item),
     deleteScrapbook: (id) => firebaseService.delete(COLLECTIONS.SCRAPBOOKS, id),
     updateScrapbook: (id, updates) => firebaseService.update(COLLECTIONS.SCRAPBOOKS, id, updates),
 
     // GALLERY (With Storage Support)
-    getGallery: () => firebaseService.getAll(COLLECTIONS.GALLERY),
+    getGallery: () => firebaseService.getAllPublic(COLLECTIONS.GALLERY),
 
     // Custom upload logic needed for Gallery? 
     // The current mock service just stores URLs. 
@@ -503,6 +512,12 @@ export const firebaseService = {
     saveEmailTemplate: (template) => firebaseService.add(COLLECTIONS.TEMPLATES, template),
     updateEmailTemplate: (id, updates) => firebaseService.update(COLLECTIONS.TEMPLATES, id, updates),
     deleteEmailTemplate: (id) => firebaseService.delete(COLLECTIONS.TEMPLATES, id),
+
+    // --- CALENDAR DAYS ---
+    getCalendarDays: () => firebaseService.getAllPublic(COLLECTIONS.CALENDAR_DAYS),
+    addCalendarDay: (day) => firebaseService.add(COLLECTIONS.CALENDAR_DAYS, day),
+    deleteCalendarDay: (id) => firebaseService.delete(COLLECTIONS.CALENDAR_DAYS, id),
+    updateCalendarDay: (id, updates) => firebaseService.update(COLLECTIONS.CALENDAR_DAYS, id, updates),
 
     // --- USER MANAGEMENT ---
     updateUser: (uid, data) => firebaseService.update(COLLECTIONS.USERS, uid, data),
