@@ -12,6 +12,40 @@ const JoinUsSection = React.lazy(() => import('../components/home/JoinUsSection'
 const GetInTouchSection = React.lazy(() => import('../components/home/GetInTouchSection'))
 
 const Home = () => {
+    // Prefetch pages for faster navigation
+    React.useEffect(() => {
+        const prefetch = (importFn) => {
+            const module = importFn();
+            return module;
+        };
+
+        const timers = [];
+
+        // 1 second: Contact Us, Join Us
+        timers.push(setTimeout(() => {
+            prefetch(() => import('./Contact'));
+            prefetch(() => import('./JoinUs'));
+        }, 1000));
+
+        // 2 seconds: About Us
+        timers.push(setTimeout(() => {
+            prefetch(() => import('./About'));
+        }, 2000));
+
+        // 5 seconds: Team, Events, Gallery, Bulletin, Scrapbook
+        timers.push(setTimeout(() => {
+            prefetch(() => import('./Team'));
+            prefetch(() => import('./Events'));
+            prefetch(() => import('./Gallery'));
+            prefetch(() => import('./Bulletin'));
+            prefetch(() => import('./Scrapbook'));
+        }, 5000));
+
+        return () => {
+            timers.forEach(timer => clearTimeout(timer));
+        };
+    }, []);
+
     return (
         <div className="home-page">
             <HeroSection />
