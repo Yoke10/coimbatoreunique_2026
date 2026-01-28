@@ -4,6 +4,7 @@ const AnnouncementTicker = React.lazy(() => import('../components/home/Announcem
 const AboutUsSection = React.lazy(() => import('../components/home/AboutUsSection'))
 const PrayerAndTestSection = React.lazy(() => import('../components/home/PrayerAndTestSection'))
 const CalendarSection = React.lazy(() => import('../components/home/CalendarSection'))
+const VideoSection = React.lazy(() => import('../components/home/VideoSection'))
 const OurTeamSection = React.lazy(() => import('../components/home/OurTeamSection'))
 const ClubStatsSection = React.lazy(() => import('../components/home/ClubStatsSection'))
 const EventsSection = React.lazy(() => import('../components/home/EventsSection'))
@@ -61,6 +62,10 @@ const Home = () => {
             <Suspense fallback={<div style={{ height: '300px' }}></div>}>
                 <PrayerAndTestSection />
                 <CalendarSection />
+            </Suspense>
+
+            <Suspense fallback={<div style={{ height: '210px' }}></div>}>
+                <VideoSection />
             </Suspense>
 
             <Suspense fallback={<div style={{ height: '200px' }}></div>}>
