@@ -15,11 +15,11 @@ import Home from './pages/Home'
 const About = React.lazy(() => import('./pages/About'))
 import AboutSkeleton from './components/about/AboutSkeleton'
 import FormPageSkeleton from './components/common/FormPageSkeleton'
-const Team = React.lazy(() => import('./pages/Team'))
-const Events = React.lazy(() => import('./pages/Events'))
-const Bulletin = React.lazy(() => import('./pages/Bulletin'))
-const Gallery = React.lazy(() => import('./pages/Gallery'))
-const Scrapbook = React.lazy(() => import('./pages/Scrapbook'))
+import Team from './pages/Team'
+import Events from './pages/Events'
+import Bulletin from './pages/Bulletin'
+import Gallery from './pages/Gallery'
+import Scrapbook from './pages/Scrapbook'
 const MemberSpace = React.lazy(() => import('./pages/MemberSpace'))
 const Contact = React.lazy(() => import('./pages/Contact'))
 const JoinUs = React.lazy(() => import('./pages/JoinUs'))
