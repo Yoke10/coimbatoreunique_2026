@@ -5,7 +5,7 @@ const PrayerAndTestSection = () => {
     return (
         <section className="prayer-test-section section">
             <div className="container">
-                <h2 className="section-main-title">Rotaract Prayer & 4-Way Testt</h2>
+                <h2 className="section-main-title">Rotaract Prayer & 4-Way Test</h2>
                 <div className="container">
                     {/* Prayer Card */}
                     <div className="box">
