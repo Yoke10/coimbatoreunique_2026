@@ -1,6 +1,6 @@
 import React from 'react'
 import TeamMemberCard from './TeamMemberCard'
-import Loading from '../common/Loading'
+import TeamMemberCardSkeleton from './TeamMemberCardSkeleton'
 import './TeamGridSection.css'
 import { firebaseService } from '../../services/firebaseService'
 import { useQuery } from '@tanstack/react-query'
@@ -18,7 +18,11 @@ const TeamGridSection = () => {
         <section className="team-grid-section">
             <h1 className="team-grid-title">Meet Our Team</h1>
             {loading ? (
-                <Loading fullScreen={false} />
+                <div className="team-grid-container">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                        <TeamMemberCardSkeleton key={i} />
+                    ))}
+                </div>
             ) : members.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>No team members added yet.</div>
             ) : (

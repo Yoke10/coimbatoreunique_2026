@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import BulletinCard from '../components/bulletin/BulletinCard'
-import Loading from '../components/common/Loading'
+import BulletinCardSkeleton from '../components/bulletin/BulletinCardSkeleton'
 import { firebaseService } from '../services/firebaseService'
 import { useQuery } from '@tanstack/react-query'
 
@@ -39,7 +39,9 @@ const Scrapbook = () => {
                 margin: '0 auto'
             }}>
                 {loading ? (
-                    <Loading fullScreen={false} style={{ gridColumn: '1/-1' }} />
+                    <>
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <BulletinCardSkeleton key={i} />)}
+                    </>
                 ) : scrapbooks.length > 0 ? (
                     scrapbooks.map((item, index) => (
                         <BulletinCard

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { firebaseService } from '../services/firebaseService'
-import Loading from '../components/common/Loading'
+import GalleryItemSkeleton from '../components/gallery/GalleryItemSkeleton'
 import './Gallery.css'
 import { useQuery } from '@tanstack/react-query'
 
@@ -32,7 +32,15 @@ const Gallery = () => {
 
             <section className="gallery-carousel">
                 {loading ? (
-                    <Loading fullScreen={false} />
+                    <div className="carousel__container">
+                        {[
+                            '350px', '220px', '400px', '280px', '320px',
+                            '260px', '450px', '200px', '380px', '290px',
+                            '310px', '240px', '420px', '270px', '330px',
+                        ].map((h, i) => (
+                            <GalleryItemSkeleton key={i} height={h} />
+                        ))}
+                    </div>
                 ) : (
                     <div className="carousel__container">
                         {galleryItems.map((item, index) => (

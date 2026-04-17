@@ -13,6 +13,8 @@ import './components/admin/AuthStyles.css' // Globally import auth styles
 import Home from './pages/Home'
 // const Home = React.lazy(() => import('./pages/Home'))
 const About = React.lazy(() => import('./pages/About'))
+import AboutSkeleton from './components/about/AboutSkeleton'
+import FormPageSkeleton from './components/common/FormPageSkeleton'
 const Team = React.lazy(() => import('./pages/Team'))
 const Events = React.lazy(() => import('./pages/Events'))
 const Bulletin = React.lazy(() => import('./pages/Bulletin'))
@@ -70,7 +72,7 @@ const AnimatedRoutes = () => {
             <Routes location={location} key={location.pathname}>
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-                    <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+                    <Route path="/about" element={<PageWrapper><Suspense fallback={<AboutSkeleton />}><About /></Suspense></PageWrapper>} />
                     <Route path="/team" element={<PageWrapper><Team /></PageWrapper>} />
                     <Route path="/events" element={<PageWrapper><Events /></PageWrapper>} />
                     <Route path="/bulletin" element={<PageWrapper><Bulletin /></PageWrapper>} />
@@ -78,8 +80,8 @@ const AnimatedRoutes = () => {
                     <Route path="/scrapbook" element={<PageWrapper><Scrapbook /></PageWrapper>} />
                     <Route path="/resources" element={<PageWrapper><Resources /></PageWrapper>} />
                     <Route path="/memberspace" element={<PageWrapper><MemberSpace /></PageWrapper>} />
-                    <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
-                    <Route path="/join" element={<PageWrapper><JoinUs /></PageWrapper>} />
+                    <Route path="/contact" element={<PageWrapper><Suspense fallback={<FormPageSkeleton title="Contact Us" />}><Contact /></Suspense></PageWrapper>} />
+                    <Route path="/join" element={<PageWrapper><Suspense fallback={<FormPageSkeleton title="Join Us" />}><JoinUs /></Suspense></PageWrapper>} />
                     <Route path="/faq" element={<PageWrapper><FAQ /></PageWrapper>} />
                     <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
                 </Route>

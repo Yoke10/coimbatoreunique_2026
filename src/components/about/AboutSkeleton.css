@@ -1,0 +1,220 @@
+.about-skeleton-page {
+    padding-top: 80px;
+    background: var(--off-white);
+    min-height: 100vh;
+}
+
+/* Base Skeleton Animation */
+.skeleton {
+    background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* HERO SECTION SKELETON */
+.skel-hero-section {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    padding: 2rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.skel-hero-visual {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.skel-years-box {
+    width: 250px;
+    height: 250px;
+    border-radius: 20px;
+}
+
+.skel-years-label {
+    width: 180px;
+    height: 30px;
+    border-radius: 15px;
+}
+
+.skel-hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.skel-title {
+    width: 90%;
+    height: 60px;
+    border-radius: 10px;
+}
+
+.skel-subtitle-line {
+    width: 100%;
+    height: 20px;
+}
+
+/* DESCRIPTION SECTION SKELETON */
+.skel-desc-section {
+    padding: 6rem 5%;
+    background: var(--white);
+    display: flex;
+    justify-content: center;
+}
+
+.skel-desc-section > div {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    gap: 4rem;
+}
+
+.skel-desc-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.skel-desc-title {
+    width: 250px;
+    height: 50px;
+}
+
+.skel-paragraphs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.skel-line {
+    height: 16px;
+    width: 100%;
+}
+
+.skel-desc-collage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px;
+    position: relative;
+    aspect-ratio: 1;
+}
+
+.skel-collage-item {
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+/* VISION MISSION GOAL SKELETON */
+.skel-vmg-section {
+    padding: 6rem 5%;
+    background: var(--off-white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+.skel-vmg-main-title {
+    width: 400px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.skel-vmg-cards {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    justify-content: center;
+}
+
+.skel-vmg-card {
+    flex: 1;
+    height: 350px;
+    border-radius: 20px;
+}
+
+/* OFFICIALS SKELETON */
+.skel-officials-section {
+    padding: 5rem 5%;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+.skel-officials-carousel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1000px;
+    justify-content: center;
+}
+
+.skel-nav-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.skel-official-card {
+    width: 100%;
+    max-width: 700px;
+    height: 400px;
+    border-radius: 20px;
+}
+
+.skel-dots {
+    display: flex;
+    gap: 1rem;
+}
+
+.skel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* Responsive Overrides */
+@media (max-width: 900px) {
+    .skel-hero-section,
+    .skel-desc-section > div {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .skel-hero-content {
+        align-items: center;
+    }
+
+    .skel-vmg-cards {
+        flex-direction: column;
+    }
+
+    .skel-desc-title {
+        margin: 0 auto;
+    }
+}

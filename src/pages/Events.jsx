@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react' // Removed useState as it is handled by useQuery
+import React, { useEffect } from 'react'
 import EventCard from '../components/events/EventCard'
-import Loading from '../components/common/Loading'
+import EventCardSkeleton from '../components/events/EventCardSkeleton'
 import { firebaseService } from '../services/firebaseService'
 import { useQuery } from '@tanstack/react-query'
 import './Events.css'
@@ -25,9 +25,11 @@ const Events = () => {
 
             <div className="events-list-container">
                 {loading ? (
-                    <div className="loading-container">
-                        <Loading fullScreen={false} />
-                    </div>
+                    <>
+                        {[1, 2, 3, 4].map((i, index) => (
+                            <EventCardSkeleton key={i} index={index} />
+                        ))}
+                    </>
                 ) : events.length > 0 ? (
                     events.map((event, index) => (
                         <EventCard
