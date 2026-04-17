@@ -353,6 +353,15 @@ textarea.report-form-input {
     color: #334155;
 }
 
+.report-btn-draft {
+    background: #f59e0b;
+    color: white;
+}
+
+.report-btn-draft:hover {
+    background: #d97706;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .report-btn {

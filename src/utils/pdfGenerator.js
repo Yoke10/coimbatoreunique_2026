@@ -36,8 +36,21 @@ const drawReportOnDoc = (doc, data) => {
         tableHeader: [230, 230, 235]
     }
 
+    // Draw the page footer: a thin rule + page number at the bottom
+    const drawPageFooter = (pageNum) => {
+        const footerY = pageHeight - 10
+        doc.setDrawColor(180, 180, 190)
+        doc.setLineWidth(0.4)
+        doc.line(margin, footerY - 4, pageWidth - margin, footerY - 4)
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(8)
+        doc.setTextColor(120, 120, 130)
+        doc.text(`Page ${pageNum}`, pageWidth - margin, footerY, { align: "right" })
+    }
+
     const ensureSpace = (heightNeeded) => {
-        if (y + heightNeeded > pageHeight - margin) {
+        if (y + heightNeeded > pageHeight - 18) {
+            drawPageFooter(doc.internal.getNumberOfPages())
             doc.addPage()
             y = margin
             return true
@@ -306,4 +319,7 @@ const drawReportOnDoc = (doc, data) => {
         })
         y += imgBoxH + 10
     }
+
+    // Draw footer on the last (or only) page
+    drawPageFooter(doc.internal.getNumberOfPages())
 }

@@ -164,7 +164,7 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
         }
     }
 
-    const handleSave = () => {
+    const handleSaveDraft = () => {
         if (!onSave) {
             alert("Error: onSave handler is missing!")
             return
@@ -379,9 +379,6 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
                 <button onClick={() => generatePDF('download')} className="report-btn report-btn-preview">
                     Download PDF
                 </button>
-                <div style={{ flex: 1 }}></div>
-                {onCancel && <button onClick={onCancel} className="report-btn report-btn-outline">Cancel</button>}
-                <button onClick={handleSave} className="report-btn report-btn-primary">{isAdmin ? "Update Report" : "Save to Portal"}</button>
             </div>
         </div>
     )
