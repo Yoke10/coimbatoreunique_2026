@@ -9,7 +9,8 @@ const TeamGridSection = () => {
     const { data: members = [], isLoading: loading } = useQuery({
         queryKey: ['boardMembers'],
         queryFn: firebaseService.getBoardMembers,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 0,           // Always refetch on mount — ensures new members appear immediately
+        refetchOnMount: true,
     })
 
 

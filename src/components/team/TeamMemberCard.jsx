@@ -2,25 +2,42 @@ import React from 'react'
 import './TeamMemberCard.css'
 
 const TeamMemberCard = ({ name, role, image, message, priority = false }) => {
+    // Strip "Rtr." prefix stored in Firebase names (e.g. "Rtr. Dharshini Shri" → "Dharshini Shri")
+    const cleanName = (name || '')
+
     return (
-        <div className="team-member-card">
-            <div className="member-image-container">
+        <div className="tmc-wrapper">
+            {/* Tilted pink accent background */}
+            <div className="tmc-bg-tilt" aria-hidden="true"></div>
+
+            {/* Main image card */}
+            <div className="tmc-image-card">
                 <img
                     src={image}
                     alt={name}
-                    className="member-image"
-                    width="300"
-                    height="300"
-                    loading={priority ? "eager" : "lazy"}
+                    className="tmc-image"
+                    width="260"
+                    height="325"
+                    loading={priority ? 'eager' : 'lazy'}
                 />
-                <div className="member-overlay">
-                    <p className="member-message">"{message}"</p>
-                </div>
+                {/* Persistent bottom gradient */}
+                <div className="tmc-gradient-overlay" aria-hidden="true"></div>
+
+                {/* Message overlay — shown on hover (data from backend) */}
+                {message && (
+                    <div className="tmc-message-overlay">
+                        <p className="tmc-message-text">"{message}"</p>
+                    </div>
+                )}
             </div>
-            <div className="member-info">
-                <h2 className="member-name">{name}</h2>
-                <span className="member-role">{role}</span>
+
+            {/* Bottom name + role block */}
+            <div className="tmc-name-section">
+                <p className="tmc-full-name">{cleanName}</p>
+                <span className="tmc-role-tag">{role}</span>
             </div>
+
+            {/* Top role badge removed — role now shown below name */}
         </div>
     )
 }

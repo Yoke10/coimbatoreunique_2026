@@ -6,9 +6,12 @@
 .team-grid-section .team-grid-container {
     max-width: 1400px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;          /* gap handled by tmc-wrapper margin */
+    overflow: visible;
+    padding: 10px 0 20px;
 }
 
 .team-grid-section .team-grid-title {
@@ -25,13 +28,13 @@
 
 @media (max-width: 768px) {
     .team-grid-section .team-grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1.5rem;
+        justify-content: center;
     }
 }
 
 @media (max-width: 425px) {
     .team-grid-section .team-grid-container {
-        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: center;
     }
 }

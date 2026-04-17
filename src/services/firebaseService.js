@@ -346,9 +346,12 @@ export const firebaseService = {
     deleteResource: (id) => firebaseService.delete(COLLECTIONS.RESOURCES, id),
     updateResource: (id, updates) => firebaseService.update(COLLECTIONS.RESOURCES, id, updates),
 
-    // BOARD MEMBERS
-    getBoardMembers: () => firebaseService.getAll(COLLECTIONS.BOARD),
-    addBoardMember: (member) => firebaseService.add(COLLECTIONS.BOARD, member),
+    // BOARD MEMBERS (ordered by upload time: first added = first shown)
+    getBoardMembers: async () => {
+        const members = await firebaseService.getAll(COLLECTIONS.BOARD);
+        return members.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    },
+    addBoardMember: (member) => firebaseService.add(COLLECTIONS.BOARD, { ...member, createdAt: Date.now() }),
     deleteBoardMember: (id) => firebaseService.delete(COLLECTIONS.BOARD, id),
     updateBoardMember: (id, updates) => firebaseService.update(COLLECTIONS.BOARD, id, updates),
 
