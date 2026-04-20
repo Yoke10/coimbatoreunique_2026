@@ -160,6 +160,8 @@ const TreasuryReportManager = () => {
   const [showInstallmentDatePicker, setShowInstallmentDatePicker] = useState(false)
   const [datePickerData, setDatePickerData] = useState(null)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [showPreviewModal, setShowPreviewModal] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState(null)
   const isDirtyRef = useRef(false)
 
   const updateTreasury = (updater) => {
@@ -240,7 +242,26 @@ const TreasuryReportManager = () => {
 
   const reportPeriodLabel = useMemo(() => {
     if (!range.start || !range.end) return 'All Time'
-    return range.start === range.end ? range.start : `${range.start} → ${range.end}`
+    
+    const formatMonthYear = (dateString) => {
+      const [year, month] = dateString.split('-');
+      const date = new Date(year, month - 1);
+      return { monthStr: date.toLocaleString('default', { month: 'long' }), year };
+    };
+
+    if (range.start === range.end) {
+      const { monthStr, year } = formatMonthYear(range.start);
+      return `${monthStr} ${year}`;
+    }
+
+    const startData = formatMonthYear(range.start);
+    const endData = formatMonthYear(range.end);
+
+    if (startData.year === endData.year) {
+      return `${startData.monthStr} - ${endData.monthStr} ${startData.year}`;
+    } else {
+      return `${startData.monthStr} ${startData.year} - ${endData.monthStr} ${endData.year}`;
+    }
   }, [range])
 
   const matchingDuesPayments = useMemo(() => {
@@ -378,7 +399,9 @@ const TreasuryReportManager = () => {
       return
     }
 
-    if (newEvent.id) {
+    const isExistingEvent = treasury.events.some(evt => evt.id === newEvent.id)
+
+    if (isExistingEvent) {
       // Editing existing event
       updateTreasury(prev => ({
         ...prev,
@@ -632,25 +655,32 @@ const TreasuryReportManager = () => {
     }
   }
 
+  const getReportData = () => ({
+    period: reportPeriodLabel,
+    dues: filteredDues,
+    matchingDuesPayments,
+    matchingEvents,
+    totalDuesIncome,
+    totalEventIncome,
+    totalEventExpense,
+    totalIncome,
+    totalExpense,
+    totalBalance,
+    clubName: config.clubName,
+    parentClub: config.sponsorClub ? `SPONSORED BY : ${config.sponsorClub.toUpperCase()}` : undefined,
+    clubId: config.clubId ? `CLUB ID : ${config.clubId}` : undefined,
+    group: config.group ? `GROUP ${config.group}` : undefined,
+    rid: config.district ? `RI DISTRICT ${config.district}` : undefined
+  })
+
   const handleDownloadPDF = () => {
-    const reportData = {
-      period: reportPeriodLabel,
-      dues: filteredDues,
-      matchingDuesPayments,
-      matchingEvents,
-      totalDuesIncome,
-      totalEventIncome,
-      totalEventExpense,
-      totalIncome,
-      totalExpense,
-      totalBalance,
-      clubName: config.clubName,
-      parentClub: config.sponsorClub ? `SPONSORED BY : ${config.sponsorClub.toUpperCase()}` : undefined,
-      clubId: config.clubId ? `CLUB ID : ${config.clubId}` : undefined,
-      group: config.group ? `GROUP ${config.group}` : undefined,
-      rid: config.district ? `RI DISTRICT ${config.district}` : undefined
-    }
-    generateTreasuryPDF(reportData)
+    generateTreasuryPDF(getReportData())
+  }
+
+  const handlePreviewPDF = () => {
+    const blobUrl = generateTreasuryPDF(getReportData(), 'bloburl')
+    setPreviewUrl(blobUrl)
+    setShowPreviewModal(true)
   }
 
   if (usersLoading || treasuryLoading) {
@@ -673,7 +703,7 @@ const TreasuryReportManager = () => {
         <div />
         <div className="treasury-actions">
           <button className="btn-secondary" onClick={() => refetch()}><RefreshCcw size={16} /> Refresh</button>
-          <button className="btn-primary" onClick={() => setCurrentTab('dues')}><DollarSign size={16} /> Club Due</button>
+          <button className="btn-primary" onClick={handlePreviewPDF}><Eye size={16} /> Preview PDF</button>
           <button className="btn-primary outline" onClick={handleDownloadPDF}><Download size={16} /> Download as PDF</button>
         </div>
       </div>
@@ -1154,6 +1184,24 @@ const TreasuryReportManager = () => {
             <div className="modal-footer">
               <button className="btn-secondary" onClick={() => setShowInstallmentDatePicker(false)}>Cancel</button>
               <button className="btn-primary" onClick={handleConfirmInstallmentDatePicker}>Confirm Payment</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPreviewModal && previewUrl && (
+        <div className="modal-overlay" onClick={() => setShowPreviewModal(false)} style={{ zIndex: 1000 }}>
+          <div className="modal-content preview-modal" style={{ width: '90%', height: '90vh', maxWidth: '1000px', display: 'flex', flexDirection: 'column', padding: 0 }} onClick={e => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #eee' }}>
+              <h4>Treasury Report Preview</h4>
+              <button className="btn-icon" onClick={() => setShowPreviewModal(false)}><X size={16} /></button>
+            </div>
+            <div className="modal-body" style={{ flex: 1, padding: 0, overflow: 'hidden' }}>
+              <iframe src={previewUrl} style={{ width: '100%', height: '100%', border: 'none' }} title="PDF Preview" />
+            </div>
+            <div className="modal-footer" style={{ padding: '1rem 1.5rem', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+              <button className="btn-secondary" onClick={() => setShowPreviewModal(false)}>Close Preview</button>
+              <button className="btn-primary outline" onClick={() => { handleDownloadPDF(); setShowPreviewModal(false); }}><Download size={16} /> Download PDF</button>
             </div>
           </div>
         </div>

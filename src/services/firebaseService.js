@@ -2,7 +2,8 @@
 import { db, auth, storage } from '../firebase/config';
 import {
     collection, getDocs, addDoc, deleteDoc, doc, updateDoc, getDoc,
-    query, where, orderBy, setDoc, runTransaction, writeBatch, serverTimestamp, limit
+    query, where, orderBy, setDoc, runTransaction, writeBatch, serverTimestamp, limit,
+    waitForPendingWrites
 } from 'firebase/firestore';
 import {
     signInWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence,
@@ -166,14 +167,43 @@ export const firebaseService = {
     },
 
     add: async (collectionName, data) => {
-        await firebaseService.waitForAuth();
-        const docRef = await addDoc(collection(db, collectionName), data);
-        return { id: docRef.id, ...data };
+        const authUser = await firebaseService.waitForAuth();
+
+        if (!authUser) {
+            throw new Error("Security check failed: Session not found. Please logout and login again.");
+        }
+
+        try {
+            const docRef = await addDoc(collection(db, collectionName), data);
+            // waitForPendingWrites ensures the write actually reaches the Firestore server.
+            // Without this, persistentLocalCache makes addDoc resolve locally even if the
+            // server later rejects it (e.g. due to security rules), causing silent data loss.
+            await waitForPendingWrites(db);
+            return { id: docRef.id, ...data };
+        } catch (e) {
+            console.error("[Firebase Add] Failed:", e);
+            if (e.code === 'permission-denied') {
+                throw new Error("Permission Denied: You do not have access to add this record.");
+            }
+            throw e;
+        }
     },
 
     delete: async (collectionName, id) => {
-        await firebaseService.waitForAuth();
-        await deleteDoc(doc(db, collectionName, id));
+        const authUser = await firebaseService.waitForAuth();
+        if (!authUser) {
+            throw new Error("Security check failed: Session not found. Please logout and login again.");
+        }
+        try {
+            await deleteDoc(doc(db, collectionName, id));
+            await waitForPendingWrites(db);
+        } catch (e) {
+            console.error("[Firebase Delete] Failed:", e);
+            if (e.code === 'permission-denied') {
+                throw new Error("Permission Denied: You do not have access to delete this record.");
+            }
+            throw e;
+        }
     },
 
     update: async (collectionName, id, data) => {
@@ -185,6 +215,7 @@ export const firebaseService = {
 
         try {
             await updateDoc(doc(db, collectionName, id), data);
+            await waitForPendingWrites(db);
             return { id, ...data };
         } catch (e) {
             console.error("[Firebase Update] Failed:", e);

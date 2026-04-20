@@ -1,5 +1,13 @@
 import { jsPDF } from 'jspdf'
 
+const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A"
+    const regex = /^(\d{4})-(\d{2})-(\d{2})$/
+    const match = String(dateStr).match(regex)
+    if (match) return `${match[3]}-${match[2]}-${match[1]}`
+    return dateStr
+}
+
 export const generateReportPDF = (data, action = 'download') => {
     const doc = new jsPDF({ unit: "mm", format: "a4", compress: true })
     drawReportOnDoc(doc, data)
@@ -29,11 +37,11 @@ const drawReportOnDoc = (doc, data) => {
     let y = margin
 
     const colors = {
-        navy: [20, 30, 90],
+        navy: [0, 51, 102], // Navy blue
         black: [30, 30, 30],
-        grey: [100, 100, 100],
-        lightBg: [248, 249, 250],
-        tableHeader: [230, 230, 235]
+        grey: [100, 110, 120],
+        lightBg: [245, 248, 252], // Light blue tint
+        tableHeader: [225, 235, 245] // Soft blue
     }
 
     // Draw the page footer: a thin rule + page number at the bottom
@@ -99,9 +107,9 @@ const drawReportOnDoc = (doc, data) => {
         y += 6
 
         // Header
-        doc.setFillColor(...colors.navy)
+        doc.setFillColor(...colors.tableHeader)
         doc.rect(margin, y, contentWidth, rowHeight, 'F')
-        doc.setTextColor(255, 255, 255)
+        doc.setTextColor(...colors.navy)
         doc.setFontSize(9)
 
         let cx = margin + 2
@@ -190,7 +198,7 @@ const drawReportOnDoc = (doc, data) => {
         { label: "EVENT CHAIR", value: data.eventChair },
         { label: "LOCATION", value: data.location },
         { label: "AVENUE", value: data.avenue },
-        { label: "DATE", value: data.eventDate }
+        { label: "DATE", value: formatDate(data.eventDate) }
     ]
     const metaStartY = y
     const colW = contentWidth / 2
@@ -329,6 +337,7 @@ export const generateTreasuryPDF = (data, action = 'download') => {
     drawTreasuryReportOnDoc(doc, data)
 
     if (action === 'preview') window.open(doc.output('bloburl'))
+    else if (action === 'bloburl') return doc.output('bloburl')
     else doc.save(`Treasury_Report_${data.period || 'Summary'}.pdf`)
 }
 
@@ -339,15 +348,15 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     const contentWidth = pageWidth - margin * 2
     let y = margin
 
-    // Colors mimicking the Excel sheet
+    // Navy blue theme colors
     const colors = {
-        navy: [30, 40, 90],
-        black: [0, 0, 0],
-        red: [200, 0, 0],
-        lightBlueBg: [169, 194, 235], // Header backgrounds
-        lighterBlueBg: [210, 225, 245], // Row backgrounds
+        navy: [0, 51, 102], // Navy blue
+        black: [30, 30, 30],
+        red: [220, 53, 69], // Red for negative balances
+        lightBlueBg: [225, 235, 245], // Soft blue for headers
+        lighterBlueBg: [245, 248, 252], // Very light blue for rows
         white: [255, 255, 255],
-        border: [80, 80, 80]
+        border: [180, 200, 220] // Soft border
     }
 
     const ensureSpace = (heightNeeded) => {
@@ -388,8 +397,10 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     y += 6
 
     doc.setFontSize(12)
-    doc.setTextColor(...colors.red)
-    doc.text(`Club's Account Statement (${data.period || 'All Time'})`, pageWidth / 2, y, { align: "center" })
+    doc.setTextColor(...colors.navy)
+    const accTitle = `Club's Account Statement (${data.period || 'All Time'})`
+    const accTitleW = doc.getTextWidth(accTitle)
+    doc.text(accTitle, (pageWidth - accTitleW) / 2, y)
     y += 8
 
     // HELPER: Draw bordered cell with text
@@ -401,20 +412,20 @@ const drawTreasuryReportOnDoc = (doc, data) => {
         doc.setDrawColor(...colors.border)
         doc.setLineWidth(0.3)
         doc.rect(x, yPos, w, h, 'S')
-        
+
         doc.setFont("helvetica", fontStyle)
         doc.setTextColor(...textColor)
         doc.setFontSize(9)
-        
+
         // Vertical centering offset
-        const textY = yPos + (h / 2) + 1.2 
-        
+        const textY = yPos + (h / 2) + 1.2
+
         // Clip text if it's too long
         let printText = String(text)
         // basic clipping logic (approx)
         if (printText.length > (w / 2)) {
             // Very simple truncation to avoid text bleeding out of cell
-            const maxChars = Math.floor(w / 1.8)
+            const maxChars = Math.floor(w / 1.6)
             if (printText.length > maxChars) printText = printText.substring(0, maxChars - 3) + "..."
         }
 
@@ -433,44 +444,42 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     }
 
     // --- SUMMARY TABLE ---
-    const rowH = 6.5
-    
+    const rowH = 7.5
+
     // Summary Header
-    drawCell("Income & Expense Statistics", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
+    drawCell("OVERALL FINANCIAL OVERVIEW", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
     y += rowH
 
     const totalIncome = Number(data.totalEventIncome || 0) + Number(data.totalDuesIncome || 0)
-    
-    const summaryColW1 = contentWidth * 0.35
+
+    const summaryColW1 = contentWidth * 0.50
     const summaryColW2 = contentWidth * 0.50
-    const summaryColW3 = contentWidth * 0.15
 
     const summaryRows = [
-        ["TOTAL INCOME", formatCurrencyPDF(totalIncome), "INR"],
-        ["TOTAL CLUB DUES", formatCurrencyPDF(data.totalDuesIncome), "INR"],
-        ["TOTAL EXPENSE", formatCurrencyPDF(data.totalEventExpense), "INR"]
+        ["TOTAL CLUB DUES", formatCurrencyPDF(data.totalDuesIncome)],
+        ["TOTAL INCOME", formatCurrencyPDF(totalIncome)],
+        ["TOTAL EXPENSE", formatCurrencyPDF(data.totalEventExpense)]
     ]
 
     summaryRows.forEach(row => {
         drawCell(row[0], margin, y, summaryColW1, rowH, colors.lighterBlueBg, 'center', 'bold')
-        drawCell(row[1], margin + summaryColW1, y, summaryColW2, rowH, colors.lighterBlueBg, 'center', 'bold')
-        drawCell(row[2], margin + summaryColW1 + summaryColW2, y, summaryColW3, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell(row[1], margin + summaryColW1, y, summaryColW2, rowH, colors.white, 'center', 'bold')
         y += rowH
     })
     y += 5
 
     // --- EVENTS TABLE ---
-    const colDate = 22
-    const colInc = 26
-    const colExp = 26
+    const colDate = 24
+    const colInc = 28
+    const colExp = 28
     const colEvt = contentWidth - colDate - colInc - colExp
     const halfEvt = colEvt / 2
 
     // Main Header
     drawCell("DATE", margin, y, colDate, rowH, colors.lightBlueBg, 'center', 'bold')
     drawCell("EVENTS", margin + colDate, y, colEvt, rowH, colors.lightBlueBg, 'center', 'bold')
-    drawCell("Income INR", margin + colDate + colEvt, y, colInc, rowH, colors.lightBlueBg, 'center', 'bold')
-    drawCell("Expense INR", margin + colDate + colEvt + colInc, y, colExp, rowH, colors.lightBlueBg, 'center', 'bold')
+    drawCell("INCOME", margin + colDate + colEvt, y, colInc, rowH, colors.lightBlueBg, 'center', 'bold')
+    drawCell("EXPENSE", margin + colDate + colEvt + colInc, y, colExp, rowH, colors.lightBlueBg, 'center', 'bold')
     y += rowH
 
     const events = data.matchingEvents || []
@@ -478,45 +487,42 @@ const drawTreasuryReportOnDoc = (doc, data) => {
         const incs = evt.incomes || []
         const exps = evt.expenses || []
         const maxLines = Math.max(incs.length, exps.length, 1)
-        
+
         const eventTotalHeight = rowH + rowH + (maxLines * rowH)
         ensureSpace(eventTotalHeight)
 
+        // Merged Cells for Date, Total Income, Total Expense (spanning full event height)
+        drawCell(formatDate(evt.date), margin, y, colDate, eventTotalHeight, colors.white, 'center', 'bold')
+        drawCell(formatCurrencyPDF(evt.totalIncome), margin + colDate + colEvt, y, colInc, eventTotalHeight, colors.white, 'center', 'bold')
+        drawCell(formatCurrencyPDF(evt.totalExpenses), margin + colDate + colEvt + colInc, y, colExp, eventTotalHeight, colors.white, 'center', 'bold')
+
+        let currentY = y
+
         // Event Header Row (e.g. VIBE CHECK)
-        drawCell(evt.date || "N/A", margin, y, colDate, rowH, colors.white, 'center', 'bold')
-        drawCell((evt.name || "UNTITLED EVENT").toUpperCase(), margin + colDate, y, colEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
-        drawCell(formatCurrencyPDF(evt.totalIncome), margin + colDate + colEvt, y, colInc, rowH, colors.white, 'center', 'bold')
-        drawCell(formatCurrencyPDF(evt.totalExpenses), margin + colDate + colEvt + colInc, y, colExp, rowH, colors.white, 'center', 'bold')
-        y += rowH
+        drawCell((evt.name || "UNTITLED EVENT").toUpperCase(), margin + colDate, currentY, colEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
+        currentY += rowH
 
         // Subheader Row (INCOME | EXPENSE)
-        drawCell("", margin, y, colDate, rowH, colors.lighterBlueBg, 'center', 'normal')
-        drawCell("INCOME", margin + colDate, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
-        drawCell("EXPENSE", margin + colDate + halfEvt, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
-        drawCell("", margin + colDate + colEvt, y, colInc, rowH, colors.white, 'center', 'normal')
-        drawCell("", margin + colDate + colEvt + colInc, y, colExp, rowH, colors.white, 'center', 'normal')
-        y += rowH
+        drawCell("INCOME DETAILS", margin + colDate, currentY, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("EXPENSE DETAILS", margin + colDate + halfEvt, currentY, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
+        currentY += rowH
 
         // Line Items
         for (let i = 0; i < maxLines; i++) {
             const inc = incs[i]
             const exp = exps[i]
-            ensureSpace(rowH)
 
-            const incName = inc ? inc.name : "NIL"
-            const expName = exp ? exp.name : "NIL"
-            const finalIncAmt = inc ? formatCurrencyPDF(inc.amount) : "Rs. 0.00"
-            const finalExpAmt = exp ? formatCurrencyPDF(exp.amount) : "Rs. 0.00"
+            const incText = inc ? `${inc.name} (${formatCurrencyPDF(inc.amount)})` : "-"
+            const expText = exp ? `${exp.name} (${formatCurrencyPDF(exp.amount)})` : "-"
 
-            drawCell("", margin, y, colDate, rowH, colors.lighterBlueBg, 'center', 'normal')
-            drawCell(incName, margin + colDate, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'normal')
-            drawCell(expName, margin + colDate + halfEvt, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'normal')
-            drawCell(finalIncAmt, margin + colDate + colEvt, y, colInc, rowH, colors.white, 'center', 'normal')
-            drawCell(finalExpAmt, margin + colDate + colEvt + colInc, y, colExp, rowH, colors.white, 'center', 'normal')
-            y += rowH
+            drawCell(incText, margin + colDate, currentY, halfEvt, rowH, colors.white, 'center', 'normal')
+            drawCell(expText, margin + colDate + halfEvt, currentY, halfEvt, rowH, colors.white, 'center', 'normal')
+            currentY += rowH
         }
+
+        y += eventTotalHeight
     })
-    
+
     // Add Member Dues Payments at the bottom
     const duesPayments = data.matchingDuesPayments || []
     if (duesPayments.length > 0) {
@@ -524,14 +530,14 @@ const drawTreasuryReportOnDoc = (doc, data) => {
         ensureSpace(rowH * 3)
         drawCell("MEMBER DUES PAYMENTS", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
         y += rowH
-        drawCell("Date Paid", margin, y, contentWidth * 0.3, rowH, colors.lighterBlueBg, 'center', 'bold')
-        drawCell("Member Name", margin + contentWidth * 0.3, y, contentWidth * 0.4, rowH, colors.lighterBlueBg, 'center', 'bold')
-        drawCell("Amount", margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("DATE PAID", margin, y, contentWidth * 0.3, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("MEMBER NAME", margin + contentWidth * 0.3, y, contentWidth * 0.4, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("TOTAL DUE", margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.lighterBlueBg, 'center', 'bold')
         y += rowH
-        
+
         duesPayments.forEach(payment => {
             ensureSpace(rowH)
-            drawCell(payment.date, margin, y, contentWidth * 0.3, rowH, colors.white, 'center', 'normal')
+            drawCell(formatDate(payment.date), margin, y, contentWidth * 0.3, rowH, colors.white, 'center', 'normal')
             drawCell(payment.memberName, margin + contentWidth * 0.3, y, contentWidth * 0.4, rowH, colors.white, 'left', 'normal')
             drawCell(formatCurrencyPDF(payment.amount), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.white, 'center', 'normal')
             y += rowH
@@ -551,9 +557,9 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     drawCell("TOTAL INCOME", margin, y, contentWidth * 0.7, rowH, colors.white, 'right', 'bold')
     drawCell(formatCurrencyPDF(grandTotalIncome), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.white, 'center', 'bold', colors.navy)
     y += rowH
-    
+
     drawCell("TOTAL EXPENSE", margin, y, contentWidth * 0.7, rowH, colors.white, 'right', 'bold')
-    drawCell(formatCurrencyPDF(grandTotalExpense), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.white, 'center', 'bold', colors.red)
+    drawCell(formatCurrencyPDF(grandTotalExpense), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.white, 'center', 'bold', colors.navy)
     y += rowH
 
     drawCell("NET BALANCE", margin, y, contentWidth * 0.7, rowH, colors.white, 'right', 'bold')
