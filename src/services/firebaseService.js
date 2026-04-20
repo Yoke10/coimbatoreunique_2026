@@ -29,7 +29,8 @@ const COLLECTIONS = {
     RESOURCES: 'resources',
     BOARD: 'board_members',
     TEMPLATES: 'email_templates',
-    CALENDAR_DAYS: 'calendar_days'
+    CALENDAR_DAYS: 'calendar_days',
+    TREASURY: 'treasury'
 };
 
 // Helper to map doc snapshot to object
@@ -241,6 +242,30 @@ export const firebaseService = {
     addReport: (report) => firebaseService.add(COLLECTIONS.REPORTS, report),
     deleteReport: (id) => firebaseService.delete(COLLECTIONS.REPORTS, id),
     updateReport: (id, updates) => firebaseService.update(COLLECTIONS.REPORTS, id, updates),
+
+    getTreasury: async () => {
+        await firebaseService.waitForAuth()
+        const treasuryRef = doc(db, COLLECTIONS.TREASURY, 'global')
+        const snap = await getDoc(treasuryRef)
+
+        if (!snap.exists()) {
+            const initialDoc = {
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                dues: [],
+                events: []
+            }
+            await setDoc(treasuryRef, initialDoc)
+            return { id: 'global', ...initialDoc }
+        }
+
+        return { id: 'global', ...snap.data() }
+    },
+    updateTreasury: async (updates) => {
+        const treasuryRef = doc(db, COLLECTIONS.TREASURY, 'global')
+        await firebaseService.waitForAuth()
+        await updateDoc(treasuryRef, { ...updates, updatedAt: new Date().toISOString() })
+    },
 
     // USERS / MEMBERS
     getUsers: () => firebaseService.getAll(COLLECTIONS.USERS),

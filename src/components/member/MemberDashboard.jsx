@@ -4,6 +4,7 @@ const FirstTimeSetup = React.lazy(() => import('./FirstTimeSetup'))
 const MemberProfile = React.lazy(() => import('./MemberProfile'))
 const Resources = React.lazy(() => import('./Resources'))
 const ReportGenerator = React.lazy(() => import('../reports/ReportGenerator'))
+const TreasuryReportManager = React.lazy(() => import('../finance/TreasuryReportManager'))
 import { firebaseService } from '../../services/firebaseService'
 import './MemberDashboard.css'
 import {
@@ -46,12 +47,44 @@ const MemberDashboard = ({ user, onLogout }) => {
     const [showProfileModal, setShowProfileModal] = useState(false)
     const [selectedMember, setSelectedMember] = useState(null)
 
+    // Treasury Password State
+    const [isTreasuryUnlocked, setIsTreasuryUnlocked] = useState(false)
+    const [showTreasuryPasswordPrompt, setShowTreasuryPasswordPrompt] = useState(false)
+    const [treasuryPasswordInput, setTreasuryPasswordInput] = useState('')
+
+    const handleTreasuryClick = () => {
+        if (currentUser?.role === 'admin' || isTreasuryUnlocked) {
+            setActiveTab('treasury')
+        } else {
+            setShowTreasuryPasswordPrompt(true)
+        }
+    }
+
+    const handleTreasuryPasswordSubmit = (e) => {
+        e.preventDefault()
+        const correctPassword = config.treasuryPassword || 'rotaract123'
+        if (treasuryPasswordInput === correctPassword) {
+            setIsTreasuryUnlocked(true)
+            setActiveTab('treasury')
+            setShowTreasuryPasswordPrompt(false)
+            setTreasuryPasswordInput('')
+        } else {
+            alert('Incorrect password. Please try again.')
+        }
+    }
+
     // --- TANSTACK QUERIES ---
 
     // 1. Fetch Reports
     const { data: reports = [] } = useQuery({
         queryKey: ['reports'],
         queryFn: firebaseService.getReports,
+        staleTime: 5 * 60 * 1000
+    })
+
+    const { data: config = {} } = useQuery({
+        queryKey: ['config'],
+        queryFn: firebaseService.getClubConfig,
         staleTime: 5 * 60 * 1000
     })
 
@@ -164,6 +197,12 @@ const MemberDashboard = ({ user, onLogout }) => {
                         Project Reports
                     </button>
                     <button
+                        onClick={handleTreasuryClick}
+                        className={`member-nav-btn ${activeTab === 'treasury' ? 'active' : ''}`}
+                    >
+                        Treasury
+                    </button>
+                    <button
                         onClick={() => setActiveTab('resources')}
                         className={`member-nav-btn ${activeTab === 'resources' ? 'active' : ''}`}
                     >
@@ -251,6 +290,13 @@ const MemberDashboard = ({ user, onLogout }) => {
                                 )}
                             </div>
                         )}
+                        {activeTab === 'treasury' && (
+                            <div className="member-treasury-section">
+                                <React.Suspense fallback={<div className="p-4 text-center">Loading Treasury...</div>}>
+                                    <TreasuryReportManager />
+                                </React.Suspense>
+                            </div>
+                        )}
                     </React.Suspense>
                 </>
             )}
@@ -334,6 +380,57 @@ const MemberDashboard = ({ user, onLogout }) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+            {/* Treasury Password Modal */}
+            {showTreasuryPasswordPrompt && (
+                <div className="modal-overlay">
+                    <div className="modal-content" style={{ maxWidth: '400px' }}>
+                        <div className="modal-header">
+                            <h3>Treasury Access Restricted</h3>
+                            <button className="close-btn" onClick={() => setShowTreasuryPasswordPrompt(false)}>✕</button>
+                        </div>
+                        <div className="modal-body" style={{ padding: '1.5rem' }}>
+                            <p style={{ marginBottom: '1rem', color: '#666', fontSize: '0.95rem' }}>
+                                Please enter the treasury password to view this section.
+                            </p>
+                            <form onSubmit={handleTreasuryPasswordSubmit}>
+                                <input 
+                                    type="password" 
+                                    value={treasuryPasswordInput} 
+                                    onChange={(e) => setTreasuryPasswordInput(e.target.value)}
+                                    placeholder="Enter password"
+                                    autoFocus
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '0.75rem', 
+                                        marginBottom: '1.5rem', 
+                                        borderRadius: '8px', 
+                                        border: '1px solid #ddd',
+                                        fontSize: '1rem'
+                                    }}
+                                />
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+                                    <button 
+                                        type="button" 
+                                        className="btn-secondary" 
+                                        onClick={() => setShowTreasuryPasswordPrompt(false)}
+                                        style={{ padding: '0.5rem 1rem', borderRadius: '6px' }}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button 
+                                        type="submit" 
+                                        className="btn-primary"
+                                        style={{ padding: '0.5rem 1rem', borderRadius: '6px', background: 'var(--primary-magenta)', color: 'white', border: 'none' }}
+                                    >
+                                        Unlock
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     )
 }

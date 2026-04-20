@@ -323,3 +323,242 @@ const drawReportOnDoc = (doc, data) => {
     // Draw footer on the last (or only) page
     drawPageFooter(doc.internal.getNumberOfPages())
 }
+
+export const generateTreasuryPDF = (data, action = 'download') => {
+    const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true })
+    drawTreasuryReportOnDoc(doc, data)
+
+    if (action === 'preview') window.open(doc.output('bloburl'))
+    else doc.save(`Treasury_Report_${data.period || 'Summary'}.pdf`)
+}
+
+const drawTreasuryReportOnDoc = (doc, data) => {
+    const pageWidth = doc.internal.pageSize.getWidth()
+    const pageHeight = doc.internal.pageSize.getHeight()
+    const margin = 12
+    const contentWidth = pageWidth - margin * 2
+    let y = margin
+
+    // Colors mimicking the Excel sheet
+    const colors = {
+        navy: [30, 40, 90],
+        black: [0, 0, 0],
+        red: [200, 0, 0],
+        lightBlueBg: [169, 194, 235], // Header backgrounds
+        lighterBlueBg: [210, 225, 245], // Row backgrounds
+        white: [255, 255, 255],
+        border: [80, 80, 80]
+    }
+
+    const ensureSpace = (heightNeeded) => {
+        if (y + heightNeeded > pageHeight - 15) {
+            drawPageFooter(doc.internal.getNumberOfPages())
+            doc.addPage()
+            y = margin
+            return true
+        }
+        return false
+    }
+
+    const drawPageFooter = (pageNum) => {
+        const footerY = pageHeight - 8
+        doc.setDrawColor(180)
+        doc.setLineWidth(0.4)
+        doc.line(margin, footerY - 4, pageWidth - margin, footerY - 4)
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(8)
+        doc.setTextColor(120)
+        doc.text(`Page ${pageNum}`, pageWidth - margin, footerY, { align: 'right' })
+    }
+
+    // --- HEADER ---
+    doc.setFont("helvetica", "bold")
+    doc.setFontSize(14)
+    doc.setTextColor(...colors.navy)
+    doc.text((data.clubName || "ROTARACT CLUB OF COIMBATORE UNIQUE").toUpperCase(), pageWidth / 2, y, { align: "center" })
+    y += 6
+
+    doc.setFontSize(11)
+    doc.text(data.parentClub || "SPONSORED BY : ROTARY CLUB OF THONDAMUTHUR", pageWidth / 2, y, { align: "center" })
+    y += 6
+
+    doc.setFontSize(10)
+    doc.setTextColor(...colors.black)
+    doc.text(`${data.clubId || 'CLUB ID : 50295'} | ${data.group || 'GROUP 2'} | ${data.rid || 'RI DISTRICT 3206'}`, pageWidth / 2, y, { align: "center" })
+    y += 6
+
+    doc.setFontSize(12)
+    doc.setTextColor(...colors.red)
+    doc.text(`Club's Account Statement (${data.period || 'All Time'})`, pageWidth / 2, y, { align: "center" })
+    y += 8
+
+    // HELPER: Draw bordered cell with text
+    const drawCell = (text, x, yPos, w, h, bg, align = 'center', fontStyle = 'normal', textColor = colors.black) => {
+        if (bg) {
+            doc.setFillColor(...bg)
+            doc.rect(x, yPos, w, h, 'F')
+        }
+        doc.setDrawColor(...colors.border)
+        doc.setLineWidth(0.3)
+        doc.rect(x, yPos, w, h, 'S')
+        
+        doc.setFont("helvetica", fontStyle)
+        doc.setTextColor(...textColor)
+        doc.setFontSize(9)
+        
+        // Vertical centering offset
+        const textY = yPos + (h / 2) + 1.2 
+        
+        // Clip text if it's too long
+        let printText = String(text)
+        // basic clipping logic (approx)
+        if (printText.length > (w / 2)) {
+            // Very simple truncation to avoid text bleeding out of cell
+            const maxChars = Math.floor(w / 1.8)
+            if (printText.length > maxChars) printText = printText.substring(0, maxChars - 3) + "..."
+        }
+
+        if (align === 'center') {
+            doc.text(printText, x + (w / 2), textY, { align: 'center' })
+        } else if (align === 'right') {
+            doc.text(printText, x + w - 2, textY, { align: 'right' })
+        } else {
+            doc.text(printText, x + 2, textY, { align: 'left' })
+        }
+    }
+
+    const formatCurrencyPDF = (amount) => {
+        if (amount === undefined || amount === null || isNaN(amount)) return "Rs. 0.00"
+        return 'Rs. ' + Number(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+
+    // --- SUMMARY TABLE ---
+    const rowH = 6.5
+    
+    // Summary Header
+    drawCell("Income & Expense Statistics", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
+    y += rowH
+
+    const totalIncome = Number(data.totalEventIncome || 0) + Number(data.totalDuesIncome || 0)
+    
+    const summaryColW1 = contentWidth * 0.35
+    const summaryColW2 = contentWidth * 0.50
+    const summaryColW3 = contentWidth * 0.15
+
+    const summaryRows = [
+        ["TOTAL INCOME", formatCurrencyPDF(totalIncome), "INR"],
+        ["TOTAL CLUB DUES", formatCurrencyPDF(data.totalDuesIncome), "INR"],
+        ["TOTAL EXPENSE", formatCurrencyPDF(data.totalEventExpense), "INR"]
+    ]
+
+    summaryRows.forEach(row => {
+        drawCell(row[0], margin, y, summaryColW1, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell(row[1], margin + summaryColW1, y, summaryColW2, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell(row[2], margin + summaryColW1 + summaryColW2, y, summaryColW3, rowH, colors.lighterBlueBg, 'center', 'bold')
+        y += rowH
+    })
+    y += 5
+
+    // --- EVENTS TABLE ---
+    const colDate = 22
+    const colInc = 26
+    const colExp = 26
+    const colEvt = contentWidth - colDate - colInc - colExp
+    const halfEvt = colEvt / 2
+
+    // Main Header
+    drawCell("DATE", margin, y, colDate, rowH, colors.lightBlueBg, 'center', 'bold')
+    drawCell("EVENTS", margin + colDate, y, colEvt, rowH, colors.lightBlueBg, 'center', 'bold')
+    drawCell("Income INR", margin + colDate + colEvt, y, colInc, rowH, colors.lightBlueBg, 'center', 'bold')
+    drawCell("Expense INR", margin + colDate + colEvt + colInc, y, colExp, rowH, colors.lightBlueBg, 'center', 'bold')
+    y += rowH
+
+    const events = data.matchingEvents || []
+    events.forEach(evt => {
+        const incs = evt.incomes || []
+        const exps = evt.expenses || []
+        const maxLines = Math.max(incs.length, exps.length, 1)
+        
+        const eventTotalHeight = rowH + rowH + (maxLines * rowH)
+        ensureSpace(eventTotalHeight)
+
+        // Event Header Row (e.g. VIBE CHECK)
+        drawCell(evt.date || "N/A", margin, y, colDate, rowH, colors.white, 'center', 'bold')
+        drawCell((evt.name || "UNTITLED EVENT").toUpperCase(), margin + colDate, y, colEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell(formatCurrencyPDF(evt.totalIncome), margin + colDate + colEvt, y, colInc, rowH, colors.white, 'center', 'bold')
+        drawCell(formatCurrencyPDF(evt.totalExpenses), margin + colDate + colEvt + colInc, y, colExp, rowH, colors.white, 'center', 'bold')
+        y += rowH
+
+        // Subheader Row (INCOME | EXPENSE)
+        drawCell("", margin, y, colDate, rowH, colors.lighterBlueBg, 'center', 'normal')
+        drawCell("INCOME", margin + colDate, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("EXPENSE", margin + colDate + halfEvt, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("", margin + colDate + colEvt, y, colInc, rowH, colors.white, 'center', 'normal')
+        drawCell("", margin + colDate + colEvt + colInc, y, colExp, rowH, colors.white, 'center', 'normal')
+        y += rowH
+
+        // Line Items
+        for (let i = 0; i < maxLines; i++) {
+            const inc = incs[i]
+            const exp = exps[i]
+            ensureSpace(rowH)
+
+            const incName = inc ? inc.name : "NIL"
+            const expName = exp ? exp.name : "NIL"
+            const finalIncAmt = inc ? formatCurrencyPDF(inc.amount) : "Rs. 0.00"
+            const finalExpAmt = exp ? formatCurrencyPDF(exp.amount) : "Rs. 0.00"
+
+            drawCell("", margin, y, colDate, rowH, colors.lighterBlueBg, 'center', 'normal')
+            drawCell(incName, margin + colDate, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'normal')
+            drawCell(expName, margin + colDate + halfEvt, y, halfEvt, rowH, colors.lighterBlueBg, 'center', 'normal')
+            drawCell(finalIncAmt, margin + colDate + colEvt, y, colInc, rowH, colors.white, 'center', 'normal')
+            drawCell(finalExpAmt, margin + colDate + colEvt + colInc, y, colExp, rowH, colors.white, 'center', 'normal')
+            y += rowH
+        }
+    })
+    
+    // Add Member Dues Payments at the bottom
+    const duesPayments = data.matchingDuesPayments || []
+    if (duesPayments.length > 0) {
+        y += 8
+        ensureSpace(rowH * 3)
+        drawCell("MEMBER DUES PAYMENTS", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
+        y += rowH
+        drawCell("Date Paid", margin, y, contentWidth * 0.3, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("Member Name", margin + contentWidth * 0.3, y, contentWidth * 0.4, rowH, colors.lighterBlueBg, 'center', 'bold')
+        drawCell("Amount", margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.lighterBlueBg, 'center', 'bold')
+        y += rowH
+        
+        duesPayments.forEach(payment => {
+            ensureSpace(rowH)
+            drawCell(payment.date, margin, y, contentWidth * 0.3, rowH, colors.white, 'center', 'normal')
+            drawCell(payment.memberName, margin + contentWidth * 0.3, y, contentWidth * 0.4, rowH, colors.white, 'left', 'normal')
+            drawCell(formatCurrencyPDF(payment.amount), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.white, 'center', 'normal')
+            y += rowH
+        })
+    }
+
+    // GRAND TOTAL SUMMARY
+    y += 10
+    ensureSpace(rowH * 4)
+    drawCell("GRAND TOTAL SUMMARY", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
+    y += rowH
+
+    const grandTotalIncome = Number(data.totalEventIncome || 0) + Number(data.totalDuesIncome || 0)
+    const grandTotalExpense = Number(data.totalEventExpense || 0)
+    const grandBalance = grandTotalIncome - grandTotalExpense
+
+    drawCell("TOTAL INCOME", margin, y, contentWidth * 0.7, rowH, colors.white, 'right', 'bold')
+    drawCell(formatCurrencyPDF(grandTotalIncome), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.white, 'center', 'bold', colors.navy)
+    y += rowH
+    
+    drawCell("TOTAL EXPENSE", margin, y, contentWidth * 0.7, rowH, colors.white, 'right', 'bold')
+    drawCell(formatCurrencyPDF(grandTotalExpense), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.white, 'center', 'bold', colors.red)
+    y += rowH
+
+    drawCell("NET BALANCE", margin, y, contentWidth * 0.7, rowH, colors.white, 'right', 'bold')
+    drawCell(formatCurrencyPDF(grandBalance), margin + contentWidth * 0.7, y, contentWidth * 0.3, rowH, colors.lighterBlueBg, 'center', 'bold', colors.black)
+    y += rowH
+
+    drawPageFooter(doc.internal.getNumberOfPages())
+}
