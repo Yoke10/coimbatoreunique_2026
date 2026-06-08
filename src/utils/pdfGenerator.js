@@ -1,5 +1,25 @@
 import { jsPDF } from 'jspdf'
 
+// Helper to convert WEBP with alpha to PNG so jsPDF doesn't render a black background
+const convertWebPToPNG = (base64) => {
+    return new Promise((resolve) => {
+        if (!base64 || !base64.startsWith('data:image/webp')) {
+            return resolve(base64)
+        }
+        const img = new Image()
+        img.onload = () => {
+            const canvas = document.createElement('canvas')
+            canvas.width = img.width
+            canvas.height = img.height
+            const ctx = canvas.getContext('2d')
+            ctx.drawImage(img, 0, 0)
+            resolve(canvas.toDataURL('image/png'))
+        }
+        img.onerror = () => resolve(base64) // fallback
+        img.src = base64
+    })
+}
+
 const formatDate = (dateStr) => {
     if (!dateStr) return "N/A"
     const regex = /^(\d{4})-(\d{2})-(\d{2})$/
@@ -8,7 +28,10 @@ const formatDate = (dateStr) => {
     return dateStr
 }
 
-export const generateReportPDF = (data, action = 'download') => {
+export const generateReportPDF = async (data, action = 'download') => {
+    if (data.logos && data.logos.length > 0) {
+        data.logos = await Promise.all(data.logos.map(l => convertWebPToPNG(l)))
+    }
     const doc = new jsPDF({ unit: "mm", format: "a4", compress: true })
     drawReportOnDoc(doc, data)
 
@@ -16,17 +39,28 @@ export const generateReportPDF = (data, action = 'download') => {
     else doc.save(`${data.eventName || 'Report'}.pdf`)
 }
 
-export const generateBulkPDF = (reports, filename = 'Bulk_Reports.pdf') => {
+export const generateBulkPDF = async (reports, filename = 'Bulk_Reports.pdf') => {
     if (!reports || reports.length === 0) return alert("No reports to generate")
 
     const doc = new jsPDF({ unit: "mm", format: "a4", compress: true })
 
-    reports.forEach((report, index) => {
-        if (index > 0) doc.addPage()
+    for (let i = 0; i < reports.length; i++) {
+        let report = reports[i]
+        if (report.logos && report.logos.length > 0) {
+            report.logos = await Promise.all(report.logos.map(l => convertWebPToPNG(l)))
+        }
+        if (i > 0) doc.addPage()
         drawReportOnDoc(doc, report)
-    })
+    }
 
     doc.save(filename)
+}
+
+const getImageType = (data) => {
+    if (!data) return 'JPEG'
+    if (data.startsWith('data:image/webp')) return 'WEBP'
+    if (data.startsWith('data:image/png')) return 'PNG'
+    return 'JPEG'
 }
 
 const drawReportOnDoc = (doc, data) => {
@@ -141,28 +175,35 @@ const drawReportOnDoc = (doc, data) => {
         y += 8
     }
 
-    const getImageType = (data) => {
-        if (!data) return 'JPEG'
-        if (data.startsWith('data:image/webp')) return 'WEBP'
-        if (data.startsWith('data:image/png')) return 'PNG'
-        return 'JPEG'
-    }
-
-    // LOGOS (Header) - Centered
-    const logoSize = 25
+    // LOGOS (Header) - Centered and Aspect-Ratio-Aware
+    const logoHeight = 14
+    const logoGap = 6
     const logos = data.logos || []
-
-    // Calculate total width of logos to center them
     const validLogos = logos.filter(l => l)
-    const totalLogoWidth = (validLogos.length * logoSize) + ((validLogos.length - 1) * 5)
-    let logoX = (pageWidth - totalLogoWidth) / 2
 
-    validLogos.forEach(logo => {
-        try { doc.addImage(logo, getImageType(logo), logoX, y, logoSize, logoSize, undefined, 'FAST') } catch (e) { }
-        logoX += logoSize + 5
-    })
+    if (validLogos.length > 0) {
+        const logoInfos = validLogos.map(logo => {
+            try {
+                const props = doc.getImageProperties(logo)
+                const aspect = props.width / props.height
+                return { logo, aspect, width: logoHeight * aspect }
+            } catch (e) {
+                return { logo, aspect: 1, width: logoHeight }
+            }
+        })
 
-    y += logoSize + 5
+        const totalLogosWidth = logoInfos.reduce((sum, item) => sum + item.width, 0) + (logoGap * (logoInfos.length - 1))
+        let logoX = (pageWidth - totalLogosWidth) / 2
+
+        logoInfos.forEach(item => {
+            try {
+                doc.addImage(item.logo, getImageType(item.logo), logoX, y, item.width, logoHeight, undefined, 'FAST')
+            } catch (e) { }
+            logoX += item.width + logoGap
+        })
+
+        y += logoHeight + 5
+    }
 
     // CLUB INFO
     doc.setFont("helvetica", "bold")
@@ -181,7 +222,7 @@ const drawReportOnDoc = (doc, data) => {
     doc.setTextColor(...colors.black)
     const metaString = `${data.clubId || 'CLUB ID : 50295'} | ${data.group || 'GROUP 1'} | ${data.rid || 'RI DISTRICT : 3206'}`
     doc.text(metaString, pageWidth / 2, y, { align: "center" })
-    y += 15
+    y += 6
 
     // TITLE
     doc.setFont("helvetica", "bold");
@@ -332,7 +373,10 @@ const drawReportOnDoc = (doc, data) => {
     drawPageFooter(doc.internal.getNumberOfPages())
 }
 
-export const generateTreasuryPDF = (data, action = 'download') => {
+export const generateTreasuryPDF = async (data, action = 'download') => {
+    if (data.logos && data.logos.length > 0) {
+        data.logos = await Promise.all(data.logos.map(l => convertWebPToPNG(l)))
+    }
     const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true })
     drawTreasuryReportOnDoc(doc, data)
 
@@ -381,6 +425,35 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     }
 
     // --- HEADER ---
+    const logos = data.logos || []
+    const validLogos = logos.filter(l => l)
+
+    if (validLogos.length > 0) {
+        const logoHeight = 14
+        const logoGap = 6
+        const logoInfos = validLogos.map(logo => {
+            try {
+                const props = doc.getImageProperties(logo)
+                const aspect = props.width / props.height
+                return { logo, aspect, width: logoHeight * aspect }
+            } catch (e) {
+                return { logo, aspect: 1, width: logoHeight }
+            }
+        })
+
+        const totalLogosWidth = logoInfos.reduce((sum, item) => sum + item.width, 0) + (logoGap * (logoInfos.length - 1))
+        let logoX = (pageWidth - totalLogosWidth) / 2
+
+        logoInfos.forEach(item => {
+            try {
+                doc.addImage(item.logo, getImageType(item.logo), logoX, y, item.width, logoHeight, undefined, 'FAST')
+            } catch (e) { }
+            logoX += item.width + logoGap
+        })
+
+        y += logoHeight + 5
+    }
+
     doc.setFont("helvetica", "bold")
     doc.setFontSize(14)
     doc.setTextColor(...colors.navy)
@@ -393,7 +466,7 @@ const drawTreasuryReportOnDoc = (doc, data) => {
 
     doc.setFontSize(10)
     doc.setTextColor(...colors.black)
-    doc.text(`${data.clubId || 'CLUB ID : 50295'} | ${data.group || 'GROUP 2'} | ${data.rid || 'RI DISTRICT 3206'}`, pageWidth / 2, y, { align: "center" })
+    doc.text(`${data.clubId || 'CLUB ID : 50295'} | ${data.group || 'GROUP 1'} | ${data.rid || 'RI DISTRICT 3206'}`, pageWidth / 2, y, { align: "center" })
     y += 6
 
     doc.setFontSize(12)

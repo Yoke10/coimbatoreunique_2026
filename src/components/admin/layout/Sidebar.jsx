@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Calendar, FileText, BookOpen, Image, Users, MessagesSquare,
-    UserPlus, HardDrive, Mail, Trash2, LogOut, LayoutDashboard, X, Star, DollarSign
+    UserPlus, HardDrive, Mail, Trash2, LogOut, LayoutDashboard, X, Star, DollarSign, Building2
 } from 'lucide-react';
 import {
     AlertDialog,
@@ -40,6 +40,7 @@ const Sidebar = ({
         { id: 'treasury', label: 'Treasury', icon: DollarSign },
         { id: 'resources', label: 'Resources', icon: HardDrive },
         { id: 'email', label: 'Email Manager', icon: Mail },
+        { id: 'club_details', label: 'Club Details', icon: Building2 },
     ];
 
     return (

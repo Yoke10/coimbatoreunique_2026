@@ -20,6 +20,8 @@ import {
 
 import { useAuth } from "../../context/AuthContext"
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Lock } from 'lucide-react'
+
 
 const MemberDashboard = ({ user, onLogout }) => {
     // Default to Directory as Profile is now in modal
@@ -382,51 +384,43 @@ const MemberDashboard = ({ user, onLogout }) => {
             </AlertDialog>
             {/* Treasury Password Modal */}
             {showTreasuryPasswordPrompt && (
-                <div className="modal-overlay">
-                    <div className="modal-content" style={{ maxWidth: '400px' }}>
-                        <div className="modal-header">
+                <div className="modal-overlay" onClick={() => setShowTreasuryPasswordPrompt(false)}>
+                    <div className="treasury-lock-card" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close-btn" onClick={() => setShowTreasuryPasswordPrompt(false)}>✕</button>
+                        <div className="lock-header">
+                            <div className="lock-icon-container">
+                                <Lock className="lock-icon" size={32} />
+                            </div>
                             <h3>Treasury Access Restricted</h3>
-                            <button className="close-btn" onClick={() => setShowTreasuryPasswordPrompt(false)}>✕</button>
+                            <p>Enter password to unlock financial details.</p>
                         </div>
-                        <div className="modal-body" style={{ padding: '1.5rem' }}>
-                            <p style={{ marginBottom: '1rem', color: '#666', fontSize: '0.95rem' }}>
-                                Please enter the treasury password to view this section.
-                            </p>
-                            <form onSubmit={handleTreasuryPasswordSubmit}>
+                        <form onSubmit={handleTreasuryPasswordSubmit} className="lock-form">
+                            <div className="input-field-group">
                                 <input 
                                     type="password" 
                                     value={treasuryPasswordInput} 
                                     onChange={(e) => setTreasuryPasswordInput(e.target.value)}
-                                    placeholder="Enter password"
+                                    placeholder="Enter Access Password"
                                     autoFocus
-                                    style={{ 
-                                        width: '100%', 
-                                        padding: '0.75rem', 
-                                        marginBottom: '1.5rem', 
-                                        borderRadius: '8px', 
-                                        border: '1px solid #ddd',
-                                        fontSize: '1rem'
-                                    }}
+                                    className="lock-input"
                                 />
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
-                                    <button 
-                                        type="button" 
-                                        className="btn-secondary" 
-                                        onClick={() => setShowTreasuryPasswordPrompt(false)}
-                                        style={{ padding: '0.5rem 1rem', borderRadius: '6px' }}
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button 
-                                        type="submit" 
-                                        className="btn-primary"
-                                        style={{ padding: '0.5rem 1rem', borderRadius: '6px', background: 'var(--primary-magenta)', color: 'white', border: 'none' }}
-                                    >
-                                        Unlock
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div className="lock-actions">
+                                <button 
+                                    type="button" 
+                                    className="lock-btn secondary" 
+                                    onClick={() => setShowTreasuryPasswordPrompt(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="lock-btn primary"
+                                >
+                                    Unlock
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

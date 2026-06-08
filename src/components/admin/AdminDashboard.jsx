@@ -17,6 +17,7 @@ const CalendarManagerView = React.lazy(() => import('./views/CalendarManagerView
 const EmailManager = React.lazy(() => import('./EmailManager'))
 const ResourceManager = React.lazy(() => import('./ResourceManager'))
 const TreasuryView = React.lazy(() => import('./views/TreasuryView'))
+const ClubDetailsView = React.lazy(() => import('./views/ClubDetailsView'))
 
 // Styles
 import './AdminDashboard.css'
@@ -66,6 +67,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                                 case 'email': return <EmailManager />
                         case 'resources': return <ResourceManager />
                         case 'treasury': return <TreasuryView />
+                        case 'club_details': return <ClubDetailsView />
                         default: return <EventsView />
                     }
                 })()}

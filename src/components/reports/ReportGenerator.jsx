@@ -3,13 +3,38 @@ import { compressImage } from '../../utils/imageUtils'
 import './ReportGenerator.css'
 
 const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }) => {
+    const [config, setConfig] = useState({})
+    useEffect(() => {
+        const loadConfig = async () => {
+            try {
+                const { firebaseService } = await import('../../services/firebaseService')
+                const cfg = await firebaseService.getClubConfig()
+                setConfig(cfg)
+            } catch (e) {
+                console.error("Failed to load config", e)
+            }
+        }
+        loadConfig()
+    }, [])
+
     // --- PDF GENERATION ---
     const generatePDF = async (action = 'download') => {
         const fullData = {
             ...formData,
+            clubName: config.clubName || formData.clubName,
+            parentClub: config.sponsorClub ? `SPONSORED BY : ${config.sponsorClub.toUpperCase()}` : formData.parentClub,
+            clubId: config.clubId ? `CLUB ID : ${config.clubId}` : formData.clubId,
+            group: config.group ? `GROUP ${config.group}` : formData.group,
+            rid: config.district ? `RI DISTRICT ${config.district}` : formData.rid,
+            presidentName: config.presidentName || '',
+            secretaryName: config.secretaryName || '',
             poster: poster?.base64,
             images: gallery.map(g => g.base64),
-            logos: logos.map(l => l?.base64)
+            logos: [
+                config.rotaryLogo || null,
+                config.districtLogo || null,
+                config.clubLogo || null,
+            ]
         }
 
         try {
@@ -49,14 +74,12 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
 
     const [poster, setPoster] = useState(null) // { file, preview, base64 }
     const [gallery, setGallery] = useState([]) // Array of { file, preview, base64 }
-    const [logos, setLogos] = useState([null, null, null]) // Left, Center, Right logos
 
     useEffect(() => {
         if (reportData) {
             setFormData(reportData)
             if (reportData.poster) setPoster({ base64: reportData.poster, preview: reportData.poster })
             if (reportData.images) setGallery(reportData.images.map(img => ({ base64: img, preview: img })))
-            if (reportData.logos) setLogos(reportData.logos.map(l => l ? { base64: l, preview: l } : null))
         }
     }, [reportData])
 
@@ -151,13 +174,6 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
                     })
                 }
             }
-            else if (type === 'logo') {
-                setLogos(prev => {
-                    const newLogos = [...prev]
-                    newLogos[index] = fileObj
-                    return newLogos
-                })
-            }
         } catch (error) {
             console.error("Image processing failed", error)
             alert("Failed to process image")
@@ -173,8 +189,7 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
             const dataToSave = {
                 ...formData,
                 poster: poster?.base64,
-                images: gallery.map(g => g.base64),
-                logos: logos.map(l => l?.base64)
+                images: gallery.map(g => g.base64)
             }
             onSave(dataToSave)
         } catch (error) {
@@ -186,20 +201,6 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
     return (
         <div className="report-container">
             <h2 className="report-header">{reportData ? 'Edit Report' : 'New Project Report'}</h2>
-
-            {/* LOGOS CONFIG */}
-            <div className="logos-container">
-                {[0, 1, 2].map(idx => (
-                    <div key={idx} className="logo-upload-box">
-                        <label htmlFor={`logo-${idx}`} className="logo-preview">
-                            {logos[idx] ? <img src={logos[idx].preview} alt={`Logo ${idx + 1}`} /> : <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Logo {idx + 1}</span>}
-                        </label>
-                        <input id={`logo-${idx}`} type="file" accept=".webp" onChange={(e) => handleFileChange(e, 'logo', idx)} style={{ display: 'none' }} />
-                        <label htmlFor={`logo-${idx}`} style={{ fontSize: '0.75rem', color: '#64748b', cursor: 'pointer', textDecoration: 'underline' }}>Change</label>
-                    </div>
-                ))}
-            </div>
-
 
             <div className="form-grid">
                 <div className="input-group">

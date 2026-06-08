@@ -106,7 +106,7 @@ const sanitizeTreasuryData = (treasury) => {
   }
 }
 
-const TreasuryReportManager = () => {
+const TreasuryReportManager = ({ hideBrand = false }) => {
   const { currentUser } = useAuth()
   const queryClient = useQueryClient()
   const { data: users = [], isLoading: usersLoading, error: usersError } = useQuery({
@@ -666,19 +666,28 @@ const TreasuryReportManager = () => {
     totalIncome,
     totalExpense,
     totalBalance,
-    clubName: config.clubName,
-    parentClub: config.sponsorClub ? `SPONSORED BY : ${config.sponsorClub.toUpperCase()}` : undefined,
-    clubId: config.clubId ? `CLUB ID : ${config.clubId}` : undefined,
-    group: config.group ? `GROUP ${config.group}` : undefined,
-    rid: config.district ? `RI DISTRICT ${config.district}` : undefined
+    clubName: config.clubName || 'ROTARACT CLUB OF COIMBATORE UNIQUE',
+    parentClub: config.sponsorClub
+      ? `SPONSORED BY : ${config.sponsorClub.toUpperCase()}`
+      : 'SPONSORED BY : ROTARY CLUB OF THONDAMUTHUR',
+    clubId: config.clubId ? `CLUB ID : ${config.clubId}` : 'CLUB ID : 50295',
+    group: config.group ? `GROUP ${config.group}` : 'GROUP 1',
+    rid: config.district ? `RI DISTRICT ${config.district}` : 'RI DISTRICT 3206',
+    presidentName: config.presidentName || '',
+    secretaryName: config.secretaryName || '',
+    logos: [
+      config.rotaryLogo || null,
+      config.districtLogo || null,
+      config.clubLogo || null,
+    ],
   })
 
   const handleDownloadPDF = () => {
     generateTreasuryPDF(getReportData())
   }
 
-  const handlePreviewPDF = () => {
-    const blobUrl = generateTreasuryPDF(getReportData(), 'bloburl')
+  const handlePreviewPDF = async () => {
+    const blobUrl = await generateTreasuryPDF(getReportData(), 'bloburl')
     setPreviewUrl(blobUrl)
     setShowPreviewModal(true)
   }
@@ -700,7 +709,33 @@ const TreasuryReportManager = () => {
   return (
     <div className="treasury-shell">
       <div className="treasury-header">
-        <div />
+        {/* Brand section: logos + club info - hidden in admin context */}
+        {!hideBrand && (
+          <div className="treasury-brand">
+            <div className="treasury-logos">
+              {config.rotaryLogo && (
+                <img src={config.rotaryLogo} alt="Rotary Logo" className="treasury-logo" />
+              )}
+              {config.districtLogo && (
+                <img src={config.districtLogo} alt="District Logo" className="treasury-logo" />
+              )}
+              {config.clubLogo && (
+                <img src={config.clubLogo} alt="Club Logo" className="treasury-logo" />
+              )}
+            </div>
+            <div className="treasury-title">
+              <h3>{config.clubName || 'Rotaract Club of Coimbatore Unique'}</h3>
+              <p className="treasury-tagline">
+                {config.sponsorClub
+                  ? `Parented by ${config.sponsorClub}`
+                  : 'Parented by Rotary Club of Thondamuthur'}
+                {config.clubId && ` · Club ID: ${config.clubId}`}
+                {config.group && ` · Group ${config.group}`}
+                {config.district && ` · RI District ${config.district}`}
+              </p>
+            </div>
+          </div>
+        )}
         <div className="treasury-actions">
           <button className="btn-secondary" onClick={() => refetch()}><RefreshCcw size={16} /> Refresh</button>
           <button className="btn-primary" onClick={handlePreviewPDF}><Eye size={16} /> Preview PDF</button>
