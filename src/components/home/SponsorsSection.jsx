@@ -40,7 +40,7 @@ const SponsorsSection = () => {
                                 style={{
                                     backgroundImage: `url(${sponsor.image})`,
                                     // Fallback if image fails or for preview
-                                    backgroundColor: '#400763'
+                                    backgroundColor: 'var(--primary-purple)'
                                 }}
                             >
                                 <h1>

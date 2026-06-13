@@ -30,7 +30,7 @@ const FormPageSkeleton = ({ title }) => {
                     border: '1px solid rgba(0, 0, 0, 0.02)'
                 }}>
                     {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', paddingBottom: '1rem', borderBottom: '1px solid var(--light-gray)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', paddingBottom: '1rem', borderBottom: '1px solid var(--off-white)' }}>
                         <div className="skeleton" style={{ width: '44px', height: '44px', borderRadius: '10px' }}></div>
                         <div className="skeleton" style={{ width: '200px', height: '28px', borderRadius: '4px' }}></div>
                     </div>
