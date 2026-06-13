@@ -27,7 +27,7 @@
 .loading-container {
     width: 100vw;
     height: 100vh;
-    background-color: #ffffff;
+    background-color: var(--white);
     overflow: hidden;
     position: fixed;
     top: 0;
@@ -106,7 +106,7 @@
     content: "";
     height: 22px;
     width: 22px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background: var(--primary-purple);
     /* speeder base circle color */
     position: absolute;
@@ -122,7 +122,7 @@
     border-top: 0 solid transparent;
     border-right: 55px solid var(--primary-purple);
     /* speeder tail color */
-    border-bottom: 16px solid transparent;
+    border-bottom: var(--spacing-sm) solid transparent;
     top: -16px;
     right: -98px;
 }

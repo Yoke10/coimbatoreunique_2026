@@ -19,7 +19,7 @@
 /* View More Button Container */
 .team-section .team-view-more {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: var(--spacing-md);
 }
 
 /* Responsive */

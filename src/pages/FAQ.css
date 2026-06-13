@@ -62,7 +62,7 @@
 
 .faq-card h2 {
     font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-xs);
     color: var(--primary-purple);
     font-family: var(--font-display);
     font-weight: 700;
@@ -98,7 +98,7 @@
     opacity: 1;
     max-height: 200px;
     /* Arbitrary large height to reveal content */
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-xs);
     /* Add spacing when revealed */
 }
 
@@ -145,7 +145,7 @@
 
 .faq-card:hover::after {
     opacity: 1;
-    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: -10px 10px 20px color-mix(in srgb, var(--black) calc(0.15 * 100%), transparent);
     /* Softer shadow */
 }
 
@@ -162,7 +162,7 @@
 .faq-item-1 h1 {
     font-size: 2.5rem;
     color: var(--primary-purple);
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 /* Base border colors for accents */

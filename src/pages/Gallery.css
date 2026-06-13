@@ -1,6 +1,6 @@
 /* MAIN WRAPPER */
 .gallery-page .gallery-carousel {
-    padding: 2rem 0;
+    padding: var(--spacing-md) 0;
     display: flex;
     justify-content: center;
 }
@@ -25,11 +25,11 @@
     break-inside: avoid;
     /* prevents card from breaking across columns */
     margin-bottom: 20px;
-    background: #f7f7f7;
+    background: var(--off-white);
     border-radius: 14px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--black) calc(0.15 * 100%), transparent);
     transition: box-shadow 0.25s ease;
 }
 
@@ -49,7 +49,7 @@
 }
 
 .gallery-page .carousel-item:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 25px color-mix(in srgb, var(--black) calc(0.25 * 100%), transparent);
 }
 
 /* -------------------------------
@@ -59,11 +59,11 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 1rem 1rem 0.6rem;
-    color: #ffffff;
+    padding: var(--spacing-sm) 1rem 0.6rem;
+    color: var(--white);
     background: linear-gradient(to top,
-            rgba(0, 0, 0, 0.85),
-            rgba(0, 0, 0, 0.5),
+            color-mix(in srgb, var(--black) calc(0.85 * 100%), transparent),
+            color-mix(in srgb, var(--black) calc(0.5 * 100%), transparent),
             transparent);
     opacity: 0;
     transition: opacity .25s ease;
@@ -77,8 +77,8 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    color: var(--white);
+    text-shadow: 0 2px 4px color-mix(in srgb, var(--black) calc(0.6 * 100%), transparent);
 }
 
 /* --------------------------------

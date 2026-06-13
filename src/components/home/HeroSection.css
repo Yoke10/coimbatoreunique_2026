@@ -38,7 +38,7 @@
     font-size: clamp(1.2rem, 2vw, 1.5rem);
     font-weight: 500;
     color: white;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-md);
     letter-spacing: 2px;
     text-transform: uppercase;
 }
@@ -77,7 +77,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: var(--spacing-sm);
     flex-wrap: wrap;
 
     /* Make style same as hero-subtitle */
@@ -88,7 +88,7 @@
     font-size: clamp(1rem, 2vw, 1.3rem);
 
     /* NEW: vertical spacing between title and info */
-    /*margin-top: 2rem;
+    /*margin-top: var(--spacing-md);
     /* similar space as subtitle → title */
 }
 
@@ -155,12 +155,12 @@
     }
 
     .hero-section .hero-subtitle {
-        margin-bottom: 1rem;
+        margin-bottom: var(--spacing-sm);
     }
 
     .hero-section .hero-info {
         flex-direction: column;
-        gap: 0.5rem;
+        gap: var(--spacing-xs);
         margin-top: 1.5rem;
     }
 

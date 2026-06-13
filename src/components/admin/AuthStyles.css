@@ -2,13 +2,13 @@
    ROOT & BASE
 ========================= */
 :root {
-    --primary-purple: #400763;
-    --primary-pink: #ed0775;
-    --accent-light-purple: #5a0a8a;
-    --white: #ffffff;
-    --dark-gray: #1f2937;
-    --gray: #6b7280;
-    --light-bg: #f6f7fb;
+    --primary-purple: var(--primary-purple);
+    --primary-pink: var(--primary-pink);
+    --accent-light-purple: var(--accent-light-purple);
+    --white: var(--white);
+    --dark-gray: var(--dark-gray);
+    --gray: var(--gray);
+    --light-bg: var(--off-white);
     --radius-md: 18px;
     --font-primary: 'Inter', system-ui, sans-serif;
 }
@@ -34,7 +34,7 @@
     background: var(--white);
     overflow: hidden;
     border-radius: var(--radius-md);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 25px 60px color-mix(in srgb, var(--black) calc(0.15 * 100%), transparent);
     font-family: var(--font-primary);
 }
 
@@ -157,7 +157,7 @@
     font-size: 15px;
     font-weight: 500;
     color: var(--dark-gray);
-    border-bottom: 2px solid #d1d5db;
+    border-bottom: 2px solid var(--light-gray);
     font-family: var(--font-primary);
 }
 
@@ -188,11 +188,11 @@
 /* ADMIN INPUT CONTRAST */
 .form-box.Admin input {
     color: var(--white);
-    border-bottom-color: rgba(255, 255, 255, 0.6);
+    border-bottom-color: color-mix(in srgb, var(--white) calc(0.6 * 100%), transparent);
 }
 
 .form-box.Admin label {
-    color: rgba(255, 255, 255, 0.75);
+    color: color-mix(in srgb, var(--white) calc(0.75 * 100%), transparent);
 }
 
 .form-box.Admin input:focus,
@@ -229,7 +229,7 @@
 .login-btn {
     width: 100%;
     height: 46px;
-    margin-top: 32px;
+    margin-top: var(--spacing-md);
     border-radius: 30px;
     border: none;
     background: var(--primary-pink);
@@ -237,13 +237,13 @@
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.3s ease;
-    box-shadow: 0 6px 18px rgba(237, 7, 117, 0.4);
+    transition: var(--transition-normal);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--primary-pink) calc(0.4 * 100%), transparent);
 }
 
 .login-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(237, 7, 117, 0.6);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-pink) calc(0.6 * 100%), transparent);
 }
 
 .login-btn:disabled {

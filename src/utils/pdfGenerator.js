@@ -476,7 +476,7 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     doc.text(accTitle, (pageWidth - accTitleW) / 2, y)
     y += 8
 
-    // HELPER: Draw bordered cell with text
+    // HELPER: Draw bordered cell with text (fixed height, no wrap)
     const drawCell = (text, x, yPos, w, h, bg, align = 'center', fontStyle = 'normal', textColor = colors.black) => {
         if (bg) {
             doc.setFillColor(...bg)
@@ -493,14 +493,7 @@ const drawTreasuryReportOnDoc = (doc, data) => {
         // Vertical centering offset
         const textY = yPos + (h / 2) + 1.2
 
-        // Clip text if it's too long
-        let printText = String(text)
-        // basic clipping logic (approx)
-        if (printText.length > (w / 2)) {
-            // Very simple truncation to avoid text bleeding out of cell
-            const maxChars = Math.floor(w / 1.6)
-            if (printText.length > maxChars) printText = printText.substring(0, maxChars - 3) + "..."
-        }
+        const printText = String(text)
 
         if (align === 'center') {
             doc.text(printText, x + (w / 2), textY, { align: 'center' })
@@ -509,6 +502,54 @@ const drawTreasuryReportOnDoc = (doc, data) => {
         } else {
             doc.text(printText, x + 2, textY, { align: 'left' })
         }
+    }
+
+    // HELPER: Draw bordered cell with WRAPPED text — returns actual cell height used
+    const drawCellWrapped = (text, x, yPos, w, bg, align = 'center', fontStyle = 'normal', textColor = colors.black, minH = rowH) => {
+        doc.setFont("helvetica", fontStyle)
+        doc.setFontSize(9)
+        const padding = 2
+        const innerW = w - padding * 2
+        const lineHeight = 4.5
+        const lines = doc.splitTextToSize(String(text), innerW)
+        const h = Math.max(minH, lines.length * lineHeight + padding * 2)
+
+        if (bg) {
+            doc.setFillColor(...bg)
+            doc.rect(x, yPos, w, h, 'F')
+        }
+        doc.setDrawColor(...colors.border)
+        doc.setLineWidth(0.3)
+        doc.rect(x, yPos, w, h, 'S')
+
+        doc.setTextColor(...textColor)
+
+        // Vertically center the block of lines
+        const blockH = lines.length * lineHeight
+        let textStartY = yPos + (h - blockH) / 2 + lineHeight * 0.85
+
+        lines.forEach((line) => {
+            if (align === 'center') {
+                doc.text(line, x + w / 2, textStartY, { align: 'center' })
+            } else if (align === 'right') {
+                doc.text(line, x + w - padding, textStartY, { align: 'right' })
+            } else {
+                doc.text(line, x + padding, textStartY, { align: 'left' })
+            }
+            textStartY += lineHeight
+        })
+
+        return h
+    }
+
+    // HELPER: Measure how tall a wrapped cell would be (without drawing)
+    const measureWrappedCellH = (text, w, minH = rowH) => {
+        doc.setFont("helvetica", 'normal')
+        doc.setFontSize(9)
+        const padding = 2
+        const lines = doc.splitTextToSize(String(text), w - padding * 2)
+        const lineHeight = 4.5
+        return Math.max(minH, lines.length * lineHeight + padding * 2)
     }
 
     const formatCurrencyPDF = (amount) => {
@@ -561,7 +602,20 @@ const drawTreasuryReportOnDoc = (doc, data) => {
         const exps = evt.expenses || []
         const maxLines = Math.max(incs.length, exps.length, 1)
 
-        const eventTotalHeight = rowH + rowH + (maxLines * rowH)
+        // Pre-compute per-row heights based on wrapped text
+        const lineItemHeights = []
+        for (let i = 0; i < maxLines; i++) {
+            const inc = incs[i]
+            const exp = exps[i]
+            const incText = inc ? `${inc.name} (${formatCurrencyPDF(inc.amount)})` : "-"
+            const expText = exp ? `${exp.name} (${formatCurrencyPDF(exp.amount)})` : "-"
+            const hInc = measureWrappedCellH(incText, halfEvt)
+            const hExp = measureWrappedCellH(expText, halfEvt)
+            lineItemHeights.push(Math.max(hInc, hExp))
+        }
+
+        const lineItemsTotalH = lineItemHeights.reduce((a, b) => a + b, 0)
+        const eventTotalHeight = rowH + rowH + lineItemsTotalH
         ensureSpace(eventTotalHeight)
 
         // Merged Cells for Date, Total Income, Total Expense (spanning full event height)
@@ -575,22 +629,22 @@ const drawTreasuryReportOnDoc = (doc, data) => {
         drawCell((evt.name || "UNTITLED EVENT").toUpperCase(), margin + colDate, currentY, colEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
         currentY += rowH
 
-        // Subheader Row (INCOME | EXPENSE)
+        // Subheader Row (INCOME DETAILS | EXPENSE DETAILS)
         drawCell("INCOME DETAILS", margin + colDate, currentY, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
         drawCell("EXPENSE DETAILS", margin + colDate + halfEvt, currentY, halfEvt, rowH, colors.lighterBlueBg, 'center', 'bold')
         currentY += rowH
 
-        // Line Items
+        // Line Items — wrapped, dynamic height
         for (let i = 0; i < maxLines; i++) {
             const inc = incs[i]
             const exp = exps[i]
-
             const incText = inc ? `${inc.name} (${formatCurrencyPDF(inc.amount)})` : "-"
             const expText = exp ? `${exp.name} (${formatCurrencyPDF(exp.amount)})` : "-"
+            const rowItemH = lineItemHeights[i]
 
-            drawCell(incText, margin + colDate, currentY, halfEvt, rowH, colors.white, 'center', 'normal')
-            drawCell(expText, margin + colDate + halfEvt, currentY, halfEvt, rowH, colors.white, 'center', 'normal')
-            currentY += rowH
+            drawCellWrapped(incText, margin + colDate, currentY, halfEvt, colors.white, 'center', 'normal', colors.black, rowItemH)
+            drawCellWrapped(expText, margin + colDate + halfEvt, currentY, halfEvt, colors.white, 'center', 'normal', colors.black, rowItemH)
+            currentY += rowItemH
         }
 
         y += eventTotalHeight

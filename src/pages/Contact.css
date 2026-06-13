@@ -14,7 +14,7 @@
 .contact-container {
     width: 100%;
     max-width: 900px;
-    padding: 1rem;
+    padding: var(--spacing-sm);
 }
 
 .main-title {
@@ -22,24 +22,24 @@
     color: var(--primary-purple);
     font-family: var(--font-display);
     font-size: 3.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .contact-card {
     background: var(--white);
     border-radius: 20px;
     padding: 3rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.02);
+    box-shadow: 0 10px 40px color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
+    border: 1px solid color-mix(in srgb, var(--black) calc(0.02 * 100%), transparent);
 }
 
 /* Header */
 .contact-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
     border-bottom: 1px solid var(--light-gray);
 }
 
@@ -80,13 +80,13 @@
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--spacing-xs);
 }
 
 .input-label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #333333;
+    color: var(--dark-gray);
     /* Darker for better contrast */
 }
 
@@ -98,7 +98,7 @@
 
 .input-icon {
     position: absolute;
-    left: 1rem;
+    left: var(--spacing-sm);
     color: var(--gray);
     pointer-events: none;
     display: flex;
@@ -114,11 +114,11 @@
     padding: 0.8rem 1rem 0.8rem 2.8rem;
     /* Left padding for icon */
     border: 1px solid var(--light-gray);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     font-size: 0.95rem;
     color: var(--dark-gray);
     background: var(--white);
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
     outline: none;
     font-family: inherit;
 }
@@ -133,7 +133,7 @@
 }
 
 .form-textarea {
-    padding-left: 1rem;
+    padding-left: var(--spacing-sm);
     /* No icon for textarea usually, or adjust if needed */
     min-height: 120px;
     resize: vertical;
@@ -149,18 +149,18 @@
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-    color: #cbd5e0;
+    color: var(--light-gray);
 }
 
 .form-input.error,
 .form-select.error,
 .form-textarea.error {
-    border-color: #ff4d4d;
+    border-color: var(--error);
 }
 
 .error-text {
     font-size: 0.8rem;
-    color: #ff4d4d;
+    color: var(--error);
     margin-top: 0.25rem;
 }
 
@@ -170,7 +170,7 @@
     align-items: flex-start;
     /* Align to top for multi-line text */
     gap: 0.75rem;
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-xs);
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -193,7 +193,7 @@
 }
 
 .link-text {
-    color: #bf065e;
+    color: var(--primary-pink);
     /* WCAG Compliant Dark Pink */
     text-decoration: none;
     font-weight: 500;
@@ -209,7 +209,7 @@
     justify-content: flex-end;
     /* Align to right or center? Image usually has it right or block. Let's start with block/auto or flex-end. But the previous code had it centered? Let's assume right or full width for modern forms. Or center. I'll stick to center/right. The image description is not specific, but "Send Message" button usually right aligned or full width. I'll make it right aligned as it looks cleaner in cards. */
     justify-content: flex-end;
-    margin-top: 1rem;
+    margin-top: var(--spacing-sm);
 }
 
 .submit-btn {
@@ -217,22 +217,22 @@
     color: white;
     border: none;
     padding: 0.8rem 2rem;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 12px rgba(237, 7, 117, 0.2);
-    /* Using hex for shadow opacity of primary pink #ed0775 */
+    gap: var(--spacing-xs);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    /* Using hex for shadow opacity of primary pink var(--primary-pink) */
 }
 
 .submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(237, 7, 117, 0.4);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--primary-pink) calc(0.4 * 100%), transparent);
 }
 
 
@@ -243,15 +243,15 @@
 }
 
 .submit-btn:disabled {
-    background: #ffb3d6;
+    background: var(--accent-soft-pink);
     cursor: not-allowed;
     box-shadow: none;
 }
 
 .success-message {
-    padding: 1rem;
-    background: #d4edda;
-    color: #155724;
+    padding: var(--spacing-sm);
+    background: var(--success-light);
+    color: var(--success);
     border-radius: 10px;
     margin-bottom: 1.5rem;
     text-align: center;

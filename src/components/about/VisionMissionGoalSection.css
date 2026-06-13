@@ -1,5 +1,5 @@
 .vmg-section {
-    padding: 6rem 0;
+    padding: var(--spacing-xl) 0;
     width: 100%;
     position: relative;
     z-index: 10;
@@ -11,7 +11,7 @@
     color: var(--gradient-primary);
     font-size: 2.5rem;
     font-weight: 800;
-    margin-bottom: 4rem;
+    margin-bottom: var(--spacing-lg);
     position: relative;
     display: inline-block;
     left: 50%;
@@ -33,15 +33,15 @@
 .vmg-section .vmg-cards-container {
     display: flex;
     justify-content: center;
-    gap: 2rem;
-    padding: 2rem;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
     flex-wrap: wrap;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .vmg-section .vmg-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--white) calc(0.95 * 100%), transparent);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 2.5rem 2rem;
@@ -49,8 +49,8 @@
     min-width: 300px;
     max-width: 380px;
     text-align: center;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
@@ -58,32 +58,32 @@
 
 .vmg-section .vmg-card:hover {
     /* transform: translateY(-10px); - Removed to prevent misalignment with GlowingCards overlay */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 40px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
 }
 
 /* Theme Borders & Glows */
 .vmg-section .vmg-card.theme-purple {
-    border-top: 4px solid #400763;
+    border-top: 4px solid var(--primary-purple);
 }
 
 .vmg-section .vmg-card.theme-purple:hover {
-    box-shadow: 0 20px 40px rgba(64, 7, 99, 0.15);
+    box-shadow: 0 20px 40px color-mix(in srgb, var(--primary-purple) calc(0.15 * 100%), transparent);
 }
 
 .vmg-section .vmg-card.theme-magenta {
-    border-top: 4px solid #680b56;
+    border-top: 4px solid var(--primary-magenta);
 }
 
 .vmg-section .vmg-card.theme-magenta:hover {
-    box-shadow: 0 20px 40px rgba(104, 11, 86, 0.15);
+    box-shadow: 0 20px 40px color-mix(in srgb, var(--primary-magenta) calc(0.15 * 100%), transparent);
 }
 
 .vmg-section .vmg-card.theme-pink {
-    border-top: 4px solid #ed0775;
+    border-top: 4px solid var(--primary-pink);
 }
 
 .vmg-section .vmg-card.theme-pink:hover {
-    box-shadow: 0 20px 40px rgba(237, 7, 117, 0.15);
+    box-shadow: 0 20px 40px color-mix(in srgb, var(--primary-pink) calc(0.15 * 100%), transparent);
 }
 
 .vmg-section .vmg-content {
@@ -95,8 +95,8 @@
 
 .vmg-section .vmg-icon-wrapper {
     padding: 1.25rem;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.03);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--black) calc(0.03 * 100%), transparent);
     transition: transform 0.4s ease;
 }
 
@@ -106,20 +106,20 @@
 
 .vmg-section .vmg-card.theme-purple .vmg-icon-wrapper {
     color: white;
-    background: #400763;
-    box-shadow: 0 10px 20px rgba(64, 7, 99, 0.2);
+    background: var(--primary-purple);
+    box-shadow: 0 10px 20px color-mix(in srgb, var(--primary-purple) calc(0.2 * 100%), transparent);
 }
 
 .vmg-section .vmg-card.theme-magenta .vmg-icon-wrapper {
     color: white;
-    background: #680b56;
-    box-shadow: 0 10px 20px rgba(104, 11, 86, 0.2);
+    background: var(--primary-magenta);
+    box-shadow: 0 10px 20px color-mix(in srgb, var(--primary-magenta) calc(0.2 * 100%), transparent);
 }
 
 .vmg-section .vmg-card.theme-pink .vmg-icon-wrapper {
     color: white;
-    background: #ed0775;
-    box-shadow: 0 10px 20px rgba(237, 7, 117, 0.2);
+    background: var(--primary-pink);
+    box-shadow: 0 10px 20px color-mix(in srgb, var(--primary-pink) calc(0.2 * 100%), transparent);
 }
 
 .vmg-section .vmg-title {
@@ -130,20 +130,20 @@
 
 .vmg-section .vmg-card.theme-purple .vmg-title,
 .vmg-section .vmg-card.theme-purple .vmg-text {
-    color: #400763;
+    color: var(--primary-purple);
 }
 
 .vmg-section .vmg-card.theme-magenta .vmg-title,
 .vmg-section .vmg-card.theme-magenta .vmg-text {
-    color: #680b56;
+    color: var(--primary-magenta);
 }
 
 .vmg-section .vmg-card.theme-pink .vmg-title {
-    color: #ed0775;
+    color: var(--primary-pink);
 }
 
 .vmg-section .vmg-card.theme-pink .vmg-text {
-    color: #bf065e;
+    color: var(--primary-pink);
     /* Darker pink for better contrast */
 }
 

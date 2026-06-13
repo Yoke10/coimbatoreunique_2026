@@ -11,7 +11,7 @@
     left: 0;
     z-index: 10000;
     /* Ensure on top of everything */
-    background-color: #2d0447;
+    background-color: var(--accent-dark-purple);
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -21,7 +21,7 @@
 .not-found-container {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
-    /* background-color: #2d0447; Already set above */
+    /* background-color: var(--accent-dark-purple); Already set above */
 }
 
 /* SVG Styling from style.css */
@@ -50,7 +50,7 @@
     position: relative;
     z-index: 10;
     font-family: "Source Sans Pro", sans-serif;
-    color: #FFF;
+    color: var(--white);
 }
 
 .content h3 {
@@ -58,16 +58,16 @@
     font-size: 2.625rem;
     font-weight: 900;
     line-height: 120%;
-    color: #ff1a8c;
+    color: var(--accent-light-pink);
     /* Vibrant Pink */
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 10px color-mix(in srgb, var(--black) calc(0.3 * 100%), transparent);
 }
 
 .content p {
     font-size: 1.25rem;
     font-weight: normal;
     line-height: 150%;
-    color: #e2c0ff;
+    color: var(--accent-light-purple);
     /* Light Lavender */
 }
 

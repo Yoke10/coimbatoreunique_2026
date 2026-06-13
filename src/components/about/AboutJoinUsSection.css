@@ -31,20 +31,20 @@
 
 .about-join-section .about-join-btn {
     display: inline-block;
-    padding: 1rem 3rem;
+    padding: var(--spacing-sm) 3rem;
     font-size: 1.2rem;
     font-weight: 700;
     color: var(--primary-magenta);
     background: white;
     border-radius: 50px;
     text-decoration: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    box-shadow: 0 10px 20px color-mix(in srgb, var(--black) calc(0.2 * 100%), transparent);
 }
 
 .about-join-section .about-join-btn:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 30px color-mix(in srgb, var(--black) calc(0.3 * 100%), transparent);
 }
 
 /* Background decoration */
@@ -55,6 +55,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="90" r="10" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.05)"/></svg>') center/cover;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="5" fill="rgba(255, 255, 255, 0.1)"/><circle cx="90" cy="90" r="10" fill="rgba(255, 255, 255, 0.1)"/><circle cx="50" cy="50" r="20" fill="rgba(255, 255, 255, 0.05)"/></svg>') center/cover;
     z-index: 1;
 }

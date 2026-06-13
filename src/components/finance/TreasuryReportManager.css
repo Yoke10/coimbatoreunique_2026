@@ -2,14 +2,14 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1rem 0;
+  padding: var(--spacing-sm) 0;
 }
 
 .treasury-header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--spacing-sm);
   align-items: flex-start;
 }
 
@@ -21,7 +21,7 @@
 .treasury-brand {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .treasury-logos {
@@ -43,14 +43,14 @@
 }
 
 .treasury-officials {
-  margin: 0.5rem 0 0;
+  margin: var(--spacing-xs) 0 0;
   font-size: 0.9rem;
   color: var(--dark-gray);
 }
 
 .officials-sep {
   margin: 0 0.5rem;
-  color: #ccc;
+  color: var(--light-gray);
 }
 
 .treasury-tagline {
@@ -73,7 +73,7 @@
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .btn-primary {
@@ -82,7 +82,7 @@
   padding: 0.85rem 1.25rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .btn-primary.outline {
@@ -92,13 +92,13 @@
 }
 
 .btn-secondary {
-  background: #fff;
+  background: var(--white);
   color: var(--primary-purple);
   border: 1px solid var(--light-gray);
   padding: 0.85rem 1rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .btn-small {
@@ -113,8 +113,8 @@
 
 .btn-small.danger,
 .btn-icon {
-  background: #ffe5eb;
-  color: #b02a4e;
+  background: var(--accent-soft-pink);
+  color: var(--error);
 }
 
 .btn-add-payment {
@@ -127,26 +127,26 @@
 }
 
 .treasury-error {
-  background: #ffe7e7;
-  color: #9d1c2c;
-  border-radius: 16px;
-  padding: 1rem 1.25rem;
+  background: var(--error-light);
+  color: var(--error);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) 1.25rem;
 }
 
 .treasury-section {
   background: white;
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: 0 14px 35px rgba(64, 7, 99, 0.05);
+  box-shadow: 0 14px 35px color-mix(in srgb, var(--primary-purple) calc(0.05 * 100%), transparent);
 }
 
 .section-head {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--spacing-sm);
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .section-head h4 {
@@ -164,36 +164,36 @@
   flex-direction: column;
   gap: 0.35rem;
   font-size: 0.95rem;
-  color: #444;
+  color: var(--dark-gray);
 }
 
 .period-inputs input {
   border: 1px solid var(--light-gray);
   border-radius: 10px;
   padding: 0.75rem 0.85rem;
-  background: #fafafa;
+  background: var(--white);
   min-width: 170px;
 }
 
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .summary-card {
-  background: #f9f3ff;
-  border-radius: 16px;
-  padding: 1rem;
+  background: var(--accent-pale-purple);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
   min-height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .summary-card span {
-  color: #666;
+  color: var(--gray);
 }
 
 .summary-card strong {
@@ -204,14 +204,14 @@
 .dues-table,
 .event-list {
   display: grid;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .dues-table-header,
 .dues-row {
   display: grid;
   grid-template-columns: 2.5fr 1fr 1fr 1fr 1.5fr;
-  gap: 1rem;
+  gap: var(--spacing-sm);
   align-items: center;
 }
 
@@ -222,8 +222,8 @@
 }
 
 .dues-row {
-  padding: 1rem;
-  background: #fcfcfc;
+  padding: var(--spacing-sm);
+  background: var(--white);
   border-radius: 18px;
   border: 1px solid var(--light-gray);
 }
@@ -241,7 +241,7 @@
 
 .dues-action-cell {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .dues-action-cell input {
@@ -253,21 +253,21 @@
 
 .event-form-card {
   display: grid;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
 }
 
 .event-form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .event-form-row label,
 .collection-row {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .event-form-row input,
@@ -287,7 +287,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .subsection-head h5,
@@ -313,8 +313,8 @@
   border: 1px solid var(--light-gray);
   padding: 1.25rem;
   display: grid;
-  gap: 1rem;
-  background: #fff;
+  gap: var(--spacing-sm);
+  background: var(--white);
 }
 
 .event-card.locked {
@@ -325,7 +325,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .event-card-header h5 {
@@ -346,12 +346,12 @@
 
 .event-card-body {
   display: grid;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .event-card-body label {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .event-card-body input {
@@ -363,18 +363,18 @@
 .event-financial-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
 }
 
 .event-financial-summary div {
-  padding: 1rem;
-  background: #f9f3ff;
-  border-radius: 16px;
+  padding: var(--spacing-sm);
+  background: var(--accent-pale-purple);
+  border-radius: var(--radius-md);
 }
 
 .event-financial-summary span {
-  color: #666;
+  color: var(--gray);
 }
 
 .event-financial-summary strong {
@@ -385,17 +385,17 @@
 
 .treasury-tabs {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
 }
 
 .tab-button {
   padding: 0.75rem 1.5rem;
-  background: #f5f5f5;
+  background: var(--light-gray);
   border: 1px solid var(--light-gray);
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   font-weight: 500;
 }
 
@@ -408,7 +408,7 @@
 .due-amount-cell {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
   align-items: flex-start;
 }
 
@@ -419,22 +419,22 @@
 
 .due-amount-cell input {
   width: 100px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--light-gray);
-  padding: 0.5rem;
+  padding: var(--spacing-xs);
 }
 
 .event-table {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .event-table-header {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-  gap: 1rem;
+  gap: var(--spacing-sm);
   padding: 0.75rem 1rem;
-  background: #f9f3ff;
+  background: var(--accent-pale-purple);
   border-radius: 12px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -444,9 +444,9 @@
 .event-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem;
-  background: #fcfcfc;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--white);
   border-radius: 12px;
   border: 1px solid var(--light-gray);
   align-items: center;
@@ -454,18 +454,18 @@
 
 .event-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
   justify-content: center;
 }
 
 .btn-icon {
-  padding: 0.5rem;
-  border-radius: 8px;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .btn-icon:hover {
@@ -473,7 +473,7 @@
 }
 
 .btn-icon.danger:hover {
-  background: #ff4757;
+  background: var(--accent-light-pink);
   color: white;
 }
 
@@ -483,7 +483,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: color-mix(in srgb, var(--black) calc(0.5 * 100%), transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -497,7 +497,7 @@
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 40px color-mix(in srgb, var(--black) calc(0.15 * 100%), transparent);
 }
 
 .modal-header {
@@ -516,13 +516,13 @@
 .modal-body {
   padding: 1.5rem;
   display: grid;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: var(--spacing-sm);
   padding: 1.5rem;
   border-top: 1px solid var(--light-gray);
 }
@@ -530,8 +530,8 @@
 .club-due-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .club-due-form {
@@ -542,19 +542,19 @@
 .club-due-form .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .installment-summary {
   text-align: center;
-  padding: 1rem;
-  background: #f9f3ff;
+  padding: var(--spacing-sm);
+  background: var(--accent-pale-purple);
   border-radius: 12px;
 }
 
 .installments-list {
   display: grid;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .installments-list h5 {
@@ -565,16 +565,16 @@
 .installment-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-sm);
   padding: 0.75rem;
-  background: #f9f9f9;
-  border-radius: 8px;
+  background: var(--off-white);
+  border-radius: var(--radius-sm);
 }
 
 .installment-item label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
   flex: 1;
   margin: 0;
 }
@@ -582,34 +582,34 @@
 .installment-chip-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .installment-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
   padding: 0.65rem 0.85rem;
   border-radius: 999px;
-  background: #f5f5ff;
+  background: var(--accent-pale-purple);
   border: 1px solid var(--light-gray);
   font-size: 0.85rem;
 }
 
 .installment-chip.paid {
-  background: #e8f7ee;
-  border-color: #b1dfc6;
+  background: var(--success-light);
+  border-color: var(--success-light);
 }
 
 .installment-chip small {
-  margin-left: 0.5rem;
-  color: #555;
+  margin-left: var(--spacing-xs);
+  color: var(--gray);
 }
 
 .event-detail-summary {
   display: grid;
   gap: 0.75rem;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .detail-row {
@@ -617,12 +617,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: #f9f3ff;
-  border-radius: 8px;
+  background: var(--accent-pale-purple);
+  border-radius: var(--radius-sm);
 }
 
 .event-detail-section {
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .event-detail-section h5 {
@@ -632,8 +632,8 @@
 
 .detail-list {
   display: grid;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
 }
 
 .detail-item {
@@ -641,26 +641,26 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: #f9f9f9;
-  border-radius: 8px;
+  background: var(--off-white);
+  border-radius: var(--radius-sm);
 }
 
 .detail-total {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background: #f0f0ff;
-  border-radius: 8px;
+  padding: var(--spacing-sm);
+  background: var(--accent-pale-purple);
+  border-radius: var(--radius-sm);
   font-weight: 600;
 }
 
 .positive {
-  color: #28a745;
+  color: var(--success);
 }
 
 .negative {
-  color: #dc3545;
+  color: var(--error);
 }
 
 /* Set Due Modal Improvements */
@@ -668,7 +668,7 @@
 .club-due-form .form-input-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .form-input-group {
@@ -686,22 +686,22 @@
   border-radius: 10px;
   padding: 0.85rem 0.9rem;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .club-due-form input:focus {
   outline: none;
   border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px rgba(112, 44, 155, 0.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-purple) calc(0.1 * 100%), transparent);
 }
 
 .club-due-form input:placeholder-shown {
-  color: #bbb;
+  color: var(--gray);
 }
 
 .instructional-text {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--gray);
   margin: 0 0 0.5rem 0;
 }
 
@@ -744,7 +744,7 @@
   cursor: inherit;
   width: 16px !important;
   height: 16px !important;
-  accent-color: #28a745;
+  accent-color: var(--success);
   margin: 0 !important;
   display: inline-block !important;
 }
@@ -756,8 +756,8 @@
   bottom: 150%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
+  background-color: var(--dark-gray);
+  color: var(--white);
   text-align: center;
   border-radius: 4px;
   padding: 5px 10px;
@@ -776,7 +776,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #333 transparent transparent transparent;
+  border-color: var(--dark-gray) transparent transparent transparent;
 }
 
 .installment-checkbox-container:hover .payment-date-tooltip {
@@ -791,24 +791,24 @@
 
 .date-picker-label {
   font-size: 0.95rem;
-  color: #555;
+  color: var(--gray);
   margin: 0;
   font-weight: 500;
 }
 
 .date-picker-input {
   width: 100%;
-  padding: 1rem;
+  padding: var(--spacing-sm);
   border: 2px solid var(--light-gray);
   border-radius: 10px;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .date-picker-input:focus {
   outline: none;
   border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px rgba(112, 44, 155, 0.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-purple) calc(0.1 * 100%), transparent);
 }
 
 @media (max-width: 900px) {
@@ -839,7 +839,7 @@
 .treasury-logos {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
   flex-shrink: 0;
 }
 
@@ -847,7 +847,7 @@
   width: 48px;
   height: 48px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: white;
   padding: 3px;
   border: 1px solid var(--light-gray);
@@ -887,7 +887,7 @@
     align-items: flex-start;
   }
   .treasury-actions {
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-xs);
     width: 100%;
   }
   .treasury-logo {

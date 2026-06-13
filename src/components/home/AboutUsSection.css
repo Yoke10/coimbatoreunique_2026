@@ -40,7 +40,7 @@
     overflow: hidden;
     /* required for asymmetric edges */
     background: var(--light-gray);
-    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 18px 32px color-mix(in srgb, var(--black) calc(0.14 * 100%), transparent);
     z-index: 2;
 
     /* hover transition */
@@ -63,7 +63,7 @@
 /* ================= IMAGE HOVER ================= */
 .photo:hover {
     transform: translateY(-6px) scale(1.03);
-    box-shadow: 0 26px 46px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 26px 46px color-mix(in srgb, var(--black) calc(0.22 * 100%), transparent);
     z-index: 5;
     /* brings hovered image on top */
 }
@@ -134,7 +134,7 @@
 
 /* ================= BUTTON ================= */
 .about-content .btn {
-    margin-top: 32px;
+    margin-top: var(--spacing-md);
     padding: 15px 32px;
     background: var(--gradient-primary);
     color: var(--white);

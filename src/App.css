@@ -14,6 +14,7 @@
   --accent-dark-purple: #2d0447;
   --accent-light-pink: #ff1a8c;
   --accent-soft-pink: #ffc4e1;
+  --accent-pale-purple: #f9f3ff;
 
   /* Neutral Colors */
   --white: #ffffff;
@@ -22,6 +23,16 @@
   --gray: #999999;
   --dark-gray: #333333;
   --black: #000000;
+
+  /* State Colors */
+  --success: #10b981;
+  --success-light: #dcfce7;
+  --warning: #f59e0b;
+  --warning-light: #fefce8;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --info: #3b82f6;
+  --info-light: #eff6ff;
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-magenta) 50%, var(--primary-pink) 100%);

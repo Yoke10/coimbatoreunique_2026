@@ -2,7 +2,7 @@
     position: relative;
     flex: 1;
     min-width: 14rem;
-    border-radius: 1rem;
+    border-radius: var(--radius-md);
     transition: all 400ms ease-out;
     /* Basic styling that was in Tailwind classes */
     background-color: transparent;

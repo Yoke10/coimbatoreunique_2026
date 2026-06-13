@@ -3,9 +3,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--spacing-xs);
     font-weight: 600;
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
     cursor: pointer;
     border: none;
     outline: none;
@@ -18,46 +18,46 @@
 
 /* Variants */
 .confetti-btn-default {
-    background-color: var(--primary-purple, #400763);
+    background-color: var(--primary-purple, var(--primary-purple));
     color: white;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
 }
 
 .confetti-btn-default:hover {
-    background-color: var(--primary-magenta, #680b56);
+    background-color: var(--primary-magenta, var(--primary-magenta));
 }
 
 .confetti-btn-gradient {
-    background: var(--gradient-primary, linear-gradient(135deg, #400763 0%, #ed0775 100%));
+    background: var(--gradient-primary, linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-pink) 100%));
     color: white;
     border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(237, 7, 117, 0.3);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--primary-pink) calc(0.3 * 100%), transparent);
 }
 
 .confetti-btn-gradient:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(237, 7, 117, 0.4);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--primary-pink) calc(0.4 * 100%), transparent);
     opacity: 0.95;
 }
 
 .confetti-btn-outline {
     background: transparent;
     border: 2px solid currentColor;
-    color: var(--primary-purple, #400763);
-    border-radius: 8px;
+    color: var(--primary-purple, var(--primary-purple));
+    border-radius: var(--radius-sm);
 }
 
 .confetti-btn-outline:hover {
-    background: rgba(64, 7, 99, 0.05);
+    background: color-mix(in srgb, var(--primary-purple) calc(0.05 * 100%), transparent);
 }
 
 .confetti-btn-ghost {
     background: transparent;
-    color: var(--primary-purple, #400763);
+    color: var(--primary-purple, var(--primary-purple));
 }
 
 .confetti-btn-ghost:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
 }
 
 /* Sizes */
@@ -92,9 +92,9 @@
     height: 1rem;
     border: 2px solid currentColor;
     border-right-color: transparent;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     animation: confetti-spin 0.75s linear infinite;
-    margin-right: 0.5rem;
+    margin-right: var(--spacing-xs);
 }
 
 @keyframes confetti-spin {

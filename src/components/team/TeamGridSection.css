@@ -1,6 +1,6 @@
 .team-grid-section {
     padding: var(--spacing-xl) 5%;
-    background-color: #fdfbfd;
+    background-color: var(--white);
 }
 
 .team-grid-section .team-grid-container {

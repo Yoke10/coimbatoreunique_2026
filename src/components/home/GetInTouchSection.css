@@ -6,7 +6,7 @@
     min-height: auto;
     background: var(--accent-dark-purple);
     font-family: var(--font-primary);
-    padding: 4rem var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-md);
     position: relative;
     overflow: hidden;
     /* Optimized scale factor */
@@ -40,17 +40,17 @@
     position: relative;
     background: radial-gradient(circle at 50% 0%, var(--accent-light-purple) 0%, var(--accent-dark-purple) 64%);
     /* Light purple to dark purple */
-    box-shadow: inset 0 1.01em 0.2em -1em rgba(255, 255, 255, 0),
-        inset 0 -1.01em 0.2em -1em rgba(0, 0, 0, 0),
-        0 -1.02em 0.2em -1em rgba(255, 255, 255, 0),
-        0 1em 0.2em -1em rgba(0, 0, 0, 0),
-        0 0 0 1px rgba(255, 255, 255, 0.2),
-        0 4px 4px 0 rgba(0, 0, 0, 0.4),
+    box-shadow: inset 0 1.01em 0.2em -1em color-mix(in srgb, var(--white) calc(0 * 100%), transparent),
+        inset 0 -1.01em 0.2em -1em color-mix(in srgb, var(--black) calc(0 * 100%), transparent),
+        0 -1.02em 0.2em -1em color-mix(in srgb, var(--white) calc(0 * 100%), transparent),
+        0 1em 0.2em -1em color-mix(in srgb, var(--black) calc(0 * 100%), transparent),
+        0 0 0 1px color-mix(in srgb, var(--white) calc(0.2 * 100%), transparent),
+        0 4px 4px 0 color-mix(in srgb, var(--black) calc(0.4 * 100%), transparent),
         0 0 0 1px var(--dark-gray);
     width: 18em;
     height: 24em;
     border-radius: 1.8em;
-    color: #fff;
+    color: var(--white);
     padding: 1em;
     display: flex;
     flex-direction: column;
@@ -74,7 +74,7 @@
     top: calc(-1 * var(--offset));
     bottom: calc(-1 * var(--offset));
     margin: auto;
-    box-shadow: inset 0 0 0px 0.06em rgba(255, 255, 255, 0.13);
+    box-shadow: inset 0 0 0px 0.06em color-mix(in srgb, var(--white) calc(0.13 * 100%), transparent);
     border-radius: 2.6em;
     --ax: 4rem;
     clip-path: polygon(var(--ax) 0,
@@ -108,7 +108,7 @@
     --offset: 0.5em;
     --ax: 8rem;
     border-radius: 2.2em;
-    box-shadow: inset 0 0 0 0.08em rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 0.08em color-mix(in srgb, var(--white) calc(0.06 * 100%), transparent);
 }
 
 /* Light Layer */
@@ -134,8 +134,8 @@
     width: 64%;
     height: 1.2em;
     transform: rotateX(-76deg);
-    background: #121212;
-    box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0);
+    background: var(--black);
+    box-shadow: 0 0 4px 0 color-mix(in srgb, var(--white) calc(0 * 100%), transparent);
     transition: all 0.4s ease-in-out;
 }
 
@@ -158,7 +158,7 @@
 .get-in-touch-section .lumen .min {
     width: 70%;
     height: 3em;
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 192, 225, 0.67));
+    background: linear-gradient(color-mix(in srgb, var(--white) calc(0 * 100%), transparent), color-mix(in srgb, var(--primary-pink) calc(0.67 * 100%), transparent));
     /* Tinted */
     position: absolute;
     left: 0;
@@ -173,7 +173,7 @@
 .get-in-touch-section .lumen .mid {
     width: 74%;
     height: 13em;
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 192, 225, 0.67));
+    background: linear-gradient(color-mix(in srgb, var(--white) calc(0 * 100%), transparent), color-mix(in srgb, var(--primary-pink) calc(0.67 * 100%), transparent));
     position: absolute;
     left: 0;
     right: 0;
@@ -189,7 +189,7 @@
 .get-in-touch-section .lumen .hi {
     width: 50%;
     height: 13em;
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 192, 225, 0.67));
+    background: linear-gradient(color-mix(in srgb, var(--white) calc(0 * 100%), transparent), color-mix(in srgb, var(--primary-pink) calc(0.67 * 100%), transparent));
     position: absolute;
     left: 0;
     right: 0;
@@ -225,7 +225,7 @@
 .get-in-touch-section .darken .sl {
     width: 64%;
     height: 10em;
-    background: linear-gradient(#000, rgba(0, 0, 0, 0));
+    background: linear-gradient(var(--black), color-mix(in srgb, var(--black) calc(0 * 100%), transparent));
     position: absolute;
     left: 0;
     right: 0;
@@ -241,7 +241,7 @@
 .get-in-touch-section .darken .ll {
     width: 62%;
     height: 10em;
-    background: linear-gradient(rgba(0, 0, 0, 0.67), rgba(0, 0, 0, 0));
+    background: linear-gradient(color-mix(in srgb, var(--black) calc(0.67 * 100%), transparent), color-mix(in srgb, var(--black) calc(0 * 100%), transparent));
     position: absolute;
     left: 0;
     right: 0;
@@ -257,7 +257,7 @@
 .get-in-touch-section .darken .slt {
     width: 0.5em;
     height: 4em;
-    background: linear-gradient(rgba(0, 0, 0, 0.33), rgba(0, 0, 0, 0));
+    background: linear-gradient(color-mix(in srgb, var(--black) calc(0.33 * 100%), transparent), color-mix(in srgb, var(--black) calc(0 * 100%), transparent));
     position: absolute;
     left: 0;
     right: 11.5em;
@@ -272,7 +272,7 @@
 .get-in-touch-section .darken .srt {
     width: 0.5em;
     height: 4em;
-    background: linear-gradient(rgba(0, 0, 0, 0.33), rgba(0, 0, 0, 0));
+    background: linear-gradient(color-mix(in srgb, var(--black) calc(0.33 * 100%), transparent), color-mix(in srgb, var(--black) calc(0 * 100%), transparent));
     position: absolute;
     right: 0;
     left: 11.5em;
@@ -323,10 +323,10 @@
 .get-in-touch-section .bottom p {
     margin: 0;
     padding-bottom: 0.6em;
-    color: rgba(255, 255, 255, 0.27);
+    color: color-mix(in srgb, var(--white) calc(0.27 * 100%), transparent);
     font-size: 0.6em;
     font-weight: 100;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid color-mix(in srgb, var(--white) calc(0.07 * 100%), transparent);
     max-width: 100%;
 }
 
@@ -339,7 +339,7 @@
     letter-spacing: 0.05em;
     margin-top: 1em;
     display: inline-block;
-    transition: color 0.3s ease;
+    transition: color var(--transition-normal);
 }
 
 .get-in-touch-section .card a:hover {
@@ -351,18 +351,18 @@
 /* HOVER ACTIVATION (replacing .active class) */
 .get-in-touch-section .card:hover {
     box-shadow:
-        inset 0 1.01em 0.1em -1em rgba(255, 255, 255, 0.67),
-        inset 0 -4em 3em -3em rgba(0, 0, 0, 0.67),
-        0 -1.02em 0.2em -1em rgba(255, 255, 255, 0.67),
-        0 1em 0.2em -1em #000,
-        0 0 0 1px rgba(255, 255, 255, 0.13),
-        0 4px 4px 0 rgba(0, 0, 0, 0.27),
+        inset 0 1.01em 0.1em -1em color-mix(in srgb, var(--white) calc(0.67 * 100%), transparent),
+        inset 0 -4em 3em -3em color-mix(in srgb, var(--black) calc(0.67 * 100%), transparent),
+        0 -1.02em 0.2em -1em color-mix(in srgb, var(--white) calc(0.67 * 100%), transparent),
+        0 1em 0.2em -1em var(--black),
+        0 0 0 1px color-mix(in srgb, var(--white) calc(0.13 * 100%), transparent),
+        0 4px 4px 0 color-mix(in srgb, var(--black) calc(0.27 * 100%), transparent),
         0 0 0 1px var(--dark-gray);
 }
 
 .get-in-touch-section .card:hover .slit {
-    background: #fff;
-    box-shadow: 0 0 4px 0 #fff;
+    background: var(--white);
+    box-shadow: 0 0 4px 0 var(--white);
 }
 
 .get-in-touch-section .card:hover .lumen {
@@ -387,7 +387,7 @@
 }
 
 .get-in-touch-section .card:hover .icon-wrapper {
-    filter: drop-shadow(0 -1.2em 2px rgba(0, 0, 0, 0.2)) brightness(1.64);
+    filter: drop-shadow(0 -1.2em 2px color-mix(in srgb, var(--black) calc(0.2 * 100%), transparent)) brightness(1.64);
 }
 
 /* Responsive */
@@ -400,7 +400,7 @@
     .get-in-touch-section {
         height: auto;
         min-height: auto;
-        padding: 4rem 1rem;
+        padding: var(--spacing-lg) 1rem;
     }
 }
 

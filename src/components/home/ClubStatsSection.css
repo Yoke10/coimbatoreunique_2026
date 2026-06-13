@@ -3,7 +3,7 @@
     color: var(--white);
     position: relative;
     overflow: hidden;
-    padding: 4rem 0;
+    padding: var(--spacing-lg) 0;
 }
 
 .stats-section::before {
@@ -13,8 +13,8 @@
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(237, 7, 117, 0.25) 0%, transparent 70%);
-    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary-pink) calc(0.25 * 100%), transparent) 0%, transparent 70%);
+    border-radius: var(--radius-full);
     animation: statsFloat 6s ease-in-out infinite;
 }
 
@@ -25,20 +25,20 @@
     left: -5%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(237, 7, 117, 0.2) 0%, transparent 70%);
-    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary-pink) calc(0.2 * 100%), transparent) 0%, transparent 70%);
+    border-radius: var(--radius-full);
     animation: statsFloat 8s ease-in-out infinite reverse;
 }
 
 .stats-section .section-title {
     color: var(--white);
-    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    margin-bottom: 4rem;
+    text-shadow: 0 4px 10px color-mix(in srgb, var(--black) calc(0.3 * 100%), transparent);
+    margin-bottom: var(--spacing-lg);
 }
 
 .stats-section .section-title::after {
     background: var(--white);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--white) calc(0.5 * 100%), transparent);
 }
 
 .stats-section .stats-grid {
@@ -62,19 +62,19 @@
     /* Ensure it fills flex space */
     min-width: 0;
     /* Allow shrinking below content size if needed */
-    background: rgba(255, 255, 255, 0.05);
+    background: color-mix(in srgb, var(--white) calc(0.05 * 100%), transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid color-mix(in srgb, var(--white) calc(0.15 * 100%), transparent);
+    border-top: 1px solid color-mix(in srgb, var(--white) calc(0.3 * 100%), transparent);
+    border-left: 1px solid color-mix(in srgb, var(--white) calc(0.3 * 100%), transparent);
     border-radius: 20px;
     padding: 1.5rem 1rem;
     /* Optimized padding */
     text-align: center;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27),
         box-shadow 0.4s ease,
-        border-color 0.3s ease;
+        border-color var(--transition-normal);
     opacity: 0;
     transform: translateY(30px);
 }
@@ -107,10 +107,10 @@
 
 .stats-section .stat-card:hover {
     transform: translateY(-10px) scale(1.02);
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2),
-        0 0 15px rgba(237, 7, 117, 0.2);
+    background: color-mix(in srgb, var(--white) calc(0.1 * 100%), transparent);
+    border-color: color-mix(in srgb, var(--white) calc(0.5 * 100%), transparent);
+    box-shadow: 0 15px 35px color-mix(in srgb, var(--black) calc(0.2 * 100%), transparent),
+        0 0 15px color-mix(in srgb, var(--primary-pink) calc(0.2 * 100%), transparent);
     /* Pink glow */
 }
 
@@ -122,10 +122,10 @@
     /* Optimized size */
     font-weight: 800;
     color: var(--white);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-xs);
     line-height: 1;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(to bottom, #fff, #f0f0f0);
+    text-shadow: 0 2px 5px color-mix(in srgb, var(--black) calc(0.2 * 100%), transparent);
+    background: linear-gradient(to bottom, var(--white), var(--light-gray));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -144,7 +144,7 @@
     /* Slightly smaller */
     font-weight: 700;
     color: var(--accent-soft-pink);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-xs);
     text-transform: uppercase;
     letter-spacing: 1px;
     white-space: nowrap;
@@ -155,7 +155,7 @@
 
 .stats-section .stat-description {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: color-mix(in srgb, var(--white) calc(0.8 * 100%), transparent);
     font-style: italic;
     line-height: 1.4;
 }

@@ -14,11 +14,11 @@
     color: var(--white);
     margin-bottom: 40px;
     font-family: var(--font-display);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 4px color-mix(in srgb, var(--black) calc(0.2 * 100%), transparent);
 }
 
 .sponsors-section-new .section-title::after {
-    background: linear-gradient(90deg, var(--white), rgba(255, 255, 255, 0.2));
+    background: linear-gradient(90deg, var(--white), color-mix(in srgb, var(--white) calc(0.2 * 100%), transparent));
     height: 3px;
 }
 
@@ -75,7 +75,7 @@
     transition: transform 2.3s ease;
     border-radius: var(--radius-sm);
     /* Adding a subtle border to define the card against the gradient */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 15px color-mix(in srgb, var(--black) calc(0.2 * 100%), transparent);
 }
 
 /* Dark Overlay */
@@ -86,7 +86,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: color-mix(in srgb, var(--black) calc(0.4 * 100%), transparent);
     transition: 1.3s;
     z-index: 1;
     border-radius: var(--radius-sm);
@@ -98,13 +98,13 @@
     position: absolute;
     /* Use white with opacity or theme accent? User said design according to palette.
        White border looks premium on dark/gradient. Let's keep it but maybe thinner. */
-    border: 2px solid rgba(255, 255, 255, 0.6);
+    border: 2px solid color-mix(in srgb, var(--white) calc(0.6 * 100%), transparent);
     top: 15px;
     left: 15px;
     right: 15px;
     bottom: 15px;
     z-index: 2;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--black) calc(0.2 * 100%), transparent);
     transform: translateZ(20px);
     transition: 2.3s ease;
 }
@@ -127,7 +127,7 @@
     text-align: left;
     margin: 0;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px color-mix(in srgb, var(--black) calc(0.3 * 100%), transparent);
 }
 
 .sponsors-section-new .cover .number {
@@ -161,7 +161,7 @@
     transform: translateZ(-1px) rotateY(180deg);
     border-radius: var(--radius-sm);
     z-index: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid color-mix(in srgb, var(--white) calc(0.1 * 100%), transparent);
 }
 
 .sponsors-section-new .card-back a {
@@ -172,7 +172,7 @@
     text-decoration: none;
     font-size: 1em;
     font-weight: 600;
-    transition: 0.3s ease;
+    transition: var(--transition-normal);
     backface-visibility: hidden;
     font-family: var(--font-primary);
     text-transform: uppercase;
@@ -184,7 +184,7 @@
 .sponsors-section-new .card-back a:hover {
     background: var(--primary-pink);
     color: var(--white);
-    box-shadow: 0 0 15px rgba(237, 7, 117, 0.5);
+    box-shadow: 0 0 15px color-mix(in srgb, var(--primary-pink) calc(0.5 * 100%), transparent);
 }
 
 /* Flip Effect */
@@ -245,9 +245,9 @@
     }
 
     .sponsors-section-new .cover:before {
-        top: 8px;
-        left: 8px;
-        right: 8px;
-        bottom: 8px;
+        top: var(--spacing-xs);
+        left: var(--spacing-xs);
+        right: var(--spacing-xs);
+        bottom: var(--spacing-xs);
     }
 }

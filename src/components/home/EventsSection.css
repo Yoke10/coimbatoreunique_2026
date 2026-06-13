@@ -1,6 +1,6 @@
 .events-section {
     background: var(--off-white);
-    padding: 4rem 0;
+    padding: var(--spacing-lg) 0;
     position: relative;
 }
 
@@ -14,7 +14,7 @@
 
 .events-section .events-scroll {
     display: flex;
-    gap: 2rem;
+    gap: var(--spacing-md);
     overflow-x: auto;
     scroll-behavior: smooth;
     padding: var(--spacing-md) var(--spacing-sm);
@@ -37,9 +37,9 @@
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
     /* Soft shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
     position: relative;
     display: flex;
     flex-direction: row;
@@ -52,7 +52,7 @@
 
 .events-section .event-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 40px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
 }
 
 /* Left Panel - Image */
@@ -73,7 +73,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform var(--transition-slow);
 }
 
 .events-section .event-card:hover .event-illustration img {
@@ -99,13 +99,13 @@
 .events-section .event-category {
     display: inline-block;
     padding: 0.4rem 1rem;
-    background: rgba(237, 7, 117, 0.1);
+    background: color-mix(in srgb, var(--primary-pink) calc(0.1 * 100%), transparent);
     /* Primary pink tint */
     color: var(--primary-pink);
     border-radius: 50px;
     font-size: 0.8rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-sm);
     align-self: flex-start;
     text-transform: none;
     letter-spacing: normal;
@@ -116,7 +116,7 @@
     font-size: 1.6rem;
     font-weight: 700;
     color: var(--primary-magenta);
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-sm);
     line-height: 1.2;
 }
 
@@ -140,7 +140,7 @@
     width: 120px;
     background: transparent;
     box-shadow: none;
-    padding: 1rem;
+    padding: var(--spacing-sm);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,7 +168,7 @@
 .events-section .scroll-btn {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background: var(--white);
     border: none;
     box-shadow: var(--shadow-md);
@@ -216,7 +216,7 @@
 
     .events-section .event-main {
         border-right: none;
-        border-bottom: 2px dashed #eee;
+        border-bottom: 2px dashed var(--light-gray);
         padding: 1.5rem;
     }
 
@@ -224,14 +224,14 @@
         width: 100%;
         flex-direction: row;
         justify-content: space-between;
-        padding: 1rem 1.5rem;
-        background: #fcfcfc;
+        padding: var(--spacing-sm) 1.5rem;
+        background: var(--white);
     }
 
     .events-section .event-date {
         display: flex;
         align-items: baseline;
-        gap: 0.5rem;
+        gap: var(--spacing-xs);
     }
 
     .events-section .date-number {
@@ -244,6 +244,6 @@
 
     .events-section .events-scroll {
         padding: var(--spacing-sm);
-        gap: 1rem;
+        gap: var(--spacing-sm);
     }
 }

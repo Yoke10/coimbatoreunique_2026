@@ -1,6 +1,6 @@
 .officials-section {
-    padding: 6rem 1rem;
-    background-color: #fdfbfd;
+    padding: var(--spacing-xl) 1rem;
+    background-color: var(--white);
     overflow: hidden;
     position: relative;
 }
@@ -10,7 +10,7 @@
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 800;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-md);
     color: var(--primary-magenta);
     position: relative;
     display: inline-block;
@@ -57,15 +57,15 @@
     max-width: 600px;
     background: white;
     border-radius: 30px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    padding: 2rem;
+    border: 1px solid color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
+    padding: var(--spacing-md);
     min-height: 250px;
     display: flex;
     flex-direction: row;
     /* Content left, image right */
     align-items: center;
     gap: 1.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
     transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer;
     overflow: hidden;
@@ -76,7 +76,7 @@
     transform: translateZ(0) scale(1);
     z-index: 10;
     opacity: 1;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 50px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
 }
 
 .officials-section .official-card.prev {
@@ -111,14 +111,14 @@
     font-size: 0.95rem;
     color: var(--dark-gray);
     font-style: italic;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-sm);
     line-height: 1.5;
     text-align: left;
 }
 
 .officials-section .official-info {
-    border-top: 1px solid #eee;
-    padding-top: 0.5rem;
+    border-top: 1px solid var(--light-gray);
+    padding-top: var(--spacing-xs);
     text-align: left;
 }
 
@@ -132,7 +132,7 @@
 
 .officials-section .official-role {
     font-size: 0.85rem;
-    color: #bf065e; /* Darker pink for better contrast */
+    color: var(--primary-pink); /* Darker pink for better contrast */
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -145,7 +145,7 @@
     border-radius: 20px;
     overflow: hidden;
     border: 3px solid var(--primary-pink);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
 }
 
 .officials-section .official-image {
@@ -160,13 +160,13 @@
     border: none;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
+    transition: all var(--transition-normal);
     z-index: 20;
     color: var(--primary-purple);
 }
@@ -178,28 +178,28 @@
 }
 
 .officials-section .nav-btn.prev {
-    margin-right: 2rem;
+    margin-right: var(--spacing-md);
 }
 
 .officials-section .nav-btn.next {
-    margin-left: 2rem;
+    margin-left: var(--spacing-md);
 }
 
 /* Dots */
 .officials-section .carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
 }
 
 .officials-section .dot {
     width: 10px;
     height: 10px;
-    border-radius: 50%;
-    background: #e5e5e5;
+    border-radius: var(--radius-full);
+    background: var(--light-gray);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
 }
 
 .officials-section .dot.active {

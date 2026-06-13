@@ -22,7 +22,7 @@
     color: var(--white);
     margin-bottom: 2.5rem;
     font-family: var(--font-display);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--white) calc(0.3 * 100%), transparent);
 }
 
 .prayer-test-section .box {
@@ -104,7 +104,7 @@
     width: 0;
     height: 0;
     border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--white) calc(0.1 * 100%), transparent);
     backdrop-filter: blur(10px);
     opacity: 0;
     transition: 0.1s;
@@ -128,7 +128,7 @@
     width: 100%;
     height: 100%;
     border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--white) calc(0.1 * 100%), transparent);
     backdrop-filter: blur(10px);
     opacity: 0;
     transition: var(--transition-slow);
@@ -161,7 +161,7 @@
     position: relative;
     left: 0;
     padding: 18px 32px;
-    background: rgba(255, 255, 255, 0.05);
+    background: color-mix(in srgb, var(--white) calc(0.05 * 100%), transparent);
     /* Keep transparency for glass effect */
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-sm);
@@ -240,7 +240,7 @@
     }
 
     .prayer-test-section .box .content {
-        padding: 2rem 1.5rem;
+        padding: var(--spacing-md) 1.5rem;
         left: 0;
         /* Align content normally */
     }
@@ -248,7 +248,7 @@
     .prayer-test-section .box:hover .content {
         left: 0;
         /* Disable shift on hover */
-        padding: 2rem 1.5rem;
+        padding: var(--spacing-md) 1.5rem;
     }
 
     /* Ensure hidden decor doesn't break layout */

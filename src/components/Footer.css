@@ -29,7 +29,7 @@
     color: var(--white);
     margin-bottom: var(--spacing-sm);
     position: relative;
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--spacing-xs);
 }
 
 .footer .footer-title::after {
@@ -46,7 +46,7 @@
 .footer .footer-text {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
+    color: color-mix(in srgb, var(--white) calc(0.9 * 100%), transparent);
 }
 
 .footer .footer-links {
@@ -60,7 +60,7 @@
 }
 
 .footer .footer-links a {
-    color: rgba(255, 255, 255, 0.85);
+    color: color-mix(in srgb, var(--white) calc(0.85 * 100%), transparent);
     text-decoration: none;
     font-size: 0.95rem;
     transition: all var(--transition-fast);
@@ -88,15 +88,15 @@
 /* Social Links */
 .footer .social-links {
     display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
 }
 
 .footer .social-link {
     width: 45px;
     height: 45px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--white) calc(0.1 * 100%), transparent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,16 +109,16 @@
     background: var(--white);
     color: var(--primary-purple);
     transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--white) calc(0.3 * 100%), transparent);
 }
 
 .footer .social-link.blood-support:hover {
-    color: #dc143c;
+    color: var(--error);
 }
 
 /* Footer Bottom */
 .footer .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid color-mix(in srgb, var(--white) calc(0.2 * 100%), transparent);
     padding-top: var(--spacing-md);
     text-align: center;
 }
@@ -126,8 +126,8 @@
 .footer .copyright,
 .footer .charter {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
-    margin: 0.5rem 0;
+    color: color-mix(in srgb, var(--white) calc(0.8 * 100%), transparent);
+    margin: var(--spacing-xs) 0;
 }
 
 /* Responsive */

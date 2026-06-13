@@ -9,18 +9,18 @@
     padding: 0.8rem 0;
     z-index: 1000;
 
-    background: rgba(255, 255, 255, 0.25);
+    background: color-mix(in srgb, var(--white) calc(0.25 * 100%), transparent);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-    transition: all 0.3s ease;
+    border-bottom: 1px solid color-mix(in srgb, var(--white) calc(0.25 * 100%), transparent);
+    transition: all var(--transition-normal);
 }
 
 /* SCROLLED MODE (Same as base, but you can style separately if needed) */
 .header.scrolled {
-    background: rgba(255, 255, 255, 0.25);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    background: color-mix(in srgb, var(--white) calc(0.25 * 100%), transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--white) calc(0.25 * 100%), transparent);
 }
 
 /* ======================================================
@@ -43,7 +43,7 @@
 }
 
 .header.on-hero .nav-link:hover {
-    color: #ff3c8f !important;
+    color: var(--accent-light-pink) !important;
 }
 
 /* -- LOGO TEXT TURNS WHITE IN HERO MODE -- */
@@ -60,7 +60,7 @@
 }
 
 .header.on-hero .btn-join:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: color-mix(in srgb, var(--white) calc(0.15 * 100%), transparent);
     color: white;
 }
 
@@ -85,7 +85,7 @@
 .header .logo {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--spacing-sm);
     text-decoration: none;
 }
 
@@ -106,12 +106,12 @@
 .header .logo-main {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #6d28d9;
+    color: var(--accent-light-purple);
 }
 
 .header .logo-sub {
     font-size: 0.8rem;
-    color: #ec4899;
+    color: var(--primary-pink);
     font-weight: 600;
 }
 
@@ -122,17 +122,17 @@
 .header .nav {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: var(--spacing-md);
 }
 
 .header .nav-link {
     position: relative;
     text-decoration: none;
     font-weight: 500;
-    color: #222;
+    color: var(--dark-gray);
     padding: 4px 0;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color var(--transition-normal);
 }
 
 /* Underline Animation */
@@ -144,7 +144,7 @@
     width: 0%;
     height: 2px;
     background: var(--gradient-primary);
-    transition: width 0.3s ease;
+    transition: width var(--transition-normal);
 }
 
 .header .nav-link:hover {
@@ -168,7 +168,7 @@
     border: none;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #222;
+    color: var(--dark-gray);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -177,7 +177,7 @@
 
 /* Dropdown Icon Animation */
 .header .dropdown-icon {
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-normal);
 }
 
 /* Dropdown Container */
@@ -185,12 +185,12 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background: rgba(255, 255, 255, 0.8);
+    background: color-mix(in srgb, var(--white) calc(0.8 * 100%), transparent);
     backdrop-filter: blur(12px);
-    padding: 0.5rem 0;
+    padding: var(--spacing-xs) 0;
     min-width: 150px;
     border-radius: 10px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 18px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
     display: none;
     animation: fadeIn 0.25s ease;
 }
@@ -205,7 +205,7 @@
     display: block;
     padding: 0.7rem 1rem;
     margin: 2px 6px;
-    color: #333;
+    color: var(--dark-gray);
     text-decoration: none;
     border-radius: 6px;
     transition: color 0.25s ease;
@@ -220,11 +220,11 @@
     width: 0%;
     height: 2px;
     background: var(--gradient-primary);
-    transition: width 0.3s ease;
+    transition: width var(--transition-normal);
 }
 
 .header .dropdown-item:hover {
-    color: #111;
+    color: var(--black);
 }
 
 .header .dropdown-item:hover::after {
@@ -236,13 +236,13 @@
    JOIN BUTTON
 ====================================================== */
 .header .btn-join {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+    padding: var(--spacing-xs) 1rem;
+    border-radius: var(--radius-sm);
     background: var(--gradient-primary);
     color: white;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
 }
 
 .header .btn-join:hover {
@@ -264,7 +264,7 @@
 .header .mobile-menu-toggle span {
     width: 25px;
     height: 3px;
-    background: #6d28d9;
+    background: var(--accent-light-purple);
     border-radius: 3px;
 }
 
@@ -281,19 +281,19 @@
         right: 0;
         bottom: 0;
         /* Full height overlay */
-        background: rgba(255, 255, 255, 0.95);
+        background: color-mix(in srgb, var(--white) calc(0.95 * 100%), transparent);
         /* More opaque */
         flex-direction: column;
         align-items: center;
         /* Center align for mobile aesthetic */
         justify-content: center;
-        padding: 2rem;
-        gap: 2rem;
+        padding: var(--spacing-md);
+        gap: var(--spacing-md);
         transform: translateX(100%);
         /* Slide from right */
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(15px);
-        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+        box-shadow: -5px 0 20px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
         height: 100vh;
         width: 100vw;
     }
@@ -316,8 +316,8 @@
     .header .dropdown-menu.show {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        padding-top: 1rem;
+        gap: var(--spacing-xs);
+        padding-top: var(--spacing-sm);
     }
 }
 

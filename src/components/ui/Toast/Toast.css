@@ -1,36 +1,36 @@
 /* Toast.css */
 :root {
-    --toast-bg-default: #ffffff;
-    --toast-text-default: #09090b;
+    --toast-bg-default: var(--white);
+    --toast-text-default: var(--dark-gray);
     /* foreground */
-    --toast-border-default: #e4e4e7;
+    --toast-border-default: var(--light-gray);
 
-    --toast-bg-destructive: #fef2f2;
-    --toast-text-destructive: #991b1b;
-    --toast-border-destructive: #ef4444;
+    --toast-bg-destructive: var(--error-light);
+    --toast-text-destructive: var(--error);
+    --toast-border-destructive: var(--error);
 
-    --toast-bg-success: #f0fdf4;
-    --toast-text-success: #166534;
-    --toast-border-success: #22c55e;
+    --toast-bg-success: var(--success-light);
+    --toast-text-success: var(--success);
+    --toast-border-success: var(--success);
 
-    --toast-bg-warning: #fefce8;
-    --toast-text-warning: #854d0e;
-    --toast-border-warning: #eab308;
+    --toast-bg-warning: var(--warning-light);
+    --toast-text-warning: var(--warning);
+    --toast-border-warning: var(--warning);
 
-    --toast-bg-info: #eff6ff;
-    --toast-text-info: #1e40af;
-    --toast-border-info: #3b82f6;
+    --toast-bg-info: var(--info-light);
+    --toast-text-info: var(--info);
+    --toast-border-info: var(--info);
 
-    --toast-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --toast-shadow: 0 10px 15px -3px color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent), 0 4px 6px -2px color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
 }
 
 .toast-viewport {
     position: fixed;
-    top: 1rem;
-    right: 1rem;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
     display: flex;
     flex-direction: column-reverse;
-    gap: 0.5rem;
+    gap: var(--spacing-xs);
     width: auto;
     max-width: 24rem;
     /* max-w-sm approx */
@@ -44,12 +44,12 @@
     width: 20rem;
     /* w-80 approx */
     max-width: 100%;
-    padding: 1rem 2rem 1rem 1rem;
+    padding: var(--spacing-sm) 2rem 1rem 1rem;
     /* pr-8 for close button */
     border-radius: 6px;
     border: 1px solid;
     box-shadow: var(--toast-shadow);
-    transition: all 0.2s ease-in-out;
+    transition: all var(--transition-fast)-in-out;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -116,8 +116,8 @@
 /* Close Button */
 .toast-close {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
     padding: 0.25rem;
     background: transparent;
     border: none;
@@ -133,7 +133,7 @@
 
 .toast-close:hover {
     opacity: 1;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: color-mix(in srgb, var(--black) calc(0.05 * 100%), transparent);
 }
 
 /* Progress Bar */
@@ -143,7 +143,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: color-mix(in srgb, var(--black) calc(0.1 * 100%), transparent);
     /* Track */
 }
 
