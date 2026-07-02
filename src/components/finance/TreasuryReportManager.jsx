@@ -10,6 +10,8 @@ const DEFAULT_TREASURY = {
   id: 'global',
   dues: [],
   events: [],
+  carryForwardAmount: 0,
+  isCarryForwardLocked: false,
   createdAt: null,
   updatedAt: null,
 }
@@ -103,6 +105,8 @@ const sanitizeTreasuryData = (treasury) => {
   return {
     dues: Array.isArray(treasury.dues) ? treasury.dues.map(sanitizeDue) : [],
     events: Array.isArray(treasury.events) ? treasury.events.map(sanitizeEvent) : [],
+    carryForwardAmount: parseAmount(treasury.carryForwardAmount) || 0,
+    isCarryForwardLocked: Boolean(treasury.isCarryForwardLocked),
   }
 }
 
@@ -111,10 +115,7 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
   const queryClient = useQueryClient()
   const { data: users = [], isLoading: usersLoading, error: usersError } = useQuery({
     queryKey: ['members'],
-    queryFn: async () => {
-      const allUsers = await firebaseService.getUsers()
-      return allUsers.filter(u => u?.role === 'member' || (!u?.role && !String(u?.email).toLowerCase().includes('admin')))
-    },
+    queryFn: firebaseService.getMembers,
     staleTime: 5 * 60 * 1000,
     retry: 1,
     refetchOnWindowFocus: false,
@@ -140,9 +141,15 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
   const [newEvent, setNewEvent] = useState(createEmptyEvent())
   const [range, setRange] = useState(() => {
     const now = new Date()
-    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const month = now.getMonth() + 1 // 1-12
     const year = now.getFullYear()
-    return { start: `${year}-${month}`, end: `${year}-${month}` }
+    // Rotaract year runs July to June
+    const startYear = month >= 7 ? year : year - 1
+    const endYear = startYear + 1
+    return {
+      start: `${startYear}-07`,
+      end: `${endYear}-06`,
+    }
   })
   const [isSaving, setIsSaving] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -179,11 +186,17 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
       duesSample: (base.dues || [])[0],
     })
     
-    // Preserve existing dues from Firebase - don't recreate them
-    const persistedDues = (base.dues || []).map(due => ({
-      ...due,
-      payments: Array.isArray(due.payments) ? due.payments : [],
-    }))
+    // Preserve existing dues from Firebase - don't recreate them, but scrub any rogue admin dues
+    const persistedDues = (base.dues || [])
+      .filter(due => {
+        const email = String(due.email || '').toLowerCase()
+        const name = String(due.memberName || '').toLowerCase()
+        return !email.includes('admin') && !name.includes('admin')
+      })
+      .map(due => ({
+        ...due,
+        payments: Array.isArray(due.payments) ? due.payments : [],
+      }))
 
     // Only create new dues for members that don't exist in persisted list
     const allMemberIds = new Set([...persistedDues.map(d => d.memberId), ...persistedDues.map(d => d.id)])
@@ -195,6 +208,8 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
       id: base.id || 'global',
       dues: [...persistedDues, ...newMemberDues],
       events: Array.isArray(base.events) ? base.events : [],
+      carryForwardAmount: parseAmount(base.carryForwardAmount) || 0,
+      isCarryForwardLocked: Boolean(base.isCarryForwardLocked),
       createdAt: base.createdAt,
       updatedAt: base.updatedAt,
     }
@@ -287,7 +302,8 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
     [matchingEvents]
   )
 
-  const totalIncome = totalDuesIncome + totalEventIncome
+  const carryForwardAmount = parseAmount(treasury.carryForwardAmount)
+  const totalIncome = totalDuesIncome + totalEventIncome + carryForwardAmount
   const totalExpense = totalEventExpense
   const totalBalance = totalIncome - totalExpense
 
@@ -673,6 +689,7 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
     clubId: config.clubId ? `CLUB ID : ${config.clubId}` : 'CLUB ID : 50295',
     group: config.group ? `GROUP ${config.group}` : 'GROUP 1',
     rid: config.district ? `RI DISTRICT ${config.district}` : 'RI DISTRICT 3206',
+    carryForwardAmount,
     presidentName: config.presidentName || '',
     secretaryName: config.secretaryName || '',
     logos: [
@@ -747,7 +764,7 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
 
       <section className="treasury-section treasury-summary-panel">
         <div className="section-head">
-          <h4>Report Period</h4>
+          <h4>Report Period & Carry Forward</h4>
           <div className="period-inputs">
             <label>
               From
@@ -756,6 +773,27 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
             <label>
               To
               <input type="month" value={range.end} onChange={e => setRange(prev => ({ ...prev, end: e.target.value }))} />
+            </label>
+            <label>
+              Carry Forward (Previous Year)
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <input 
+                  type="number" 
+                  value={treasury.carryForwardAmount} 
+                  onChange={e => updateTreasury(prev => ({ ...prev, carryForwardAmount: parseAmount(e.target.value) }))}
+                  placeholder="Amount"
+                  disabled={treasury.isCarryForwardLocked}
+                  style={{ width: '150px' }}
+                />
+                <button 
+                  className="btn-icon"
+                  style={{ padding: '0.6rem', borderRadius: '10px', background: treasury.isCarryForwardLocked ? 'var(--light-gray)' : 'var(--accent-pale-purple)', color: 'var(--primary-purple)' }}
+                  onClick={() => updateTreasury(prev => ({ ...prev, isCarryForwardLocked: !prev.isCarryForwardLocked }))}
+                  title={treasury.isCarryForwardLocked ? "Unlock Amount" : "Lock Amount"}
+                >
+                  {treasury.isCarryForwardLocked ? <Lock size={16} /> : <Unlock size={16} />}
+                </button>
+              </div>
             </label>
           </div>
         </div>

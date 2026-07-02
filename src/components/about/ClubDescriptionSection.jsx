@@ -1,7 +1,16 @@
 import React from 'react';
 import './ClubDescriptionSection.css';
+import { firebaseService } from '../../services/firebaseService';
+import { useQuery } from '@tanstack/react-query';
 
 const ClubDescriptionSection = () => {
+    const { data: config } = useQuery({
+        queryKey: ['config'],
+        queryFn: firebaseService.getClubConfig,
+        staleTime: 0,
+        refetchOnMount: true,
+    });
+
     return (
         <section className="club-description-section">
             <div className="container">
@@ -29,19 +38,19 @@ const ClubDescriptionSection = () => {
                         <div className="purple-panel"></div>
 
                         <div className="photo tl">
-                            <img src="/images/about-collage-1.png" alt="Rotaract Community Service" loading="lazy" />
+                            <img src={config?.aboutImage1 || "/images/about-collage-1.png"} alt="Rotaract Community Service" loading="lazy" />
                         </div>
 
                         <div className="photo tr">
-                            <img src="/images/about-collage-2.png" alt="Rotaract Team Meeting" loading="lazy" />
+                            <img src={config?.aboutImage2 || "/images/about-collage-2.png"} alt="Rotaract Team Meeting" loading="lazy" />
                         </div>
 
                         <div className="photo bl">
-                            <img src="/images/grouppic.webp" alt="Rotaract Club Members" loading="lazy" />
+                            <img src={config?.aboutImage3 || "/images/grouppic.webp"} alt="Rotaract Club Members" loading="lazy" />
                         </div>
 
                         <div className="photo br">
-                            <img src="/images/grouppic.webp" alt="Rotaract Leadership" loading="lazy" />
+                            <img src={config?.aboutImage4 || "/images/grouppic.webp"} alt="Rotaract Leadership" loading="lazy" />
                         </div>
                     </div>
                 </div>

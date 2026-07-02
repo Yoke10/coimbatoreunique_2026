@@ -16,12 +16,12 @@ const SPONSOR_IMAGES = [
 
 const SponsorsSection = () => {
     const sponsors = [
-        { id: 1, name: "City\nBuilders", number: "01", link: "#", image: SPONSOR_IMAGES[0] },
-        { id: 2, name: "Gold\nStandard", number: "02", link: "#", image: SPONSOR_IMAGES[1] },
-        { id: 3, name: "Tech\nElite", number: "03", link: "#", image: SPONSOR_IMAGES[2] },
-        { id: 4, name: "Nature\nCorp", number: "04", link: "#", image: SPONSOR_IMAGES[3] },
-        { id: 5, name: "Ocean\nView", number: "05", link: "#", image: SPONSOR_IMAGES[4] },
-        { id: 6, name: "Mountain\nGear", number: "06", link: "#", image: SPONSOR_IMAGES[5] }
+        { id: 1, name: "Our\nSponsor", number: "01", link: "#", image: SPONSOR_IMAGES[0] },
+        { id: 2, name: "Our\nPartner", number: "02", link: "#", image: SPONSOR_IMAGES[1] },
+        { id: 3, name: "Our\nSponsor", number: "03", link: "#", image: SPONSOR_IMAGES[2] },
+        { id: 4, name: "Our\nPartner", number: "04", link: "#", image: SPONSOR_IMAGES[3] },
+        { id: 5, name: "Our\nSponsor", number: "05", link: "#", image: SPONSOR_IMAGES[4] },
+        { id: 6, name: "Our\nPartner", number: "06", link: "#", image: SPONSOR_IMAGES[5] }
     ];
 
     // Create a tripled list for smooth infinite scrolling

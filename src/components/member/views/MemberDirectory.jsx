@@ -13,7 +13,7 @@ const MemberDirectory = () => {
     const loadMembers = async () => {
         try {
             console.log("Fetching members directory...");
-            const data = await firebaseService.getUsers();
+            const data = await firebaseService.getMembers();
             console.log("Fetched members:", data);
 
             // Filter only active members

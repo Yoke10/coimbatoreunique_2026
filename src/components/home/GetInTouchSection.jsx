@@ -32,10 +32,10 @@ const GetInTouchSection = () => {
                         <div className="bottom">
                             <h3>Phone</h3>
                             <p>
-                                +91 98765 43210<br />
-                                +91 98765 43211
+                                +91 9443502959<br />
+                                +91 8148562809
                             </p>
-                            <a href="tel:+919876543210">Call Now</a>
+                            <a href="tel:+919443502959">Call Now</a>
                         </div>
                     </div>
                 </div>
@@ -66,10 +66,10 @@ const GetInTouchSection = () => {
                         <div className="bottom">
                             <h3>Email</h3>
                             <p>
-                                info@rotaractccu.org<br />
-                                contact@rotaractccu.org
+                                raccbeunique@gmail.com<br />
+                                rtr.dharshinishri.raccbeunique@gmail.com
                             </p>
-                            <a href="mailto:info@rotaractccu.org">Send Email</a>
+                            <a href="mailto:raccbeunique@gmail">Send Email</a>
                         </div>
                     </div>
                 </div>

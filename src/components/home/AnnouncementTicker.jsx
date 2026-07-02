@@ -1,18 +1,20 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './AnnouncementTicker.css'
+import { firebaseService } from '../../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const AnnouncementTicker = () => {
     const [isPaused, setIsPaused] = useState(false)
 
-    const announcements = [
-        { id: 1, text: "🎉 New Project Launch: Community Health Initiative - Join us this weekend!", link: "/events" },
-        { id: 2, text: "📢 Monthly Meeting scheduled for December 15th at 6:00 PM", link: "/events" },
-        { id: 3, text: "🌟 Congratulations to our members for winning Best Club Award 2024!", link: "/about" },
-        { id: 4, text: "🎓 Leadership Training Workshop - Register now! Limited seats available", link: "/events" },
-        { id: 5, text: "💝 Blood Donation Camp on December 20th - Be a lifesaver!", link: "/events" },
-        { id: 6, text: "📸 Photo Contest: Share your best moments with us! Deadline: Dec 31st", link: "/gallery" }
-    ]
+    const { data: announcements = [], isLoading } = useQuery({
+        queryKey: ['announcements'],
+        queryFn: firebaseService.getAnnouncements,
+        staleTime: 0,
+        refetchOnMount: true,
+    });
+
+    if (isLoading || announcements.length === 0) return null;
 
     return (
         <section className="announcement-section">
@@ -30,15 +32,34 @@ const AnnouncementTicker = () => {
                     onMouseLeave={() => setIsPaused(false)}
                 >
                     <div className={`ticker-content ${isPaused ? 'paused' : ''}`}>
-                        {[...announcements, ...announcements].map((announcement, index) => (
-                            <Link
-                                key={`${announcement.id}-${index}`}
-                                to={announcement.link}
-                                className="ticker-item"
-                            >
-                                {announcement.text}
-                            </Link>
-                        ))}
+                        {[...announcements, ...announcements].map((announcement, index) => {
+                            const isExternal = announcement.link && (announcement.link.startsWith('http') || announcement.link.startsWith('www.'));
+                            const linkPath = announcement.link || '#';
+                            
+                            if (isExternal) {
+                                return (
+                                    <a 
+                                        key={`${announcement.id || index}-ext`}
+                                        href={linkPath.startsWith('www.') ? `https://${linkPath}` : linkPath}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="ticker-item"
+                                    >
+                                        {announcement.text}
+                                    </a>
+                                );
+                            }
+
+                            return (
+                                <Link
+                                    key={`${announcement.id || index}-int`}
+                                    to={linkPath}
+                                    className="ticker-item"
+                                >
+                                    {announcement.text}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

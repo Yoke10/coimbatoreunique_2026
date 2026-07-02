@@ -50,6 +50,8 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
         eventName: '',
         eventChair: '',
         eventDate: '',
+        isJointProject: 'No',
+        jointOrganization: '',
         avenue: 'Club Service',
         location: '',
         description: '',
@@ -58,8 +60,6 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
         others: 0,
         total: 0,
         report: '',
-        why: '',
-        impact: '',
         income: [], // { desc, amount }
         expense: [], // { desc, amount }
         rotaractorsDetails: [], // { name, club }
@@ -216,6 +216,19 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
                     <input className="report-form-input" type="date" name="eventDate" value={formData.eventDate} onChange={handleChange} />
                 </div>
                 <div className="input-group">
+                    <label className="report-input-label">Joint Project?</label>
+                    <select className="report-form-input" name="isJointProject" value={formData.isJointProject} onChange={handleChange}>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                {formData.isJointProject === 'Yes' && (
+                    <div className="input-group" style={{ gridColumn: '1 / -1' }}>
+                        <label className="report-input-label">Joint Organization Name</label>
+                        <input className="report-form-input" name="jointOrganization" value={formData.jointOrganization} onChange={handleChange} placeholder="Name of the partner organization" />
+                    </div>
+                )}
+                <div className="input-group">
                     <label className="report-input-label">Avenue</label>
                     <select className="report-form-input" name="avenue" value={formData.avenue} onChange={handleChange}>
                         <option>Club Service</option>
@@ -290,15 +303,14 @@ const ReportGenerator = ({ user, reportData, onSave, onCancel, isAdmin = false }
             <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
                 <div className="input-group">
                     <label className="report-input-label">Completion Report</label>
-                    <textarea className="report-form-input" name="report" value={formData.report} onChange={handleChange} placeholder="Detailed report of what happened..." />
-                </div>
-                <div className="input-group">
-                    <label className="report-input-label">Why this event?</label>
-                    <textarea className="report-form-input" name="why" value={formData.why} onChange={handleChange} placeholder="Purpose and rationale..." />
-                </div>
-                <div className="input-group">
-                    <label className="report-input-label">Impact</label>
-                    <textarea className="report-form-input" name="impact" value={formData.impact} onChange={handleChange} placeholder="Outcome and benefits..." />
+                    <textarea
+                        className="report-form-input"
+                        name="report"
+                        value={formData.report}
+                        onChange={handleChange}
+                        placeholder="Detailed report of what happened, why this event and impact of the event."
+                        style={{ minHeight: '160px' }}
+                    />
                 </div>
             </div>
 

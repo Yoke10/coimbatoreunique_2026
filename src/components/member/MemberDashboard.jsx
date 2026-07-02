@@ -93,15 +93,7 @@ const MemberDashboard = ({ user, onLogout }) => {
     // 2. Fetch Members (only when tab is directory)
     const { data: members = [] } = useQuery({
         queryKey: ['members'],
-        queryFn: async () => {
-            const allUsers = await firebaseService.getUsers()
-            // Filter: Must be 'member' AND not have 'admin' in email/username
-            return allUsers.filter(u =>
-                u.role === 'member' &&
-                !u.email.toLowerCase().includes('admin') &&
-                !u.username?.toLowerCase().includes('admin')
-            )
-        },
+        queryFn: firebaseService.getMembers,
         enabled: activeTab === 'directory', // Lazy fetch
         staleTime: 5 * 60 * 1000
     })
@@ -295,7 +287,7 @@ const MemberDashboard = ({ user, onLogout }) => {
                         {activeTab === 'treasury' && (
                             <div className="member-treasury-section">
                                 <React.Suspense fallback={<div className="p-4 text-center">Loading Treasury...</div>}>
-                                    <TreasuryReportManager />
+                                    <TreasuryReportManager hideBrand />
                                 </React.Suspense>
                             </div>
                         )}

@@ -71,11 +71,11 @@ const drawReportOnDoc = (doc, data) => {
     let y = margin
 
     const colors = {
-        navy: [0, 51, 102], // Navy blue
+        navy: [44, 0, 95],       // Very dark purple
         black: [30, 30, 30],
         grey: [100, 110, 120],
-        lightBg: [245, 248, 252], // Light blue tint
-        tableHeader: [225, 235, 245] // Soft blue
+        lightBg: [245, 240, 255],   // Very light purple tint
+        tableHeader: [220, 200, 250] // Soft lavender
     }
 
     // Draw the page footer: a thin rule + page number at the bottom
@@ -239,7 +239,8 @@ const drawReportOnDoc = (doc, data) => {
         { label: "EVENT CHAIR", value: data.eventChair },
         { label: "LOCATION", value: data.location },
         { label: "AVENUE", value: data.avenue },
-        { label: "DATE", value: formatDate(data.eventDate) }
+        { label: "DATE", value: formatDate(data.eventDate) },
+        { label: "JOINT PROJECT", value: data.isJointProject === 'Yes' ? `Yes — ${data.jointOrganization || 'N/A'}` : 'No' },
     ]
     const metaStartY = y
     const colW = contentWidth / 2
@@ -256,12 +257,8 @@ const drawReportOnDoc = (doc, data) => {
     y = metaStartY + (2 * 12) + 15
 
     // SECTIONS
-    drawSectionLabel("DESCRIPTION")
-    drawBodyText(data.description)
-
-    // ATTENDANCE CARD
-    ensureSpace(40)
-    drawSectionLabel("ATTENDANCE SUMMARY")
+    drawSectionLabel("COMPLETION REPORT")
+    drawBodyText(data.report || data.description)
     doc.setFillColor(...colors.lightBg)
     doc.setDrawColor(220)
     doc.roundedRect(margin, y, contentWidth, 22, 2, 2, 'FD')
@@ -283,12 +280,9 @@ const drawReportOnDoc = (doc, data) => {
     })
     y += 35
 
-    drawSectionLabel("COMPLETION REPORT")
-    drawBodyText(data.report)
-    drawSectionLabel("WHY THIS EVENT")
-    drawBodyText(data.why)
-    drawSectionLabel("IMPACT OF THE EVENT")
-    drawBodyText(data.impact)
+    // ATTENDANCE CARD
+    ensureSpace(40)
+    drawSectionLabel("ATTENDANCE SUMMARY")
 
     // FINANCIALS
     if (data.income && data.income.length > 0) {
@@ -392,15 +386,15 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     const contentWidth = pageWidth - margin * 2
     let y = margin
 
-    // Navy blue theme colors
+    // Dark purple theme colors matching the website palette
     const colors = {
-        navy: [0, 51, 102], // Navy blue
+        navy: [44, 0, 95],           // Very dark purple
         black: [30, 30, 30],
-        red: [220, 53, 69], // Red for negative balances
-        lightBlueBg: [225, 235, 245], // Soft blue for headers
-        lighterBlueBg: [245, 248, 252], // Very light blue for rows
+        red: [220, 53, 69],           // Red for negative balances
+        lightBlueBg: [220, 200, 250], // Soft lavender for headers
+        lighterBlueBg: [240, 233, 255], // Very light purple for rows
         white: [255, 255, 255],
-        border: [180, 200, 220] // Soft border
+        border: [190, 165, 225]       // Soft purple border
     }
 
     const ensureSpace = (heightNeeded) => {
@@ -564,12 +558,13 @@ const drawTreasuryReportOnDoc = (doc, data) => {
     drawCell("OVERALL FINANCIAL OVERVIEW", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
     y += rowH
 
-    const totalIncome = Number(data.totalEventIncome || 0) + Number(data.totalDuesIncome || 0)
+    const totalIncome = Number(data.totalEventIncome || 0) + Number(data.totalDuesIncome || 0) + Number(data.carryForwardAmount || 0)
 
     const summaryColW1 = contentWidth * 0.50
     const summaryColW2 = contentWidth * 0.50
 
     const summaryRows = [
+        ["PREVIOUS YEAR CARRY FORWARD", formatCurrencyPDF(data.carryForwardAmount)],
         ["TOTAL CLUB DUES", formatCurrencyPDF(data.totalDuesIncome)],
         ["TOTAL INCOME", formatCurrencyPDF(totalIncome)],
         ["TOTAL EXPENSE", formatCurrencyPDF(data.totalEventExpense)]
@@ -673,11 +668,11 @@ const drawTreasuryReportOnDoc = (doc, data) => {
 
     // GRAND TOTAL SUMMARY
     y += 10
-    ensureSpace(rowH * 4)
+    ensureSpace(rowH * 5)
     drawCell("GRAND TOTAL SUMMARY", margin, y, contentWidth, rowH, colors.lightBlueBg, 'center', 'bold')
     y += rowH
 
-    const grandTotalIncome = Number(data.totalEventIncome || 0) + Number(data.totalDuesIncome || 0)
+    const grandTotalIncome = Number(data.totalEventIncome || 0) + Number(data.totalDuesIncome || 0) + Number(data.carryForwardAmount || 0)
     const grandTotalExpense = Number(data.totalEventExpense || 0)
     const grandBalance = grandTotalIncome - grandTotalExpense
 

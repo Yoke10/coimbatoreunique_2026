@@ -2,39 +2,19 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import TeamMemberCard from '../team/TeamMemberCard'
 import './OurTeamSection.css'
-const groupPic = '/images/grouppic.webp'
+import TeamMemberCardSkeleton from '../team/TeamMemberCardSkeleton'
+import { firebaseService } from '../../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const OurTeamSection = () => {
-    const teamMembers = [
-        {
-            id: 1,
-            name: "John Doe",
-            designation: "President",
-            message: "Leading with passion and dedication to serve our community",
-            image: groupPic
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            designation: "Secretary",
-            message: "Organizing excellence and keeping our club running smoothly",
-            image: groupPic
-        },
-        {
-            id: 3,
-            name: "Mike Johnson",
-            designation: "Immediate Past President",
-            message: "Guiding with experience and wisdom from past leadership",
-            image: groupPic
-        },
-        {
-            id: 4,
-            name: "Sarah Williams",
-            designation: "Treasurer",
-            message: "Managing resources to maximize our community impact",
-            image: groupPic
-        }
-    ]
+    const { data: members = [], isLoading: loading } = useQuery({
+        queryKey: ['boardMembers'],
+        queryFn: firebaseService.getBoardMembers,
+        staleTime: 0,
+        refetchOnMount: true,
+    })
+
+    const topMembers = members.slice(0, 3)
 
     return (
         <section className="team-section section">
@@ -42,19 +22,24 @@ const OurTeamSection = () => {
                 <h2 className="section-title">Our Team</h2>
 
                 <div className="team-grid">
-                    {teamMembers
-                        .filter(member =>
-                            ["President", "Secretary", "Immediate Past President"].includes(member.designation)
-                        )
-                        .map((member) => (
+                    {loading ? (
+                        [1, 2, 3].map((i) => (
+                            <TeamMemberCardSkeleton key={i} />
+                        ))
+                    ) : topMembers.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '2rem', color: '#666', width: '100%' }}>No team members added yet.</div>
+                    ) : (
+                        topMembers.map((member, index) => (
                             <TeamMemberCard
                                 key={member.id}
                                 name={member.name}
-                                role={member.designation}
+                                role={member.role}
                                 image={member.image}
                                 message={member.message}
+                                priority={index < 3}
                             />
-                        ))}
+                        ))
+                    )}
                 </div>
 
                 <div className="team-view-more">

@@ -31,7 +31,9 @@ const COLLECTIONS = {
     BOARD: 'board_members',
     TEMPLATES: 'email_templates',
     CALENDAR_DAYS: 'calendar_days',
-    TREASURY: 'treasury'
+    TREASURY: 'treasury',
+    OFFICIALS: 'club_officials',
+    ANNOUNCEMENTS: 'announcements'
 };
 
 // Helper to map doc snapshot to object
@@ -300,6 +302,14 @@ export const firebaseService = {
 
     // USERS / MEMBERS
     getUsers: () => firebaseService.getAll(COLLECTIONS.USERS),
+    getMembers: async () => {
+        const users = await firebaseService.getAll(COLLECTIONS.USERS);
+        return users.filter(u => 
+            u.role !== 'admin' && 
+            !String(u.email || '').toLowerCase().includes('admin') &&
+            !String(u.username || '').toLowerCase().includes('admin')
+        );
+    },
 
     generateMemberId: async () => {
         const counterRef = doc(db, COLLECTIONS.CONFIG, 'member_id_counter');
@@ -410,6 +420,24 @@ export const firebaseService = {
     addBoardMember: (member) => firebaseService.add(COLLECTIONS.BOARD, { ...member, createdAt: Date.now() }),
     deleteBoardMember: (id) => firebaseService.delete(COLLECTIONS.BOARD, id),
     updateBoardMember: (id, updates) => firebaseService.update(COLLECTIONS.BOARD, id, updates),
+
+    // CLUB OFFICIALS
+    getClubOfficials: async () => {
+        const officials = await firebaseService.getAll(COLLECTIONS.OFFICIALS);
+        return officials.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    },
+    addClubOfficial: (official) => firebaseService.add(COLLECTIONS.OFFICIALS, { ...official, createdAt: Date.now() }),
+    deleteClubOfficial: (id) => firebaseService.delete(COLLECTIONS.OFFICIALS, id),
+    updateClubOfficial: (id, updates) => firebaseService.update(COLLECTIONS.OFFICIALS, id, updates),
+
+    // ANNOUNCEMENTS
+    getAnnouncements: async () => {
+        const items = await firebaseService.getAllPublic(COLLECTIONS.ANNOUNCEMENTS);
+        return items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    },
+    addAnnouncement: (announcement) => firebaseService.add(COLLECTIONS.ANNOUNCEMENTS, { ...announcement, createdAt: Date.now() }),
+    deleteAnnouncement: (id) => firebaseService.delete(COLLECTIONS.ANNOUNCEMENTS, id),
+    updateAnnouncement: (id, updates) => firebaseService.update(COLLECTIONS.ANNOUNCEMENTS, id, updates),
 
     // STORAGE HELPERS (New)
     uploadFile: async (file, path) => {
@@ -564,7 +592,7 @@ export const firebaseService = {
     saveClubConfig: async (config) => {
         await firebaseService.waitForAuth();
         // we use setDoc to overwrite/merge 'config' doc
-        await setDoc(doc(db, COLLECTIONS.CONFIG, 'config'), config);
+        await setDoc(doc(db, COLLECTIONS.CONFIG, 'config'), config, { merge: true });
     },
 
     getEmailTemplates: () => firebaseService.getAll(COLLECTIONS.TEMPLATES),

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Calendar, FileText, BookOpen, Image, Users, MessagesSquare,
-    UserPlus, HardDrive, Mail, Trash2, LogOut, LayoutDashboard, X, Star, DollarSign, Building2
+    UserPlus, HardDrive, Mail, Trash2, LogOut, LayoutDashboard, X, Star, DollarSign, Building2, Bell
 } from 'lucide-react';
 import {
     AlertDialog,
@@ -29,10 +29,12 @@ const Sidebar = ({
 
     const menuItems = [
         { id: 'events', label: 'Events', icon: Calendar },
+        { id: 'announcements', label: 'Announcements', icon: Bell },
         { id: 'calendar', label: 'Important Days', icon: Star },
         { id: 'bulletin', label: 'Bulletin', icon: FileText },
         { id: 'scrapbook', label: 'Scrapbook', icon: BookOpen },
         { id: 'gallery', label: 'Gallery', icon: Image },
+        { id: 'officials', label: 'Club Officials', icon: UserPlus },
         { id: 'board', label: 'Board Members', icon: Users },
         { id: 'members', label: 'Members', icon: Users },
         { id: 'support', label: 'Support', icon: MessagesSquare },

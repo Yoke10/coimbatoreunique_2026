@@ -42,12 +42,11 @@ const JoinUsSection = () => {
                         <span className="join-us-subtitle">BE PART OF SOMETHING GREATER</span>
                         <h2 className="join-us-title">WHY JOIN US?</h2>
                         <p className="join-us-text">
-                            Join Rotaract Club of Coimbatore Cosmopolitan and become
-                            part of a dynamic community dedicated to service, leadership,
-                            and positive change. Engage in impactful projects, develop
-                            lifelong friendships, and grow as a leader while making a
-                            difference in society. Together, let's inspire action and create a
-                            better tomorrow.
+                            Join the Rotaract Club of Coimbatore Unique and be part of a passionate
+                            community committed to service, leadership, and positive change. Take part
+                            in impactful initiatives, form lifelong friendships, and develop leadership
+                            skills while contributing meaningfully to society. Together, we work towards
+                            a brighter, more inclusive, and better tomorrow.
                         </p>
                     </div>
 
@@ -67,9 +66,10 @@ const JoinUsSection = () => {
                             <div className="interactive-card-inner">
                                 <h3 className="card-title">Ready to Make a Difference?</h3>
                                 <p className="card-text">
-                                    Take the first step towards personal growth,
-                                    community service, and lifelong
+                                    Take the first step toward becoming a leader,
+                                    serving the community, and building lifelong
                                     connections.
+
                                 </p>
                                 <button
                                     className="join-btn"

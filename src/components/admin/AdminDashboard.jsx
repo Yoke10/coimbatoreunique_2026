@@ -4,10 +4,12 @@ import React, { useState, useEffect } from 'react'
 import AdminLayout from './layout/AdminLayout'
 
 const EventsView = React.lazy(() => import('./views/EventsView'))
+const AnnouncementsView = React.lazy(() => import('./views/AnnouncementsView'))
 const BulletinView = React.lazy(() => import('./views/BulletinView'))
 const ScrapbookView = React.lazy(() => import('./views/ScrapbookView'))
 const GalleryView = React.lazy(() => import('./views/GalleryView'))
 const BoardMembersView = React.lazy(() => import('./views/BoardMembersView'))
+const ClubOfficialsView = React.lazy(() => import('./views/ClubOfficialsView'))
 const SupportView = React.lazy(() => import('./views/SupportView'))
 const JoiningEnquiryView = React.lazy(() => import('./views/JoiningEnquiryView'))
 const MembersView = React.lazy(() => import('./views/MembersView'))
@@ -56,11 +58,13 @@ const AdminDashboard = ({ user, onLogout }) => {
                 {(() => {
                     switch (activeSection) {
                         case 'events': return <EventsView />
+                        case 'announcements': return <AnnouncementsView />
                         case 'calendar': return <CalendarManagerView />
                         case 'bulletin': return <BulletinView />
                         case 'scrapbook': return <ScrapbookView />
                         case 'gallery': return <GalleryView />
                         case 'board': return <BoardMembersView />
+                        case 'officials': return <ClubOfficialsView />
                         case 'support': return <SupportView />
                         case 'joining': return <JoiningEnquiryView />
                         case 'members': return <MembersView />

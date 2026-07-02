@@ -1,36 +1,18 @@
 import React, { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import './ClubOfficialsSection.css'
+import { firebaseService } from '../../services/firebaseService'
+import { useQuery } from '@tanstack/react-query'
 
 const ClubOfficialsSection = () => {
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const officials = [
-        {
-            name: "John Doe",
-            role: "President",
-            message: "Leading with passion and purpose to create lasting change in our community.Leading with passion and purpose to create lasting change in our community.Leading with passion and purpose to create lasting change in our community.Leading with passion and purpose to create lasting change in our community.",
-            image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-        },
-        {
-            name: "Jane Smith",
-            role: "Secretary",
-            message: "Ensuring smooth operations and effective communication for our club's success.",
-            image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-        },
-        {
-            name: "Mike Johnson",
-            role: "IPP",
-            message: "Guiding the new leadership with experience and wisdom from the past year.",
-            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-        },
-        {
-            name: "Sarah Wilson",
-            role: "Advisor",
-            message: "Mentoring the next generation of leaders to reach their full potential.",
-            image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-        }
-    ]
+    const { data: officials = [], isLoading } = useQuery({
+        queryKey: ['clubOfficials'],
+        queryFn: firebaseService.getClubOfficials,
+        staleTime: 0,
+        refetchOnMount: true,
+    });
 
     const nextSlide = () => {
         setActiveIndex((prev) => (prev + 1) % officials.length);
@@ -57,7 +39,13 @@ const ClubOfficialsSection = () => {
         <section className="officials-section">
             <h2 className="officials-title">Club Officials</h2>
 
-            <div className="carousel-container">
+            {isLoading ? (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>Loading officials...</div>
+            ) : officials.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>No club officials added yet.</div>
+            ) : (
+                <>
+                    <div className="carousel-container">
                 <button className="nav-btn prev" onClick={prevSlide} aria-label="Previous Official">
                     <ChevronLeft size={32} />
                 </button>
@@ -94,16 +82,18 @@ const ClubOfficialsSection = () => {
                 </button>
             </div>
 
-            {/* Dots indicator */}
-            <div className="carousel-dots">
-                {officials.map((_, index) => (
-                    <span
-                        key={index}
-                        className={`dot ${index === activeIndex ? 'active' : ''}`}
-                        onClick={() => setActiveIndex(index)}
-                    ></span>
-                ))}
-            </div>
+                    {/* Dots indicator */}
+                    <div className="carousel-dots">
+                        {officials.map((_, index) => (
+                            <span
+                                key={index}
+                                className={`dot ${index === activeIndex ? 'active' : ''}`}
+                                onClick={() => setActiveIndex(index)}
+                            ></span>
+                        ))}
+                    </div>
+                </>
+            )}
         </section>
     )
 }

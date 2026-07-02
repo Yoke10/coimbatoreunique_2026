@@ -22,7 +22,7 @@ const MembersView = () => {
     useEffect(() => { loadUsers(); }, []);
     const loadUsers = async () => {
         try {
-            const data = await firebaseService.getUsers();
+            const data = await firebaseService.getMembers();
             setUsers(data);
         }
         catch { toast({ title: "Error", description: "Failed to load users", variant: "destructive" }); }

@@ -17,6 +17,10 @@ const DEFAULTS = {
     rotaryLogo: null,
     districtLogo: null,
     clubLogo: null,
+    aboutImage1: null,
+    aboutImage2: null,
+    aboutImage3: null,
+    aboutImage4: null,
 };
 
 import { compressImage } from '../../../utils/imageUtils';
@@ -218,6 +222,41 @@ const ClubDetailsView = () => {
                         label="Club Logo"
                         value={formData.clubLogo}
                         field="clubLogo"
+                        onChange={handleLogoChange}
+                        isEditing={isEditing}
+                    />
+                </div>
+            </div>
+
+            {/* ABOUT US IMAGES */}
+            <div className="admin-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+                <h3 className="admin-section-title" style={{ marginTop: 0 }}>About Section Images <span style={{ fontSize: '0.8rem', color: 'var(--gray)', fontWeight: 'normal' }}>(WebP format only, max 2MB each)</span></h3>
+                <div className="club-logos-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+                    <LogoUploadBox
+                        label="About Image 1"
+                        value={formData.aboutImage1}
+                        field="aboutImage1"
+                        onChange={handleLogoChange}
+                        isEditing={isEditing}
+                    />
+                    <LogoUploadBox
+                        label="About Image 2"
+                        value={formData.aboutImage2}
+                        field="aboutImage2"
+                        onChange={handleLogoChange}
+                        isEditing={isEditing}
+                    />
+                    <LogoUploadBox
+                        label="About Image 3"
+                        value={formData.aboutImage3}
+                        field="aboutImage3"
+                        onChange={handleLogoChange}
+                        isEditing={isEditing}
+                    />
+                    <LogoUploadBox
+                        label="About Image 4"
+                        value={formData.aboutImage4}
+                        field="aboutImage4"
                         onChange={handleLogoChange}
                         isEditing={isEditing}
                     />
