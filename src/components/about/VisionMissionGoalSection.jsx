@@ -18,8 +18,8 @@ const VisionMissionGoalSection = () => {
                             </div>
                             <h3 className="vmg-title">Our Vision</h3>
                             <p className="vmg-text">
-                                To be a leading global community of young adults, taking action for positive change,
-                                fostering leadership, and building international understanding.
+                                To make Rotaraction a way of life by setting standards in service, leadership and meaningful
+                                community impact.
                             </p>
                         </div>
                     </GlowingCard>
@@ -32,9 +32,9 @@ const VisionMissionGoalSection = () => {
                             </div>
                             <h3 className="vmg-title">Our Mission</h3>
                             <p className="vmg-text">
-                                To provide an opportunity for young men and women to enhance the knowledge and skills
-                                that will assist them in personal development, to address the physical and social needs
-                                of their communities.
+                                To create a structured and inclusive environment where service, leadership, professional
+                                development and fellowship empower every member to contribute with purpose.
+
                             </p>
                         </div>
                     </GlowingCard>
@@ -47,8 +47,8 @@ const VisionMissionGoalSection = () => {
                             </div>
                             <h3 className="vmg-title">Our Goal</h3>
                             <p className="vmg-text">
-                                To empower youth to become effective leaders, responsible citizens, and to promote
-                                international peace and understanding through a global network of friendship and service.
+                                To build experiences that inspire people to return not just for the events we conduct, but for the
+                                values we uphold.
                             </p>
                         </div>
                     </GlowingCard>

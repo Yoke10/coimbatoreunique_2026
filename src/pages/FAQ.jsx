@@ -19,28 +19,28 @@ const FAQ = () => {
 
                 {/* Spacer/Empty cards for visual effect if desired, or filled with more Qs */}
                 <section className="faq-card accent-purple">
-                    <h2>Meeting Times?</h2>
-                    <p>We meet every 2nd and 4th Saturday at 6 PM.</p>
+                    <h2>Membership Fee?</h2>
+                    <p>Yes, with affordable annual membership.</p>
                 </section>
 
                 <section className="faq-card accent-magenta">
-                    <h2>Is it free?</h2>
-                    <p>There is a nominal annual fee to cover club administrative costs.</p>
+                    <h2>Time Commitment?</h2>
+                    <p>Even if you spend just an hour with us, it'll be worth it.</p>
                 </section>
 
                 <section className="faq-card accent-pink">
-                    <h2>Leadership?</h2>
-                    <p>Opportunities abound! You can lead committees or run for board positions.</p>
+                    <h2>Leadership Roles?</h2>
+                    <p>Yes, through projects, teams and club initiatives.</p>
                 </section>
 
                 <section className="faq-card accent-purple">
-                    <h2>Projects?</h2>
-                    <p>We focus on community service, professional development, and international service.</p>
+                    <h2>Recognition?</h2>
+                    <p>Your efforts never go unnoticed.</p>
                 </section>
 
                 <section className="faq-card accent-magenta">
                     <h2>Networking?</h2>
-                    <p>Connect with Rotarians and other young professionals locally and globally.</p>
+                    <p>Huge connection with professionals, Rotarians and fellow rotractors.</p>
                 </section>
 
                 <section className="faq-card accent-pink">
@@ -50,10 +50,25 @@ const FAQ = () => {
 
                 <section className="faq-card accent-purple">
                     <h2>Guest Policy?</h2>
-                    <p>Guests are always welcome to attend our meetings and see what we're about.</p>
+                    <p>Guests are always welcome to attend our meetings, events and see what we're about.</p>
+                </section>
+
+                <section className="faq-card accent-pink">
+                    <h2>Beyond Service?</h2>
+                    <p>Leadership, friendships, learning and unforgettable moments.</p>
+                </section>
+
+                <section className="faq-card accent-purple">
+                    <h2>Club Culture?</h2>
+                    <p>Friendly, supportive and driven by shared purpose</p>
                 </section>
 
                 <section className="faq-card accent-magenta">
+                    <h2>Long Term Value?</h2>
+                    <p>Years later, you'll still be grateful you joined</p>
+                </section>
+
+                <section className="faq-card accent-pink">
                     <h2>Contact?</h2>
                     <p>Reach out via our 'Contact Us' page or DM us on Instagram.</p>
                 </section>

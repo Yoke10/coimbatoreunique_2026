@@ -42,11 +42,11 @@ const JoinUsSection = () => {
                         <span className="join-us-subtitle">BE PART OF SOMETHING GREATER</span>
                         <h2 className="join-us-title">WHY JOIN US?</h2>
                         <p className="join-us-text">
-                            Join the Rotaract Club of Coimbatore Unique and be part of a passionate
-                            community committed to service, leadership, and positive change. Take part
-                            in impactful initiatives, form lifelong friendships, and develop leadership
-                            skills while contributing meaningfully to society. Together, we work towards
-                            a brighter, more inclusive, and better tomorrow.
+                            At <b>Rotaract Club of Coimbatore Unique</b>, we believe growth comes from experiences that
+                            matter. Through community service, leadership, professional development and meaningful
+                            connections, we bring together people from different walks of life with one shared purpose - to
+                            create positive change.
+
                         </p>
                     </div>
 
@@ -64,11 +64,10 @@ const JoinUsSection = () => {
                             }}
                         >
                             <div className="interactive-card-inner">
-                                <h3 className="card-title">Ready to Make a Difference?</h3>
+                                <h3 className="card-title">What if every opportunity could create an impact?</h3>
                                 <p className="card-text">
-                                    Take the first step toward becoming a leader,
-                                    serving the community, and building lifelong
-                                    connections.
+                                    Join us in building a community where every act of service creates a meaningful impact.
+
 
                                 </p>
                                 <button

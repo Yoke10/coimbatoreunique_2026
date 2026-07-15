@@ -13,7 +13,9 @@ const PrayerAndTestSection = () => {
                         <div className="content">
                             <h2 className="card-title">Rotaract Prayer</h2>
                             <p className="prayer-text">
-                                <em> " Oh! God! Our Almighty Father & Ruler of the Universe, We thank thee for the inspiration you have given us for the Rotaract movement based upon Fellowship through Service. We humbly beg you to continue thy grace to enable us to do Our Service to ourselves and to our neighbors and to honor and glory of thy holy name. "</em><br />
+                                <em> " Oh! God! Our Almighty Father & Ruler of the Universe,
+                                    We thank thee for the inspiration you have given us for the Rotaract movement based upon Service through Mankind.
+                                    We humbly beg you to continue thy grace to enable us to do Our Service to ourselves and to our neighbors and to honor and glory of thy holy name. "</em><br />
                             </p>
                         </div>
                     </div>
@@ -27,7 +29,7 @@ const PrayerAndTestSection = () => {
                             <ol className="test-list">
                                 <li>Is it the <strong>TRUTH</strong>?</li>
                                 <li>Is it <strong>FAIR</strong> to all concerned?</li>
-                                <li>Will it build <strong>GOODWILL</strong> and better friendships?</li>
+                                <li>Will it build <strong>GOODWILL</strong> and <strong>BETTER FRIENDSHIP</strong>?</li>
                                 <li>Will it be <strong>BENEFICIAL</strong> to all concerned?</li>
                             </ol>
                         </div>
