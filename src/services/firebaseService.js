@@ -295,9 +295,13 @@ export const firebaseService = {
         return { id: 'global', ...snap.data() }
     },
     updateTreasury: async (updates) => {
-        const treasuryRef = doc(db, COLLECTIONS.TREASURY, 'global')
-        await firebaseService.waitForAuth()
-        await updateDoc(treasuryRef, { ...updates, updatedAt: new Date().toISOString() })
+        const authUser = await firebaseService.waitForAuth();
+        if (!authUser) {
+            throw new Error("Security check failed: Session not found. Please login again.");
+        }
+        const treasuryRef = doc(db, COLLECTIONS.TREASURY, 'global');
+        await setDoc(treasuryRef, { ...updates, updatedAt: new Date().toISOString() }, { merge: true });
+        await waitForPendingWrites(db);
     },
 
     // USERS / MEMBERS
