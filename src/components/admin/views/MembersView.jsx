@@ -67,6 +67,7 @@ const MembersView = () => {
         setIsEditing(editMode);
         setEditForm({
             username: user.username,
+            email: user.email, // Login email
             role: user.role,
             memberId: user.memberId || '',
             ...user.profile
@@ -76,10 +77,11 @@ const MembersView = () => {
     const handleEditSave = async () => {
         try {
             // Separte profile fields from root user fields
-            const { username, role, memberId, ...profileData } = editForm;
+            const { username, role, memberId, email, ...profileData } = editForm;
             // We update root fields and profile object
             await firebaseService.updateUser(selectedUser.id, {
                 username,
+                email, // Update login email in DB
                 role,
                 memberId, // Allow admin to edit Member ID? Usually restricted but useful for fixes.
                 profile: profileData
@@ -166,9 +168,11 @@ const MembersView = () => {
                     <AdminInput label="Profession" value={editForm.profession || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, profession: e.target.value })} />
 
                     {/* Personal */}
-                    <AdminInput label="Email" value={editForm.email || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, email: e.target.value })} />
+                    <AdminInput label="Login Email" value={editForm.email || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, email: e.target.value })} />
+                    <AdminInput label="Rotaract Email" value={editForm.rotaractEmail || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, rotaractEmail: e.target.value })} />
                     <AdminInput label="Phone" value={editForm.contact || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, contact: e.target.value })} />
                     <AdminInput label="DOB" type="date" value={editForm.dob || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, dob: e.target.value })} />
+                    <AdminInput label="Member Since (Year)" type="number" value={editForm.memberSince || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, memberSince: e.target.value })} />
 
                     {/* Extra */}
                     <AdminInput label="RI ID" value={editForm.riId || ''} disabled={!isEditing} onChange={e => setEditForm({ ...editForm, riId: e.target.value })} />

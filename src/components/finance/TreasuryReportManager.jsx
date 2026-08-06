@@ -20,7 +20,7 @@ const createMemberDue = (member) => ({
   id: member.id,
   memberId: member.id,
   memberName: member.profile?.fullName || member.username || member.email || 'Unknown Member',
-  email: member.profile?.personalEmail || member.profile?.email || member.email || '',
+  email: member.profile?.rotaractEmail || member.profile?.personalEmail || member.profile?.email || member.email || '',
   dueAmount: 2000, // Default due amount, can be changed
   payments: [],
 })
@@ -167,8 +167,7 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
   const [showInstallmentDatePicker, setShowInstallmentDatePicker] = useState(false)
   const [datePickerData, setDatePickerData] = useState(null)
   const [isInitialized, setIsInitialized] = useState(false)
-  const [showPreviewModal, setShowPreviewModal] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState(null)
+
   const isDirtyRef = useRef(false)
 
   const updateTreasury = (updater) => {
@@ -186,6 +185,18 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
       duesSample: (base.dues || [])[0],
     })
     
+    // Check if there are existing club due settings we should apply to new members
+    const firstMemberWithDues = (base.dues || []).find(d => d.installmentAmounts && d.installmentAmounts.length > 0);
+    const defaultDueSettings = firstMemberWithDues ? {
+      dueAmount: firstMemberWithDues.dueAmount || 2000,
+      installmentsCount: firstMemberWithDues.installmentsCount || firstMemberWithDues.installmentAmounts.length,
+      installmentAmounts: [...firstMemberWithDues.installmentAmounts],
+      installments: firstMemberWithDues.installmentAmounts.map(amount => ({ amount, paid: false, date: '' })),
+    } : {
+      dueAmount: 2000,
+      payments: []
+    };
+
     // Preserve existing dues from Firebase - don't recreate them, but scrub any rogue admin dues
     const persistedDues = (base.dues || [])
       .filter(due => {
@@ -193,16 +204,39 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
         const name = String(due.memberName || '').toLowerCase()
         return !email.includes('admin') && !name.includes('admin')
       })
-      .map(due => ({
-        ...due,
-        payments: Array.isArray(due.payments) ? due.payments : [],
-      }))
+      .map(due => {
+        const member = users.find(u => u.id === due.memberId || u.id === due.id)
+        
+        let dueWithSettings = { ...due }
+        
+        // If they have no installments set but club defaults exist, give them the defaults
+        if ((!due.installments || due.installments.length === 0) && firstMemberWithDues) {
+            dueWithSettings = {
+                ...dueWithSettings,
+                dueAmount: defaultDueSettings.dueAmount,
+                installmentsCount: defaultDueSettings.installmentsCount,
+                installmentAmounts: [...defaultDueSettings.installmentAmounts],
+                installments: defaultDueSettings.installments.map(inst => ({...inst}))
+            }
+        }
+
+        return {
+          ...dueWithSettings,
+          memberName: member ? (member.profile?.fullName || member.username || member.email || 'Unknown Member') : dueWithSettings.memberName,
+          email: member ? (member.profile?.rotaractEmail || member.profile?.personalEmail || member.profile?.email || member.email || '') : dueWithSettings.email,
+          payments: Array.isArray(dueWithSettings.payments) ? dueWithSettings.payments : [],
+        }
+      })
 
     // Only create new dues for members that don't exist in persisted list
     const allMemberIds = new Set([...persistedDues.map(d => d.memberId), ...persistedDues.map(d => d.id)])
+    
     const newMemberDues = users
       .filter(member => !allMemberIds.has(member.id))
-      .map(member => createMemberDue(member))
+      .map(member => ({
+        ...createMemberDue(member),
+        ...defaultDueSettings
+      }))
 
     const newTreasury = {
       id: base.id || 'global',
@@ -705,8 +739,7 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
 
   const handlePreviewPDF = async () => {
     const blobUrl = await generateTreasuryPDF(getReportData(), 'bloburl')
-    setPreviewUrl(blobUrl)
-    setShowPreviewModal(true)
+    window.open(blobUrl, '_blank')
   }
 
   if (usersLoading || treasuryLoading) {
@@ -1262,23 +1295,7 @@ const TreasuryReportManager = ({ hideBrand = false }) => {
         </div>
       )}
 
-      {showPreviewModal && previewUrl && (
-        <div className="modal-overlay" onClick={() => setShowPreviewModal(false)} style={{ zIndex: 1000 }}>
-          <div className="modal-content preview-modal" style={{ width: '90%', height: '90vh', maxWidth: '1000px', display: 'flex', flexDirection: 'column', padding: 0 }} onClick={e => e.stopPropagation()}>
-            <div className="modal-header" style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #eee' }}>
-              <h4>Treasury Report Preview</h4>
-              <button className="btn-icon" onClick={() => setShowPreviewModal(false)}><X size={16} /></button>
-            </div>
-            <div className="modal-body" style={{ flex: 1, padding: 0, overflow: 'hidden' }}>
-              <iframe src={previewUrl} style={{ width: '100%', height: '100%', border: 'none' }} title="PDF Preview" />
-            </div>
-            <div className="modal-footer" style={{ padding: '1rem 1.5rem', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-              <button className="btn-secondary" onClick={() => setShowPreviewModal(false)}>Close Preview</button>
-              <button className="btn-primary outline" onClick={() => { handleDownloadPDF(); setShowPreviewModal(false); }}><Download size={16} /> Download PDF</button>
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
   )
 }

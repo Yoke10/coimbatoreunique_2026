@@ -95,7 +95,8 @@ const MemberProfile = ({ user, onUpdate, onLogout }) => {
         // Ensure defaults if missing
         addressLine1: u.profile?.addressLine1 || '',
         addressLine2: u.profile?.addressLine2 || '',
-        personalEmail: u.profile?.personalEmail || u.email || '', // Default to login email if missing
+        rotaractEmail: u.profile?.rotaractEmail || u.profile?.personalEmail || '', 
+        memberSince: u.profile?.memberSince || '',
         gender: u.profile?.gender || '',
         bloodGroup: u.profile?.bloodGroup || '',
         profession: u.profile?.profession || 'Student',
@@ -205,7 +206,7 @@ const MemberProfile = ({ user, onUpdate, onLogout }) => {
                         </div>
                         <div style={{ marginBottom: '0.8rem', display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ color: '#718096', fontSize: '0.9rem' }}>Member Since</span>
-                            <span style={{ color: '#4a5568', fontWeight: '600' }}>2024</span>
+                            <span style={{ color: '#4a5568', fontWeight: '600' }}>{user.profile?.memberSince || '-'}</span>
                         </div>
                         <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
                             <div style={{ fontSize: '0.75rem', color: '#a0aec0', marginBottom: '0.2rem' }}>LOGIN ID</div>
@@ -277,6 +278,7 @@ const MemberProfile = ({ user, onUpdate, onLogout }) => {
 
                         <InfoRow label="Full Name" field="fullName" value={formData.fullName} isEditing={isEditing} formData={formData} onChange={handleChange} required />
                         <InfoRow label="Date of Birth" field="dob" value={formData.dob} isEditing={isEditing} formData={formData} onChange={handleChange} type="date" />
+                        <InfoRow label="Member Since (Year)" field="memberSince" value={formData.memberSince} isEditing={isEditing} formData={formData} onChange={handleChange} type="number" />
 
                         <InfoRow label="Gender" field="gender" value={formData.gender} isEditing={isEditing} formData={formData} onChange={handleChange} type="select" options={GENDERS} />
                         <InfoRow label="Blood Group" field="bloodGroup" value={formData.bloodGroup} isEditing={isEditing} formData={formData} onChange={handleChange} type="select" options={BLOOD_GROUPS} />
@@ -286,7 +288,7 @@ const MemberProfile = ({ user, onUpdate, onLogout }) => {
                             <h4 style={sectionHeaderStyle}>Contact Information</h4>
                         </div>
 
-                        <InfoRow label="Personal Email" field="personalEmail" value={formData.personalEmail} isEditing={isEditing} formData={formData} onChange={handleChange} type="email" />
+                        <InfoRow label="Rotaract Email" field="rotaractEmail" value={formData.rotaractEmail} isEditing={isEditing} formData={formData} onChange={handleChange} type="email" />
                         <InfoRow label="Phone Number" field="contact" value={formData.contact} isEditing={isEditing} formData={formData} onChange={handleChange} type="tel" />
 
                         {/* Address: Full Width */}
