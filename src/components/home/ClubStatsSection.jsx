@@ -6,7 +6,7 @@ const ClubStatsSection = () => {
         years: 0,
         members: 0,
         projects: 0,
-        awards: 0,
+        impacts: 0,
         hours: 0
     })
 
@@ -15,10 +15,10 @@ const ClubStatsSection = () => {
 
     const finalCounts = {
         years: 25,
-        members: 45,
-        projects: 150,
-        awards: 12,
-        hours: 5000
+        members: 25,
+        projects: 1000,
+        impacts: 50000,
+        hours: 30000
     }
 
     useEffect(() => {
@@ -87,10 +87,10 @@ const ClubStatsSection = () => {
 
     const stats = [
         { key: 'years', label: 'Years of Service', desc: 'Serving since 2000' },
+        { key: 'projects', label: 'Projects Done', desc: 'Creating lasting impact' },
         { key: 'members', label: 'Active Members', desc: 'Passionate leaders' },
-        { key: 'projects', label: 'Projects Done', desc: 'Community impact' },
-        { key: 'awards', label: 'Awards Won', desc: 'Excellence recognized' },
-        { key: 'hours', label: 'Volunteer Hours', desc: 'Dedicated service' }
+        { key: 'impacts', label: 'Lives Impacted', desc: 'Transforming communities' },
+        { key: 'hours', label: 'Volunteer Hours', desc: 'Selfless service' }
     ]
 
     return (
