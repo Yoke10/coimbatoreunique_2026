@@ -1,63 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://www.rotaractunique.org/</loc>
+    <loc>https://raccoimbatoreunique.in/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/about</loc>
+    <loc>https://raccoimbatoreunique.in/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/team</loc>
+    <loc>https://raccoimbatoreunique.in/team</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/events</loc>
+    <loc>https://raccoimbatoreunique.in/events</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/bulletin</loc>
+    <loc>https://raccoimbatoreunique.in/bulletin</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/gallery</loc>
+    <loc>https://raccoimbatoreunique.in/gallery</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/scrapbook</loc>
+    <loc>https://raccoimbatoreunique.in/scrapbook</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/resources</loc>
+    <loc>https://raccoimbatoreunique.in/resources</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/contact</loc>
+    <loc>https://raccoimbatoreunique.in/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/join</loc>
+    <loc>https://raccoimbatoreunique.in/join</loc>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/faq</loc>
+    <loc>https://raccoimbatoreunique.in/faq</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
+
   <url>
-    <loc>https://www.rotaractunique.org/terms</loc>
+    <loc>https://raccoimbatoreunique.in/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+
 </urlset>

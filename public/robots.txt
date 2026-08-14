@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.rotaractunique.org/sitemap.xml
+Sitemap: https://raccoimbatoreunique.in/sitemap.xml
