@@ -84,7 +84,7 @@ const VideoSection = () => {
                         {/* YouTube Embed */}
                         <div className="video-embed-wrapper">
                             <iframe
-                                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+                                src={`https://www.youtube.com/embed/_4HUGTVdQ4o?si=I30sAu-8SUR14b_R&autoplay=1`}
                                 title="Rotaract Club Video"
                                 frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
