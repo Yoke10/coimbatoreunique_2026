@@ -38,7 +38,7 @@ const AboutUsSection = () => {
                     </div>
 
                     {/* RIGHT CONTENT */}
-                    <div className="about-content">
+                    <div className="about-content" data-nosnippet>
                         <h2>About</h2>
 
                         <p>

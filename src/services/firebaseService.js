@@ -168,6 +168,26 @@ export const firebaseService = {
         return querySnapshot.docs.map(mapDoc);
     },
 
+    publicAdd: async (collectionName, data) => {
+        try {
+            const docRef = await addDoc(collection(db, collectionName), data);
+            
+            // Wait for server confirmation, but timeout after 5 seconds to prevent UI hanging 
+            // if Firestore Security Rules block the write.
+            await Promise.race([
+                waitForPendingWrites(db),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error("Write timed out. Check Firebase Security Rules.")), 5000)
+                )
+            ]);
+
+            return { id: docRef.id, ...data };
+        } catch (e) {
+            console.error("[Firebase Public Add] Failed:", e);
+            throw e;
+        }
+    },
+
     add: async (collectionName, data) => {
         const authUser = await firebaseService.waitForAuth();
 
@@ -261,12 +281,16 @@ export const firebaseService = {
 
     // SUPPORT
     getSupportMessages: () => firebaseService.getAll(COLLECTIONS.SUPPORT),
-    addSupportMessage: (msg) => firebaseService.add(COLLECTIONS.SUPPORT, msg),
+    addSupportMessage: async (msg) => {
+        return await firebaseService.publicAdd(COLLECTIONS.SUPPORT, msg);
+    },
     deleteSupportMessage: (id) => firebaseService.delete(COLLECTIONS.SUPPORT, id),
 
     // JOIN REQUESTS
     getJoinRequests: () => firebaseService.getAll(COLLECTIONS.JOIN_REQUESTS),
-    addJoinRequest: (req) => firebaseService.add(COLLECTIONS.JOIN_REQUESTS, req),
+    addJoinRequest: async (req) => {
+        return await firebaseService.publicAdd(COLLECTIONS.JOIN_REQUESTS, req);
+    },
     deleteJoinRequest: (id) => firebaseService.delete(COLLECTIONS.JOIN_REQUESTS, id),
     updateJoinRequest: (id, updates) => firebaseService.update(COLLECTIONS.JOIN_REQUESTS, id, updates),
 
@@ -688,8 +712,8 @@ export const firebaseService = {
             }
 
             // 2. Get Config (Internal call)
-            // We use generic getAll lookup for config
-            const configDocs = await firebaseService.getAll(COLLECTIONS.CONFIG);
+            // We use generic getAllPublic lookup for config so public forms can use it
+            const configDocs = await firebaseService.getAllPublic(COLLECTIONS.CONFIG);
             const config = configDocs.find(d => d.id === 'config');
 
             const appScriptUrl = config?.apps_script_url;
