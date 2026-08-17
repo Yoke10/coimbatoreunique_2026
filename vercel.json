@@ -5,6 +5,20 @@
             "destination": "/index.html"
         }
     ],
+    "redirects": [
+        {
+            "source": "/:path((?!api).*)",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "raccoimbatoreunique.in"
+                }
+            ],
+            "destination": "https://www.raccoimbatoreunique.in/:path",
+            "permanent": true
+        }
+    ],
+    "trailingSlash": false,
     "headers": [
         {
             "source": "/assets/(.*)",

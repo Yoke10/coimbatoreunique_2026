@@ -7,6 +7,7 @@ import { ToastProvider, Toaster } from './components/ui/Toast/ToastContext'
 import Loading from './components/common/Loading'
 
 import ScrollToTop from './components/common/ScrollToTop'
+import SEOHead from './components/common/SEOHead'
 import './components/admin/AuthStyles.css' // Globally import auth styles
 
 // Lazy Load Pages
@@ -96,6 +97,7 @@ const App = () => {
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ToastProvider>
                 <ScrollToTop />
+                <SEOHead />
                 <div className="app">
                     <SmokeyCursorWrapper />
                     <Toaster />

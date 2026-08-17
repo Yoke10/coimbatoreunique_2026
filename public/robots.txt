@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://raccoimbatoreunique.in/sitemap.xml
+Sitemap: https://www.raccoimbatoreunique.in/sitemap.xml
