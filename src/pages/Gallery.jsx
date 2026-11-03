@@ -52,22 +52,29 @@ const Gallery = () => {
                     </div>
                 ) : (
                     <div className="carousel__container">
-                        {galleryItems.map((item, index) => (
-                            <div key={item.id} className="carousel-item">
-                                <img
-                                    className="carousel-item__img"
-                                    src={item.image}
-                                    alt={item.title || "Rotaract Club of Coimbatore Unique Project Photo"}
-                                    loading="lazy"
-                                />
-                                <div className="carousel-item__details">
-                                    <div className="controls">
-                                        <span className="carousel-item__title">{item.title}</span>
+                        {galleryItems.map((item, index) => {
+                            const itemTitle = item.eventName || item.title || item.name || item.caption || "Rotaract Event";
+                            const itemCategory = item.category || (item.orientation && item.orientation !== 'landscape' && item.orientation !== 'portrait' ? item.orientation : "Rotaract Unique");
+
+                            return (
+                                <div key={item.id || index} className="carousel-item" tabIndex={0}>
+                                    <img
+                                        className="carousel-item__img"
+                                        src={item.image}
+                                        alt={itemTitle}
+                                        loading="lazy"
+                                    />
+                                    <div className="carousel-item__details">
+                                        <div className="carousel-item__content">
+                                            <h3 className="carousel-item__title">{itemTitle}</h3>
+                                            {itemCategory && (
+                                                <p className="carousel-item__subtitle">{itemCategory}</p>
+                                            )}
+                                        </div>
                                     </div>
-                                    <h2 className="carousel-item__subtitle">{item.category}</h2>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </section>
