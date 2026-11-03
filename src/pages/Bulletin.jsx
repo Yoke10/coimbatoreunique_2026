@@ -55,14 +55,11 @@ const Bulletin = () => {
                         {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <BulletinCardSkeleton key={i} />)}
                     </>
                 ) : bulletins.length > 0 ? (
-                    bulletins.map((bulletin) => (
+                    bulletins.map((bulletin, index) => (
                         <BulletinCard
-                            key={bulletin.id}
-                            title={bulletin.title}
-                            month={bulletin.month}
-                            year={bulletin.year}
-                            coverImage={bulletin.coverImage}
-                            pdfUrl={bulletin.pdfUrl}
+                            key={bulletin.id || index}
+                            bulletin={bulletin}
+                            priority={index < 4}
                         />
                     ))
                 ) : (

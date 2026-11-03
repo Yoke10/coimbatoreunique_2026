@@ -14,6 +14,17 @@ Disallow: /admin/
 Disallow: /*?*fbclid=
 Disallow: /*?*gclid=
 
+# Search Image Crawlers (Google Favicon & Image Indexing)
+User-agent: Googlebot-Image
+Allow: /
+Allow: /favicon.ico
+Allow: /favicon.png
+Allow: /favicon-48x48.png
+Allow: /favicon-32x32.png
+Allow: /favicon-16x16.png
+Allow: /favicon-512x512.png
+Allow: /apple-touch-icon.png
+
 # Generative Engine Optimization (GEO) & AI Answer Crawlers
 User-agent: Google-Extended
 Allow: /

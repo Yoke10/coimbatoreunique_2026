@@ -154,12 +154,7 @@ const Header = () => {
                                 className="dropdown-item"
                                 onClick={(e) => handleNavClick(e, '/scrapbook')}
                                 onMouseEnter={() => handlePrefetch('/scrapbook')}
-                            >Project Scrapbook</Link>
-                            <Link
-                                to="/faq"
-                                className="dropdown-item"
-                                onClick={(e) => handleNavClick(e, '/faq')}
-                            >FAQ</Link>
+                            >Scrapbook</Link>
                         </div>
                     </div>
 

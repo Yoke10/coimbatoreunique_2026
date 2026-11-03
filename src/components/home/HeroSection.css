@@ -21,8 +21,6 @@
     height: calc(100% + 80px);
 }
 
-
-
 /* ======================================================
    CONTENT
 ====================================================== */
@@ -57,7 +55,8 @@
 }
 
 .hero-section .hero-subtitle {
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-family: var(--font-primary), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
     font-weight: 500;
     color: white;
     margin-bottom: var(--spacing-md);
@@ -102,16 +101,12 @@
     gap: var(--spacing-sm);
     flex-wrap: wrap;
 
-    /* Make style same as hero-subtitle */
+    font-family: var(--font-primary), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: white;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 500;
     font-size: clamp(1rem, 2vw, 1.3rem);
-
-    /* NEW: vertical spacing between title and info */
-    /*margin-top: var(--spacing-md);
-    /* similar space as subtitle → title */
 }
 
 /* Make all children consistent */
@@ -166,13 +161,10 @@
     }
 }
 
-
-
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .hero-section .hero-title {
         letter-spacing: 2px;
-        /* Adjusted from -8px to 2px for legibility */
         line-height: 1.1;
     }
 
@@ -194,12 +186,10 @@
 @media (max-width: 425px) {
     .hero-section {
         padding-top: 60px;
-        /* Slight adjust for smaller header */
     }
 
     .hero-section .hero-title {
         font-size: clamp(2.5rem, 12vw, 3.5rem);
-        /* Ensure fit on small screens */
         letter-spacing: 1px;
     }
 }

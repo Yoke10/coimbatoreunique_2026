@@ -9,92 +9,92 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- 2. About Us -->
+  <!-- Priority 1 Sitelink: About Us -->
   <url>
     <loc>https://www.raccoimbatoreunique.in/about</loc>
     <lastmod>2026-11-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
   </url>
 
-  <!-- 3. Events -->
+  <!-- Priority 2 Sitelink: Our Team -->
+  <url>
+    <loc>https://www.raccoimbatoreunique.in/team</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+
+  <!-- Priority 3 Sitelink: Events -->
   <url>
     <loc>https://www.raccoimbatoreunique.in/events</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.90</priority>
   </url>
 
-  <!-- 5. Join Us / Membership -->
+  <!-- Priority 4 Sitelink: Gallery -->
+  <url>
+    <loc>https://www.raccoimbatoreunique.in/gallery</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Priority 5 Sitelink: Contact Us -->
+  <url>
+    <loc>https://www.raccoimbatoreunique.in/contact</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Priority 6 Sitelink: FAQ -->
+  <url>
+    <loc>https://www.raccoimbatoreunique.in/faq</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
+  </url>
+
+  <!-- Secondary: Join Us -->
   <url>
     <loc>https://www.raccoimbatoreunique.in/join</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.75</priority>
   </url>
 
-  <!-- 6. Club Board / Leadership -->
-  <url>
-    <loc>https://www.raccoimbatoreunique.in/team</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- 7. Gallery -->
-  <url>
-    <loc>https://www.raccoimbatoreunique.in/gallery</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- 8. Frequently Asked Questions -->
-  <url>
-    <loc>https://www.raccoimbatoreunique.in/faq</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- 9. Bulletins & Newsletters -->
+  <!-- Secondary: Bulletins & Newsletters -->
   <url>
     <loc>https://www.raccoimbatoreunique.in/bulletin</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.70</priority>
   </url>
 
-  <!-- 10. Contact Us -->
-  <url>
-    <loc>https://www.raccoimbatoreunique.in/contact</loc>
-    <lastmod>2026-11-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-
-  <!-- 11. Project Scrapbook -->
+  <!-- Secondary: Scrapbook -->
   <url>
     <loc>https://www.raccoimbatoreunique.in/scrapbook</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.65</priority>
   </url>
 
-  <!-- 12. Resources & Downloads -->
+  <!-- Secondary: Resources & Downloads -->
   <url>
     <loc>https://www.raccoimbatoreunique.in/resources</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.50</priority>
   </url>
 
-  <!-- 13. Terms & Conditions -->
+  <!-- De-prioritized Utility: Terms & Conditions -->
   <url>
     <loc>https://www.raccoimbatoreunique.in/terms</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.20</priority>
   </url>
 
 </urlset>

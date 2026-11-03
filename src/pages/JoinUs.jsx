@@ -306,7 +306,7 @@ const JoinUs = () => {
                                 id="terms"
                             />
                             <label htmlFor="terms">
-                                I accept the <Link to="/terms" className="link-text">terms and conditions</Link>
+                                I accept the <Link to="/terms" rel="nofollow" className="link-text">terms and conditions</Link>
                             </label>
                         </div>
 

@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    // 🔥 Fetch real Firestore user
+                    // Fetch real Firestore user
                     const profile = await firebaseService.getUser(user.uid, user);
                     if (profile) {
                         const isAdmin = await firebaseService.isAdmin(user.uid);
@@ -50,15 +50,10 @@ export const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
+    // Do NOT block public app rendering with "Loading Auth..." so search engine crawlers immediately see full page content
     return (
         <AuthContext.Provider value={{ currentUser, loading }}>
-            {loading ? (
-                <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    Loading Auth...
-                </div>
-            ) : (
-                children
-            )}
+            {children}
         </AuthContext.Provider>
     );
 };

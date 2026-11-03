@@ -15,11 +15,10 @@ const Footer = () => {
                         </p>
                     </div>
 
-                    {/* Quick Links */}
+                    {/* Quick Links - Prioritized for Google Sitelinks */}
                     <div className="footer-section">
                         <h3 className="footer-title">Quick Links</h3>
                         <ul className="footer-links">
-                            <li><Link to="/">Home</Link></li>
                             <li><Link to="/about">About Us</Link></li>
                             <li><Link to="/team">Our Team</Link></li>
                             <li><Link to="/events">Events</Link></li>
@@ -55,18 +54,24 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Legal */}
+                    {/* Legal & Compliance - De-prioritized from Sitelinks */}
                     <div className="footer-section">
                         <h3 className="footer-title">Legal</h3>
                         <ul className="footer-links">
-                            <li><Link to="/faq">FAQ's</Link></li>
-                            <li><Link to="/terms">Terms and Conditions</Link></li>
-                            <li><Link to="/contact">Contact Us</Link></li>
-                            <li><Link to="/memberspace" target="_blank" rel="noopener noreferrer">Unique Hub</Link></li>
+                            <li><Link to="/terms" rel="nofollow">Terms &amp; Conditions</Link></li>
+                            <li><Link to="/memberspace" target="_blank" rel="noopener noreferrer nofollow">Unique Hub</Link></li>
+                            <li><Link to="/faq">FAQ</Link></li>
                         </ul>
                     </div>
                 </div>
+            </div>
 
+            {/* Massive Glassmorphic Brand Tagline */}
+            <div className="footer-tagline-wrapper" aria-hidden="true">
+                <h2 className="footer-tagline-text">#LETS BE UNIQUE</h2>
+            </div>
+
+            <div className="footer-container">
                 <div className="footer-bottom">
                     <p className="copyright">
                         &copy; {new Date().getFullYear()} Rotaract Club of Coimbatore Unique. All rights reserved.

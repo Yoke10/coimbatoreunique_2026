@@ -8,11 +8,19 @@ const BASE_URL = 'https://www.raccoimbatoreunique.in'
  * SEO metadata configuration for each page route.
  * Dynamically updates <title>, <meta description>, <link canonical>, og:*, twitter:*
  * and structured data JSON-LD schemas.
+ *
+ * Sitelink Priority Order:
+ * 1. About Us (/about)
+ * 2. Our Team (/team)
+ * 3. Events (/events)
+ * 4. Gallery (/gallery)
+ * 5. Contact Us (/contact)
+ * 6. FAQ (/faq)
  */
 const SEO_CONFIG = {
     '/': {
         title: 'Rotaract Club of Coimbatore Unique | Rotaract District 3206',
-        description: 'Official portal of Rotaract Club of Coimbatore Unique (RAC CBE Unique). Chartered 21 Nov 2000 under Rotary International District 3206. Youth leadership & community service in Coimbatore.',
+        description: 'Official website of Rotaract Club of Coimbatore Unique (RAC CBE Unique). Chartered 21 Nov 2000 under Rotary International District 3206. Youth leadership & community service in Coimbatore.',
         breadcrumbName: 'Home',
         schemaType: 'WebPage',
     },
@@ -23,16 +31,34 @@ const SEO_CONFIG = {
         schemaType: 'AboutPage',
     },
     '/team': {
-        title: 'Board of Directors | Rotaract Club of Coimbatore Unique – RID 3206',
+        title: 'Our Team | Board of Directors – Rotaract Club of Coimbatore Unique',
         description: 'Meet the President, Secretary, and Board of Directors of Rotaract Club of Coimbatore Unique, Rotaract District 3206. Dedicated youth leaders serving Coimbatore, Tamil Nadu.',
         breadcrumbName: 'Our Team',
         schemaType: 'AboutPage',
     },
     '/events': {
-        title: 'Upcoming & Past Events | Rotaract Club of Coimbatore Unique',
+        title: 'Events | Community Projects & Meetings – Rotaract Club of Coimbatore Unique',
         description: 'Explore community service projects, professional workshops, district meets, and youth conferences hosted by Rotaract Club of Coimbatore Unique, Rotaract District 3206.',
         breadcrumbName: 'Events',
         schemaType: 'CollectionPage',
+    },
+    '/gallery': {
+        title: 'Gallery | Photo Highlights & Activities – Rotaract Club of Coimbatore Unique',
+        description: 'Browse photos and memorable highlights from community service drives, blood donation camps, and fellowship gatherings of RAC Coimbatore Unique.',
+        breadcrumbName: 'Gallery',
+        schemaType: 'ImageGallery',
+    },
+    '/contact': {
+        title: 'Contact Us | Rotaract Club of Coimbatore Unique – RID 3206',
+        description: 'Get in touch with Rotaract Club of Coimbatore Unique (RID 3206). Connect with club officers for collaborations, sponsorships, or membership inquiries.',
+        breadcrumbName: 'Contact Us',
+        schemaType: 'ContactPage',
+    },
+    '/faq': {
+        title: 'FAQ | Frequently Asked Questions – Rotaract Club of Coimbatore Unique',
+        description: 'Find answers to common questions about Rotaract Club of Coimbatore Unique, District 3206, membership requirements, club dues, and community service projects.',
+        breadcrumbName: 'FAQ',
+        schemaType: 'FAQPage',
     },
     '/bulletin': {
         title: 'Club Bulletins & Newsletters | RAC Coimbatore Unique',
@@ -40,23 +66,11 @@ const SEO_CONFIG = {
         breadcrumbName: 'Bulletins',
         schemaType: 'CollectionPage',
     },
-    '/gallery': {
-        title: 'Photo Gallery & Memories | Rotaract Club of Coimbatore Unique',
-        description: 'Browse photos and memorable highlights from community service drives, blood donation camps, and fellowship gatherings of RAC Coimbatore Unique.',
-        breadcrumbName: 'Gallery',
-        schemaType: 'ImageGallery',
-    },
     '/scrapbook': {
-        title: 'Project Scrapbook & Archives | RAC Coimbatore Unique',
+        title: 'Scrapbook | RAC Coimbatore Unique',
         description: 'View the official digital scrapbook of Rotaract Club of Coimbatore Unique — celebrated milestones, memories, and project archives under District 3206.',
         breadcrumbName: 'Scrapbook',
         schemaType: 'CollectionPage',
-    },
-    '/contact': {
-        title: 'Contact Us | Rotaract Club of Coimbatore Unique – Coimbatore',
-        description: 'Get in touch with Rotaract Club of Coimbatore Unique (RID 3206). Connect with club officers for collaborations, sponsorships, or membership inquiries.',
-        breadcrumbName: 'Contact Us',
-        schemaType: 'ContactPage',
     },
     '/join': {
         title: 'Join Rotaract Club of Coimbatore Unique | Youth Membership',
@@ -64,15 +78,9 @@ const SEO_CONFIG = {
         breadcrumbName: 'Join Us',
         schemaType: 'WebPage',
     },
-    '/faq': {
-        title: 'Frequently Asked Questions (FAQ) | RAC Coimbatore Unique',
-        description: 'Find answers to common questions about Rotaract Club of Coimbatore Unique, District 3206, membership requirements, club dues, and community service projects.',
-        breadcrumbName: 'FAQ',
-        schemaType: 'FAQPage',
-    },
     '/terms': {
-        title: 'Terms & Conditions | Rotaract Club of Coimbatore Unique',
-        description: 'Read the terms and conditions and website privacy policies for the official portal of Rotaract Club of Coimbatore Unique, Coimbatore, Tamil Nadu.',
+        title: 'Terms & Conditions | Legal Notice – Rotaract Club of Coimbatore Unique',
+        description: 'Read the official terms and conditions, usage policies, and legal guidelines for the web platform of Rotaract Club of Coimbatore Unique, RID 3206.',
         breadcrumbName: 'Terms & Conditions',
         schemaType: 'WebPage',
     },
@@ -113,7 +121,7 @@ const SEOHead = () => {
             el.setAttribute(attribute, value)
         }
 
-        // 3. Update meta description & keywords
+        // 3. Update meta description
         setMeta('meta[name="description"]', 'content', config.description)
 
         // 4. Update canonical link
@@ -144,6 +152,60 @@ const SEOHead = () => {
         }
 
         const graph = []
+
+        // Primary Navigation Sitelinks (on homepage)
+        if (pathname === '/') {
+            graph.push({
+                '@type': 'ItemList',
+                '@id': `${BASE_URL}/#primary-navigation`,
+                'name': 'Primary Navigation & Organic Sitelinks',
+                'description': 'Official organic sitelinks and primary navigational structure of Rotaract Club of Coimbatore Unique',
+                'itemListElement': [
+                    {
+                        '@type': 'SiteNavigationElement',
+                        'position': 1,
+                        'name': 'About Us',
+                        'url': `${BASE_URL}/about`,
+                        'description': 'Discover the history, charter, mission, and youth leadership of Rotaract Club of Coimbatore Unique.'
+                    },
+                    {
+                        '@type': 'SiteNavigationElement',
+                        'position': 2,
+                        'name': 'Our Team',
+                        'url': `${BASE_URL}/team`,
+                        'description': 'Meet the President, Secretary, and Board of Directors of Rotaract Club of Coimbatore Unique.'
+                    },
+                    {
+                        '@type': 'SiteNavigationElement',
+                        'position': 3,
+                        'name': 'Events',
+                        'url': `${BASE_URL}/events`,
+                        'description': 'Explore community service projects, professional workshops, and upcoming club events.'
+                    },
+                    {
+                        '@type': 'SiteNavigationElement',
+                        'position': 4,
+                        'name': 'Gallery',
+                        'url': `${BASE_URL}/gallery`,
+                        'description': 'Browse photo highlights from community initiatives, blood donation drives, and club meetings.'
+                    },
+                    {
+                        '@type': 'SiteNavigationElement',
+                        'position': 5,
+                        'name': 'Contact Us',
+                        'url': `${BASE_URL}/contact`,
+                        'description': 'Connect with club leadership for membership inquiries, sponsorships, and collaborations.'
+                    },
+                    {
+                        '@type': 'SiteNavigationElement',
+                        'position': 6,
+                        'name': 'FAQ',
+                        'url': `${BASE_URL}/faq`,
+                        'description': 'Frequently asked questions regarding membership requirements, club dues, and District 3206.'
+                    }
+                ]
+            })
+        }
 
         // Breadcrumbs (for all pages other than home)
         if (pathname !== '/') {

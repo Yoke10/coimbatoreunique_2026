@@ -257,7 +257,7 @@ const Contact = () => {
                                 onChange={handleChange}
                                 id="agreed"
                             />
-                            <label htmlFor="agreed">I agree to the <Link to="/terms" className="link-text">Terms & Conditions</Link> *</label>
+                            <label htmlFor="agreed">I agree to the <Link to="/terms" rel="nofollow" className="link-text">Terms &amp; Conditions</Link> *</label>
                         </div>
                         {errors.agreed && <span className="error-text">{errors.agreed}</span>}
 
