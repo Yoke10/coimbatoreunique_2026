@@ -82,7 +82,10 @@ const JoinUs = () => {
     return (
         <div className="join-us-page">
             <div className="join-container">
-                <h1 className="main-title">Join Us</h1>
+                <h1 className="main-title">
+                    Join Us
+                    <span className="sr-only"> – Rotaract Club of Coimbatore Unique, Rotaract District 3206</span>
+                </h1>
                 <div className="join-card">
                     <div className="join-card-header">
                         <div className="join-header-icon">

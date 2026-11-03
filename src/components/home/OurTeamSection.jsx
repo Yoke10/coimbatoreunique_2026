@@ -17,9 +17,9 @@ const OurTeamSection = () => {
     const topMembers = members.slice(0, 3)
 
     return (
-        <section className="team-section section">
+        <section className="team-section section" aria-labelledby="home-team-heading">
             <div className="container">
-                <h2 className="section-title">Our Team</h2>
+                <h2 id="home-team-heading" className="section-title">Club Board &amp; Leadership</h2>
 
                 <div className="team-grid">
                     {loading ? (
@@ -43,8 +43,8 @@ const OurTeamSection = () => {
                 </div>
 
                 <div className="team-view-more">
-                    <Link to="/team" className="btn btn-primary">
-                        View Team
+                    <Link to="/team" className="btn btn-primary" aria-label="Meet the full Club Board of Directors and leadership">
+                        Meet Club Board &amp; Team <span>↗</span>
                     </Link>
                 </div>
             </div>

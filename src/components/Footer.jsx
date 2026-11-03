@@ -12,7 +12,6 @@ const Footer = () => {
                         <h3 className="footer-title">What is Rotaract?</h3>
                         <p className="footer-text">
                             Rotaract brings young people together to serve communities, develop leadership, and create lasting impact.
-
                         </p>
                     </div>
 

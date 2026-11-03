@@ -110,6 +110,8 @@
 }
 
 /* Text Styles */
+.sponsors-section-new .cover .sponsor-name,
+.sponsors-section-new .cover .sponsor-name,
 .sponsors-section-new .cover h1 {
     /* Reduced size as requested */
     font-size: 1.8em;

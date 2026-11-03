@@ -16,11 +16,8 @@ const VideoSection = () => {
         document.body.style.overflow = 'unset';
     };
 
-    // YouTube video ID - replace with actual video ID
-    const videoId = 'dQw4w9WgXcQ'; // Placeholder, update with actual video
-
     return (
-        <section className="video-section">
+        <section className="video-section" aria-label="Club Video Showcase">
             {/* Split Background */}
             <div className="video-background-split">
                 <div className="video-bg-top"></div>
@@ -38,8 +35,10 @@ const VideoSection = () => {
                     <div className="video-thumbnail-wrapper">
                         <img
                             src="/assets/video-thumbnail.jpg"
-                            alt="Rotaract Club Video"
+                            alt="Rotaract Club of Coimbatore Unique Video Showcase"
                             className="video-thumbnail-image"
+                            width="1024"
+                            height="1024"
                             loading="lazy"
                         />
 
@@ -47,7 +46,7 @@ const VideoSection = () => {
                         <button
                             className="video-play-button"
                             onClick={openModal}
-                            aria-label="Play video"
+                            aria-label="Play Rotaract Club of Coimbatore Unique showcase video"
                         >
                             <div className="play-button-ripple"></div>
                             <div className="play-button-ripple ripple-delay-1"></div>
@@ -61,8 +60,6 @@ const VideoSection = () => {
                             </svg>
                         </button>
                     </div>
-
-
                 </div>
             </div>
 
@@ -74,7 +71,7 @@ const VideoSection = () => {
                         <button
                             className="video-modal-close"
                             onClick={closeModal}
-                            aria-label="Close video"
+                            aria-label="Close video player"
                         >
                             <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -84,8 +81,8 @@ const VideoSection = () => {
                         {/* YouTube Embed */}
                         <div className="video-embed-wrapper">
                             <iframe
-                                src={`https://www.youtube.com/embed/_4HUGTVdQ4o?si=I30sAu-8SUR14b_R&autoplay=1`}
-                                title="Rotaract Club Video"
+                                src="https://www.youtube.com/embed/_4HUGTVdQ4o?si=I30sAu-8SUR14b_R&autoplay=1"
+                                title="Rotaract Club of Coimbatore Unique Official Video"
                                 frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen

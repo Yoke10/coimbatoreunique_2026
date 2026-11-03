@@ -13,10 +13,12 @@ const TeamGridSection = () => {
         refetchOnMount: true,
     })
 
-
     return (
-        <section className="team-grid-section">
-            <h1 className="team-grid-title">Meet Our Team</h1>
+        <section className="team-grid-section" aria-label="Club Board and Team">
+            <h1 className="team-grid-title">
+                Meet Our Team
+                <span className="sr-only"> – Board of Directors | Rotaract Club of Coimbatore Unique, Rotaract District 3206</span>
+            </h1>
             {loading ? (
                 <div className="team-grid-container">
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (

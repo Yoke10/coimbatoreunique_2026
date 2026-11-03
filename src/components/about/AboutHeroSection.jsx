@@ -3,7 +3,7 @@ import './AboutHeroSection.css'
 
 const AboutHeroSection = () => {
     return (
-        <section className="about-hero-section">
+        <section className="about-hero-section" aria-label="About Coimbatore Unique Introduction">
             <div className="about-hero-visual">
                 <div className="years-3d-container">
                     <div className="years-text-3d">25+</div>
@@ -11,9 +11,12 @@ const AboutHeroSection = () => {
                 <div className="years-label">Years of Service</div>
             </div>
             <div className="about-hero-content">
-                <h1 className="about-hero-title">Legacy of Service & Leadership</h1>
+                <h1 className="about-hero-title">
+                    <span className="sr-only">About Rotaract Club of Coimbatore Unique – </span>
+                    Legacy of Service &amp; Leadership
+                </h1>
                 <p className="about-hero-subtitle">
-                    Celebrating over two decades of making a difference, empowering youth, and serving our community with passion and dedication.
+                    Celebrating over 25 years of empowering youth, creating community leaders, and driving impactful social service across Coimbatore under Rotaract District 3206.
                 </p>
             </div>
         </section>

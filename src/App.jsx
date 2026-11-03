@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation, Outlet } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation, Outlet, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 
@@ -28,7 +28,6 @@ const FAQ = React.lazy(() => import('./pages/FAQ'))
 const Terms = React.lazy(() => import('./pages/Terms'))
 const Resources = React.lazy(() => import('./components/member/Resources'))
 const NotFound = React.lazy(() => import('./components/404/NotFound'))
-
 
 const SmokeyCursor = React.lazy(() => import('./components/SmokeyCursor'))
 
@@ -75,6 +74,7 @@ const AnimatedRoutes = () => {
                     <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
                     <Route path="/about" element={<PageWrapper><Suspense fallback={<AboutSkeleton />}><About /></Suspense></PageWrapper>} />
                     <Route path="/team" element={<PageWrapper><Team /></PageWrapper>} />
+                    <Route path="/board" element={<Navigate to="/team" replace />} />
                     <Route path="/events" element={<PageWrapper><Events /></PageWrapper>} />
                     <Route path="/bulletin" element={<PageWrapper><Bulletin /></PageWrapper>} />
                     <Route path="/gallery" element={<PageWrapper><Gallery /></PageWrapper>} />
@@ -83,6 +83,7 @@ const AnimatedRoutes = () => {
                     <Route path="/memberspace" element={<PageWrapper><MemberSpace /></PageWrapper>} />
                     <Route path="/contact" element={<PageWrapper><Suspense fallback={<FormPageSkeleton title="Contact Us" />}><Contact /></Suspense></PageWrapper>} />
                     <Route path="/join" element={<PageWrapper><Suspense fallback={<FormPageSkeleton title="Join Us" />}><JoinUs /></Suspense></PageWrapper>} />
+                    <Route path="/membership" element={<Navigate to="/join" replace />} />
                     <Route path="/faq" element={<PageWrapper><FAQ /></PageWrapper>} />
                     <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
                 </Route>
@@ -107,7 +108,6 @@ const App = () => {
         </Router>
     )
 }
-
 
 const MainLayout = () => {
     return (
@@ -180,21 +180,25 @@ const SmokeyCursorWrapper = () => {
                     e.currentTarget.style.opacity = '0.3';
                     e.currentTarget.style.transform = 'translateX(-50%) scale(1)';
                 }}
-                title={isEnabled ? "Disable Smoke Effect" : "Enable Smoke Effect"}
+                aria-label="Toggle cursor effect"
+                title="Toggle visual effects"
             />
         </>
     )
 }
 
+// Wrapper for Header
 const HeaderWrapper = () => {
     const location = useLocation()
-    return location.pathname !== '/memberspace' ? <Header /> : null
+    if (location.pathname.startsWith('/memberspace')) return null
+    return <Header />
 }
 
+// Wrapper for Footer
 const FooterWrapper = () => {
     const location = useLocation()
-    const hiddenPaths = ['/contact', '/join', '/memberspace']
-    return !hiddenPaths.includes(location.pathname) ? <Footer /> : null
+    if (location.pathname.startsWith('/memberspace')) return null
+    return <Footer />
 }
 
 export default App

@@ -29,6 +29,7 @@ const Scrapbook = () => {
                 backgroundClip: 'text'
             }}>
                 Scrapbooks
+                <span className="sr-only"> – Rotaract Club of Coimbatore Unique Project Archives</span>
             </h1>
 
             <div style={{

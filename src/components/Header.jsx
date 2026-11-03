@@ -15,7 +15,7 @@ const Header = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            // 1. Check if we are on the Home page
+            // 1. Check if on Home page
             if (location.pathname !== '/') {
                 setIsOnHero(false)
                 return
@@ -25,8 +25,6 @@ const Header = () => {
             const hero = document.querySelector(".hero-section")
 
             if (!hero) {
-                // If on Home but hero not found yet, trust scrollY
-                // If at the top, we must be on hero (or loading it)
                 if (window.scrollY < 50) {
                     setIsOnHero(true)
                 } else {
@@ -45,8 +43,6 @@ const Header = () => {
         }
 
         window.addEventListener("scroll", handleScroll)
-
-        // Run immediately, but also give a tiny delay for React to mount Hero on direct load
         handleScroll()
         const timer = setTimeout(handleScroll, 50)
 
@@ -89,7 +85,7 @@ const Header = () => {
 
         // If clicking current page, scroll to top
         if (location.pathname === path) {
-            e.preventDefault() // Prevent default (optional, but good for pure scroll)
+            e.preventDefault()
             window.scrollTo({ top: 0, behavior: 'smooth' })
         }
     }
@@ -99,7 +95,7 @@ const Header = () => {
             <div className="header-container">
 
                 {/* LOGO */}
-                <Link to="/" className="logo" onClick={(e) => handleNavClick(e, '/')}>
+                <Link to="/" className="logo" onClick={(e) => handleNavClick(e, '/')} aria-label="Rotaract Club of Coimbatore Unique Homepage">
                     <span className="logo-circle">RCCU</span>
                     <div className="logo-details">
                         <span className="logo-main">Rotaract Club</span>
@@ -107,8 +103,8 @@ const Header = () => {
                     </div>
                 </Link>
 
-                {/* NAV MENU */}
-                <nav className={`nav ${isMobileMenuOpen ? "mobile-open" : ""}`}>
+                {/* PRIMARY NAVIGATION */}
+                <nav className={`nav ${isMobileMenuOpen ? "mobile-open" : ""}`} aria-label="Main Navigation">
                     <Link to="/" className="nav-link" onClick={(e) => handleNavClick(e, '/')}>Home</Link>
                     <Link to="/about" className="nav-link" onClick={(e) => handleNavClick(e, '/about')}>About Us</Link>
                     <Link
@@ -117,43 +113,12 @@ const Header = () => {
                         onClick={(e) => handleNavClick(e, '/team')}
                         onMouseEnter={() => handlePrefetch('/team')}
                     >Our Team</Link>
-
-                    {/* Dropdown */}
-                    <div className="nav-dropdown">
-                        <button
-                            className="nav-link dropdown-toggle"
-                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        >
-                            Activities
-                            <svg className="dropdown-icon" width="10" height="10" viewBox="0 0 12 12">
-                                <path d="M6 9L1 4h10z" fill="currentColor" />
-                            </svg>
-                        </button>
-
-                        {isDropdownOpen && (
-                            <div className="dropdown-menu show">
-                                <Link
-                                    to="/events"
-                                    className="dropdown-item"
-                                    onClick={(e) => handleNavClick(e, '/events')}
-                                    onMouseEnter={() => handlePrefetch('/events')}
-                                >Events</Link>
-                                <Link
-                                    to="/bulletin"
-                                    className="dropdown-item"
-                                    onClick={(e) => handleNavClick(e, '/bulletin')}
-                                    onMouseEnter={() => handlePrefetch('/bulletin')}
-                                >Bulletin</Link>
-                                <Link
-                                    to="/scrapbook"
-                                    className="dropdown-item"
-                                    onClick={(e) => handleNavClick(e, '/scrapbook')}
-                                    onMouseEnter={() => handlePrefetch('/scrapbook')}
-                                >Scrapbook</Link>
-                            </div>
-                        )}
-                    </div>
-
+                    <Link
+                        to="/events"
+                        className="nav-link"
+                        onClick={(e) => handleNavClick(e, '/events')}
+                        onMouseEnter={() => handlePrefetch('/events')}
+                    >Events</Link>
                     <Link
                         to="/gallery"
                         className="nav-link"
@@ -162,18 +127,57 @@ const Header = () => {
                     >Gallery</Link>
                     <Link to="/contact" className="nav-link" onClick={(e) => handleNavClick(e, '/contact')}>Contact Us</Link>
 
-                    <ConfettiButton
-                        className="btn-join"
-                        variant="gradient"
-                        onClick={() => {
-                            navigate('/join')
-                            if (location.pathname === '/join') window.scrollTo({ top: 0, behavior: 'smooth' })
-                            setIsMobileMenuOpen(false)
-                        }}
-                        confettiOptions={{ particleCount: 100, spread: 70, colors: ['#400763', '#ed0775', '#ffffff'] }}
+                    {/* Dropdown for Publications */}
+                    <div className="nav-dropdown">
+                        <button
+                            className="nav-link dropdown-toggle"
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            aria-expanded={isDropdownOpen}
+                            aria-haspopup="true"
+                            aria-label="More club resources"
+                        >
+                            Publications
+                            <svg className="dropdown-icon" width="10" height="10" viewBox="0 0 12 12">
+                                <path d="M6 9L1 4h10z" fill="currentColor" />
+                            </svg>
+                        </button>
+
+                        <div className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}>
+                            <Link
+                                to="/bulletin"
+                                className="dropdown-item"
+                                onClick={(e) => handleNavClick(e, '/bulletin')}
+                                onMouseEnter={() => handlePrefetch('/bulletin')}
+                            >Club Bulletins</Link>
+                            <Link
+                                to="/scrapbook"
+                                className="dropdown-item"
+                                onClick={(e) => handleNavClick(e, '/scrapbook')}
+                                onMouseEnter={() => handlePrefetch('/scrapbook')}
+                            >Project Scrapbook</Link>
+                            <Link
+                                to="/faq"
+                                className="dropdown-item"
+                                onClick={(e) => handleNavClick(e, '/faq')}
+                            >FAQ</Link>
+                        </div>
+                    </div>
+
+                    {/* Join Us CTA */}
+                    <Link
+                        to="/join"
+                        className="btn-join-wrapper"
+                        onClick={(e) => handleNavClick(e, '/join')}
+                        aria-label="Join Rotaract Club of Coimbatore Unique"
                     >
-                        Join Us
-                    </ConfettiButton>
+                        <ConfettiButton
+                            className="btn-join"
+                            variant="gradient"
+                            confettiOptions={{ particleCount: 100, spread: 70, colors: ['#400763', '#ed0775', '#ffffff'] }}
+                        >
+                            Join Us
+                        </ConfettiButton>
+                    </Link>
                 </nav>
 
                 {/* MOBILE MENU BUTTON */}
@@ -181,6 +185,7 @@ const Header = () => {
                     className="mobile-menu-toggle"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label="Toggle menu"
+                    aria-expanded={isMobileMenuOpen}
                 >
                     <span></span><span></span><span></span>
                 </button>

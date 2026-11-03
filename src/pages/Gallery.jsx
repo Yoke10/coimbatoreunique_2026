@@ -11,9 +11,6 @@ const Gallery = () => {
         staleTime: 5 * 60 * 1000,
     })
 
-    // No explicit fetch useEffect needed anymore
-    // Removed unused masonry calculation logic to improve performance and CLS
-
     return (
         <div className="gallery-page" style={{ marginTop: '80px', padding: '2rem 0', minHeight: '80vh', background: '#fff' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem', padding: '0 2rem' }}>
@@ -21,16 +18,28 @@ const Gallery = () => {
                     color: 'var(--primary-magenta)',
                     fontFamily: 'var(--font-display)',
                     fontSize: '3rem',
-                    marginBottom: '1rem'
+                    marginBottom: '1rem',
+                    position: 'relative'
                 }}>
                     Our Gallery
+                    <span style={{
+                        position: 'absolute',
+                        width: '1px',
+                        height: '1px',
+                        padding: 0,
+                        margin: '-1px',
+                        overflow: 'hidden',
+                        clip: 'rect(0, 0, 0, 0)',
+                        whiteSpace: 'nowrap',
+                        border: 0
+                    }}> – Photo Memories &amp; Projects | Rotaract Club of Coimbatore Unique</span>
                 </h1>
                 <p style={{ color: 'var(--dark-gray)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
-                    Capturing moments of service, fellowship, and impact.
+                    Capturing moments of service, fellowship, and impact across Rotaract District 3206.
                 </p>
             </div>
 
-            <section className="gallery-carousel">
+            <section className="gallery-carousel" aria-label="Photo Carousel">
                 {loading ? (
                     <div className="carousel__container">
                         {[
@@ -48,20 +57,17 @@ const Gallery = () => {
                                 <img
                                     className="carousel-item__img"
                                     src={item.image}
-                                    alt={item.eventName}
-                                    loading={index < 4 ? "eager" : "lazy"}
+                                    alt={item.title || "Rotaract Club of Coimbatore Unique Project Photo"}
+                                    loading="lazy"
                                 />
                                 <div className="carousel-item__details">
-                                    <h2 className="carousel-item__details--title">{item.eventName}</h2>
+                                    <div className="controls">
+                                        <span className="carousel-item__title">{item.title}</span>
+                                    </div>
+                                    <h2 className="carousel-item__subtitle">{item.category}</h2>
                                 </div>
                             </div>
                         ))}
-
-                        {galleryItems.length === 0 && (
-                            <div style={{ color: 'var(--dark-gray)', textAlign: 'center', width: '100%', padding: '20px' }}>
-                                No images in gallery yet.
-                            </div>
-                        )}
                     </div>
                 )}
             </section>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './GetInTouchSection.css'
 
 const GetInTouchSection = () => {
@@ -69,7 +70,7 @@ const GetInTouchSection = () => {
                                 raccbeunique@gmail.com<br />
                                 rtr.dharshinishri.raccbeunique@gmail.com
                             </p>
-                            <a href="mailto:raccbeunique@gmail">Send Email</a>
+                            <a href="mailto:raccbeunique@gmail.com">Send Email</a>
                         </div>
                     </div>
                 </div>

@@ -23,7 +23,10 @@ const Terms = () => {
                 <div className="terms-header-icon">
                     <FileText size={32} color="#fff" />
                 </div>
-                <h1>Terms & Conditions</h1>
+                <h1>
+                    Terms &amp; Conditions
+                    <span className="sr-only"> – Rotaract Club of Coimbatore Unique</span>
+                </h1>
                 <p>Important guidelines for using the Rotaract Club of Coimbatore Unique platform</p>
             </header>
 

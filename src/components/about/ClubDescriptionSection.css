@@ -284,3 +284,12 @@
         margin-bottom: 15px;
     }
 }
+
+.description-wrapper.no-images {
+    justify-content: center;
+}
+
+.description-content.full-width {
+    max-width: 850px;
+    margin: 0 auto;
+}

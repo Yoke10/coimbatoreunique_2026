@@ -334,3 +334,16 @@
         transform: translateY(0);
     }
 }
+
+.header .btn-join-wrapper {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+@media (min-width: 901px) {
+    .header .nav-dropdown:hover .dropdown-menu,
+    .header .nav-dropdown:focus-within .dropdown-menu {
+        display: block;
+    }
+}

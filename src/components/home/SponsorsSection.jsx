@@ -43,14 +43,14 @@ const SponsorsSection = () => {
                                     backgroundColor: 'var(--primary-purple)'
                                 }}
                             >
-                                <h1>
+                                <p className="sponsor-name">
                                     {sponsor.name.split('\n').map((line, i) => (
                                         <React.Fragment key={i}>
                                             {line}
                                             {i < sponsor.name.split('\n').length - 1 && <br />}
                                         </React.Fragment>
                                     ))}
-                                </h1>
+                                </p>
                                 <span className="number">{sponsor.number}</span>
                                 <div className="card-back">
                                     <a href={sponsor.link} target="_blank" rel="noopener noreferrer">View</a>

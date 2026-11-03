@@ -319,3 +319,17 @@
         font-size: 14px;
     }
 }
+
+.about-wrapper.no-images {
+    justify-content: center;
+}
+
+.about-content.full-width {
+    max-width: 850px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-content.full-width p {
+    text-align: center;
+}

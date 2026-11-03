@@ -106,7 +106,10 @@ const Contact = () => {
     return (
         <div className="contact-page">
             <div className="contact-container">
-                <h1 className="main-title">Contact Us</h1>
+                <h1 className="main-title">
+                    Contact Us
+                    <span className="sr-only"> – Rotaract Club of Coimbatore Unique, Rotaract District 3206</span>
+                </h1>
                 <div className="contact-card">
                     <div className="contact-header">
                         <div className="contact-header-icon">

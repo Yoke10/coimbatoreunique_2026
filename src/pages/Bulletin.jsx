@@ -26,9 +26,21 @@ const Bulletin = () => {
                 background: 'var(--gradient-primary)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
+                backgroundClip: 'text',
+                position: 'relative'
             }}>
                 Club Bulletins
+                <span style={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    padding: 0,
+                    margin: '-1px',
+                    overflow: 'hidden',
+                    clip: 'rect(0, 0, 0, 0)',
+                    whiteSpace: 'nowrap',
+                    border: 0
+                }}> – Rotaract Club of Coimbatore Unique, Rotaract District 3206 Newsletters</span>
             </h1>
 
             <div style={{
@@ -43,21 +55,28 @@ const Bulletin = () => {
                         {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <BulletinCardSkeleton key={i} />)}
                     </>
                 ) : bulletins.length > 0 ? (
-                    bulletins.map((bulletin, index) => (
+                    bulletins.map((bulletin) => (
                         <BulletinCard
                             key={bulletin.id}
-                            bulletin={bulletin}
-                            priority={index < 4}
+                            title={bulletin.title}
+                            month={bulletin.month}
+                            year={bulletin.year}
+                            coverImage={bulletin.coverImage}
+                            pdfUrl={bulletin.pdfUrl}
                         />
                     ))
                 ) : (
-                    <p style={{ textAlign: 'center', fontSize: '1.2rem', color: 'var(--dark-gray)', gridColumn: '1/-1' }}>
-                        No bulletins available yet.
-                    </p>
+                    <div style={{
+                        gridColumn: '1 / -1',
+                        textAlign: 'center',
+                        padding: '4rem 2rem',
+                        color: 'var(--text-secondary)'
+                    }}>
+                        <p style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>No bulletins published yet.</p>
+                        <p style={{ fontSize: '0.95rem' }}>Check back soon for our latest club newsletters!</p>
+                    </div>
                 )}
             </div>
-
-            {/* <FlipbookViewer /> Component Removed as per simplified requirement */}
         </div>
     )
 }

@@ -21,6 +21,7 @@ const Events = () => {
         <div className="events-page">
             <h1 className="events-page-title">
                 Upcoming Events
+                <span className="sr-only"> – Rotaract Club of Coimbatore Unique, Rotaract District 3206</span>
             </h1>
 
             <div className="events-list-container">
@@ -36,14 +37,18 @@ const Events = () => {
                             key={event.id}
                             event={event}
                             index={index}
-                            priority={index < 3}
+                            priority={index < 4}
                         />
                     ))
                 ) : (
-                    <div className="empty-state">
-                        <p className="empty-state-text">
-                            No upcoming events at the moment. Stay tuned!
-                        </p>
+                    <div style={{
+                        gridColumn: '1 / -1',
+                        textAlign: 'center',
+                        padding: '4rem 2rem',
+                        color: 'var(--text-secondary)'
+                    }}>
+                        <p style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>No upcoming events scheduled at the moment.</p>
+                        <p style={{ fontSize: '0.95rem' }}>Check back soon for new club initiatives and projects!</p>
                     </div>
                 )}
             </div>

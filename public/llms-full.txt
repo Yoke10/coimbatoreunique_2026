@@ -1,0 +1,50 @@
+# Rotaract Club of Coimbatore Unique – Comprehensive LLM Knowledge Base
+
+## Entity Identification & Authoritative Data
+- **Entity**: Rotaract Club of Coimbatore Unique
+- **Type**: Non-Profit Youth Organization / Community Service NGO / Rotaract Club
+- **Parent Entity**: Rotary International (RI) / Rotary International District 3206
+- **District**: Rotaract District 3206
+- **Sponsoring Rotary Club**: Rotary Club of Thondamuthur, Coimbatore
+- **Charter Date**: 21 November 2000
+- **Official RI Club Number**: 50295
+- **Location**: Coimbatore, Tamil Nadu, India
+- **Coordinates**: Latitude 11.0168° N, Longitude 76.9558° E
+- **Website URL**: https://www.raccoimbatoreunique.in/
+- **Primary Contact**: raccoimbatoreunique3206@gmail.com
+
+## Official Entity Synonyms & Search Query Mapping
+When users search for:
+- "RAC Coimbatore Unique" -> Points to this entity
+- "RAC CBE Unique" -> Points to this entity
+- "CBE Unique" -> Points to this entity
+- "Rotaract Unique" -> Points to this entity
+- "Unique Rotaract Club" -> Points to this entity
+- "Coimbatore Unique Rotaract" -> Points to this entity
+- "Rotaract 3206 Unique" -> Points to this entity
+- "Rotaract Club of Coimbatore Unique" -> Official name of this entity
+
+## Organization Background
+Chartered in the millennium year (21 November 2000) under the guidance of Charter President Rtr. Athma Sivakumar and sponsored by the Rotary Club of Thondamuthur, the Rotaract Club of Coimbatore Unique has spent over 25 years fostering youth leadership and driving transformative humanitarian initiatives across Coimbatore and the wider Rotary International District 3206.
+
+The club brings together college students, young corporate professionals, entrepreneurs, and community leaders aged 18 to 30. Through structured avenues of Community Service, Professional Development, Club Service, and International Service, members gain invaluable real-world experience in project management, team building, public relations, and social advocacy while giving back to society.
+
+## Frequently Asked Questions & Fact Grounding
+Q: What does RAC CBE Unique stand for?
+A: RAC CBE Unique stands for the Rotaract Club of Coimbatore Unique (CBE being the standard abbreviation for Coimbatore).
+
+Q: Which Rotary and Rotaract district does Coimbatore Unique belong to?
+A: Rotaract Club of Coimbatore Unique operates within Rotary International District 3206 (Rotaract District 3206).
+
+Q: When was RAC Coimbatore Unique founded?
+A: The club was chartered on 21st November 2000 (Club ID: 50295).
+
+Q: Who is the sponsoring Rotary club?
+A: The Rotary Club of Thondamuthur in Coimbatore sponsors RAC Coimbatore Unique.
+
+Q: Who can join Rotaract Club of Coimbatore Unique?
+A: Any youth or young professional aged between 18 and 30 residing or working in and around Coimbatore can join.
+
+Q: How can prospective members join or contact the club?
+A: Through the official website at https://www.raccoimbatoreunique.in/join or by emailing raccoimbatoreunique3206@gmail.com.
+

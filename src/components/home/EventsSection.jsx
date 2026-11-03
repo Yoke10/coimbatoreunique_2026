@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { firebaseService } from '../../services/firebaseService'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './EventsSection.css'
+
 const EventsSection = () => {
     const scrollRef = useRef(null)
     const navigate = useNavigate()
@@ -24,7 +25,6 @@ const EventsSection = () => {
                     behavior: 'smooth'
                 })
             } else {
-                // Check if near the end (within small tolerance)
                 if (scrollLeft + clientWidth >= scrollWidth - 10) {
                     navigate('/events')
                 } else {
@@ -35,10 +35,6 @@ const EventsSection = () => {
                 }
             }
         }
-    }
-
-    const handleCardClick = () => {
-        navigate('/events')
     }
 
     return (
@@ -58,11 +54,17 @@ const EventsSection = () => {
                             const month = dateObj.toLocaleString('default', { month: 'short' }).toUpperCase()
 
                             return (
-                                <div key={event.id} className="event-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+                                <Link
+                                    key={event.id}
+                                    to="/events"
+                                    className="event-card"
+                                    style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+                                    aria-label={`View details for event: ${event.title}`}
+                                >
                                     <div className="event-left">
                                         <div className="event-illustration">
                                             {event.poster ? (
-                                                <img src={event.poster} alt={event.title} />
+                                                <img src={event.poster} alt={event.title} loading="lazy" />
                                             ) : (
                                                 <svg viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <defs>
@@ -94,10 +96,9 @@ const EventsSection = () => {
                                             <div className="date-month">{month}</div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             )
                         })}
-                        {/* Removed View All Card */}
                     </div>
 
                     <button className="scroll-btn scroll-right" onClick={() => scroll('right')} aria-label="Scroll right">
